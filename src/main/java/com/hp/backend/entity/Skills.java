@@ -17,30 +17,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "session")
-public class Session {
+@Table(name = "skills")
+public class Skills {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "session_id")
-    private int session_id;
-
-    private int mentor_id;
-
     @Column(name = "skill_id")
     private int skill_id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "duration")
-    private int duration;
-
-    @Column(name = "price")
-    private float price;
-
-    @Column(name = "description")
-    private String description;
-    
-    @Column(name = "status")
-    private int status;
+    @Column(name = "skill_name")
+    private String skill_name;
 }
