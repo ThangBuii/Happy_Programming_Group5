@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.hp.backend.entity.Session;
 
-
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Integer> {
     @Query("SELECT b FROM Session b WHERE b.mentor_id = :mentor_id")

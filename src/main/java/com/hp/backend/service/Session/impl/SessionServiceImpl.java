@@ -26,12 +26,6 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionRepository sessionRepository;
 
-    // @Override
-    // public SessionDTO deleteSessionById(int id) {
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'deleteSessionById'");
-    // }
-
     @Override
     public ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException {
         Session session = sessionRepository.findById(id).get();
