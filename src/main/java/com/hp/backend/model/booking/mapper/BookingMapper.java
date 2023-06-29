@@ -25,7 +25,7 @@ public class BookingMapper {
     private final SessionRepository sessionRepository;
 
     public static BookingListMenteeDTO toBookingDTO(BookingListMenteeDTO book1) {
-        return BookingListMenteeDTO.builder().username(book1.getUsername()).email(book1.getEmail())
+        return BookingListMenteeDTO.builder().bookingID(book1.getBookingID()).username(book1.getUsername()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate())
                 .scheduleTime(book1.getScheduleTime())
                 .build();
@@ -39,7 +39,7 @@ public class BookingMapper {
     }
 
     public static BookingListMentorDTO toBookingDTO(BookingListMentorDTO book1) {
-        return BookingListMentorDTO.builder().username(book1.getUsername()).email(book1.getEmail())
+        return BookingListMentorDTO.builder().bookingID(book1.getBookingID()).username(book1.getUsername()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate())
                 .scheduleTime(book1.getScheduleTime())
                 .build();

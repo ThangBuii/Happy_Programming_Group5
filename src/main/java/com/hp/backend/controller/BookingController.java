@@ -46,7 +46,7 @@ public class BookingController {
     }
 
     @GetMapping("/mentee/booking/{id}")
-    ViewBookingDTO getBookingById(@PathVariable int id) throws CustomBadRequestException {
-        return bookingListMenteeService.findBookingDetailByID(id);
+    ViewBookingDTO getBookingMenteeById(@PathVariable int id) throws CustomBadRequestException {
+        return bookingListMenteeService.findMenteeBookingDetailByID(id);
     }
 }

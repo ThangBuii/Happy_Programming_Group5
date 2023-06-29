@@ -48,7 +48,7 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
    }
 
    @Override
-   public ViewBookingDTO findBookingDetailByID(int id) throws CustomBadRequestException {
+   public ViewBookingDTO findMenteeBookingDetailByID(int id) throws CustomBadRequestException {
       Booking booking = bookingRepository.findById(id).get();
       if (booking == null) {
          throw new CustomBadRequestException(CustomError.builder()

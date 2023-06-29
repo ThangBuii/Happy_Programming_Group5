@@ -17,7 +17,7 @@ public interface BookingListMenteeService {
     Booking findBookingByID(int id) throws CustomBadRequestException;
     // void addBooking(Booking booking);
 
-    ViewBookingDTO findBookingDetailByID(int id) throws CustomBadRequestException;
+    ViewBookingDTO findMenteeBookingDetailByID(int id) throws CustomBadRequestException;
 
     void deleteBookingByStatus(int id) throws CustomBadRequestException;
 
