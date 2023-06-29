@@ -1,0 +1,48 @@
+.footerWrapper {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .dSHead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .dSHead h1 {
+    margin-bottom: -26px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height */
+  
+    text-align: center;
+  }
+  
+  .footerDs p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    width: 440px;
+  }
+  
+  .footerItem {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footerItem h2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height */
+  
+    text-align: center;
+  }
+  
+  

@@ -1,0 +1,89 @@
+.breadcumBarWrapper {
+  background-color: rgba(246, 246, 246, 0.525);
+  border-bottom: 1px solid #e3e8eb;
+  padding: 15px 30px;
+  width: 100%;
+}
+
+.bcHome {
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.bcPersonProfile {
+  padding-left: 0.5rem;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.bcPersonProfile::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+  font-size: 14px;
+}
+
+.breadcumBarWrapper h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.personProfileWrapper {
+  border: 1px solid #7cadcc;
+  margin-bottom: 1.875rem;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.personProfileWrapper h2 {
+  text-align: center;
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.personProfileWrapper p {
+  font-size: 14px;
+  color: #757575;
+  margin-bottom: 15px;
+}
+
+.personProfileWrapper img {
+  border: 3px solid #1e88e5;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px auto 15px;
+}
+
+.aboutMe p {
+  width: 73%;
+}
+
+.profileDetailWrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.profileDetailItem p:nth-child(2) {
+  font-weight: 700;
+  padding-top: 5px;
+  color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

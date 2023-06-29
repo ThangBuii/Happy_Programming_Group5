@@ -1,0 +1,21 @@
+.profileWrapper {
+  border: 1px solid #7cadcc;
+  margin-bottom: 1.875rem;
+  border-bottom: 2px solid #1e88e5;
+  padding: 1.5rem;
+}
+
+.profileWrapper h1 {
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.profileWrapper hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}

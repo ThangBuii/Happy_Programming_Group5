@@ -1,0 +1,21 @@
+.titleWrapper {
+  background-color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  transition-duration: 0.1s !important;
+  padding: 12px 12px 12px 16px;
+  border: 2px solid rgb(209, 213, 219);
+  width: fit-content;
+  border-radius: 999px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+  box-sizing: content-box;
+  color: rgb(23, 46, 89);
+}
+
+.titleWrapper:focus {
+  border-color: rgb(104, 117, 245);
+  border-width: 2px;
+}

@@ -1,0 +1,119 @@
+.dbWrapper {
+  width: 100%;
+}
+
+.dbHead {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.itemWrapper {
+  width: 310px;
+  height: 176px;
+  background: #e7e7d7;
+  /* Secondary button */
+
+  border: 5px solid #b5c49c;
+  border-radius: 10px;
+}
+
+.dbWrapper h2 {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 36px;
+  margin-bottom: 10px;
+}
+
+.mentorInfoWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.mentorInfoWrapper img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+.infoLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.infoLeft h4 {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 0;
+}
+
+.infoLeft p {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 19px;
+  margin-bottom: 0;
+}
+
+.block {
+  width: 132px;
+  height: 45px;
+  background: #b5c49c;
+  margin: auto;
+}
+
+.trash {
+  margin-left: 40px;
+}
+.table {
+  background-color: #fff; /* Replace with the desired color */
+}
+.divbtn {
+  text-align: left;
+}
+
+.tableCellHead {
+  font-family: "Inter";
+  font-size: 0.875rem;
+  font-weight: 600 !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.customAction {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  display: flex;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+
+  background-color: rgba(2, 182, 179, 0.12) !important;
+  color: #1db9aa !important;
+
+  letter-spacing: 0.02em;
+  text-decoration: none;
+
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}

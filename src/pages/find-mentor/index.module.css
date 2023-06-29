@@ -1,0 +1,215 @@
+.layoutWrapper {
+  min-height: 800px;
+}
+
+.customLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.inputWrapper {
+  position: relative;
+  width: fit-content;
+  margin-bottom: 25px;
+}
+
+.inputWrapper input {
+  font-size: 14px;
+  line-height: 20px;
+  padding-right: 40px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 6px;
+  background-color: #fff;
+  width: 496px;
+}
+
+.inputWrapper input:focus {
+  margin-left: auto;
+  margin-right: auto;
+  border-color: rgb(104, 117, 245);
+}
+
+.inputWrapper svg {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.skillWrapper {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.inputFilter {
+  font-size: 14px;
+  line-height: 20px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid rgb(209, 213, 219);
+  width: 100%;
+  margin: 8px 0;
+}
+
+.inputFilter:focus {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  border: 1px solid rgb(209, 213, 219);
+  margin: 8px 0;
+}
+
+.searchList {
+  padding: 8px 0;
+}
+
+.searchItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.filterName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 8px;
+  color: rgb(17, 24, 39);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.filterRemain {
+  padding: 8px;
+}
+
+hr {
+  color: rgb(229, 231, 235);
+}
+
+.searchResult {
+  margin-top: 32px;
+  color: rgb(107, 114, 128);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.mentorListWrapper {
+  margin: 12px 0;
+}
+
+.mentorItemWrapper {
+  display: flex;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 12px;
+  padding: 32px 28px;
+  color: rgb(74, 74, 74);
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.mentorItemWrapper img {
+  width: 202px;
+  height: 288px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mentorInfoWrapper {
+  flex: 1;
+  margin-left: 32px;
+}
+
+.mentorName {
+  color: rgb(23, 46, 89);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.archieveList {
+  margin-top: 6px;
+}
+
+.archieveItem {
+  margin-top: 2px;
+  color: rgb(17, 133, 119);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.ratingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  font-size: 13px;
+  color: rgb(74, 74, 74);
+  margin-top: 8px;
+  font-weight: 400;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(229, 231, 235);
+}
+
+.description {
+  margin: 16px 0 24px 0;
+  color: rgb(74, 74, 74);
+  height: 72px;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skillList {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.skillItem {
+  padding: 4px 12px;
+  background-color: rgb(243, 244, 246);
+  border-radius: 999px;
+  color: rgb(55, 65, 81);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  margin-bottom: 8px;
+  height: 24px;
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  background-color: rgb(8, 195, 168);
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.customBtn {
+  display: flex;
+  justify-content: center;
+}
