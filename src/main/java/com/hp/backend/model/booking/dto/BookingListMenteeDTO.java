@@ -17,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class BookingListMenteeDTO {
+    private int bookingID;
     private String username;
     private String email;
     private Date scheduleDate;
