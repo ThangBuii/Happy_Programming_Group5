@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import com.hp.backend.entity.Account;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.CustomError;
+import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
+import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
+import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
+import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
@@ -66,6 +70,64 @@ public class AccountServiceImpl implements AccountService {
         accountDTOResponse.setToken(jwtTokenUtil.generateToken(account, 24 * 60 * 60));
         wrapper.put("account", accountDTOResponse);
         return wrapper;
+    }
+
+    @Override
+    public List<MenteeDTOResponse> getMenteeList() {
+        List<Account> accounts = accountRepository.findAllByRole(2);
+        List<MenteeDTOResponse> mentees = new ArrayList<>();
+        for (Account account : accounts) {
+            mentees.add(accountMapper.toMenteeDTOResponse(account));
+        }
+
+        return mentees;
+    }
+
+    @Override
+    public List<MentorDTOResponse> getMentorList() {
+        List<Account> accounts = accountRepository.findAllByRole(1);
+        List<MentorDTOResponse> mentors = new ArrayList<>();
+        for (Account account : accounts) {
+            mentors.add(accountMapper.toMentorDTOResponse(account));
+        }
+
+        return mentors;
+    }
+
+    @Override
+    public MentorDTODetailResponse findMentorByID(int id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(id);
+
+        if(account.isPresent() && account.get().getRole() == 1){
+            return AccountMapper.toMentorDTODetailResponse(account.get());
+        }else{
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exist").build());
+        }
+        
+    }
+
+    @Override
+    public MenteeDTODetailResponse findMenteeByID(int id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(id);
+
+        if(account.isPresent() && account.get().getRole() == 2){
+            return AccountMapper.toMenteeDTODetailResponse(account.get());
+        }else{
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exist").build());
+        }
+    }
+
+    @Override
+    public void deleteById(int id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(id);
+        if(account.isPresent()){
+            accountRepository.deleteById(id);
+        }else{
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exist").build());
+        }
     }
 
 }

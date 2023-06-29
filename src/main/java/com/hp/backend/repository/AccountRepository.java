@@ -1,5 +1,6 @@
 package com.hp.backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -13,4 +14,5 @@ import com.hp.backend.entity.Account;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     public Optional<Account> findByEmail(String email);
 
+    List<Account> findAllByRole(int role);
 }
