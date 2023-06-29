@@ -3,7 +3,6 @@ package com.hp.backend.service.Booking.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Booking;
@@ -17,20 +16,16 @@ import com.hp.backend.service.Booking.BookingListAdminService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
-
 @Service
 @RequiredArgsConstructor
 public class BookingListAdminServiceImpl implements BookingListAdminService {
 
-   
    private final BookingRepository bookingRepository;
-   
+
    private final TimeRepository timeRepository;
-   
+
    private final AccountRepository accountRepository;
-   
+
    private final SessionRepository sessionRepository;
 
    private final BookingMapper bookingMapper;
@@ -56,38 +51,39 @@ public class BookingListAdminServiceImpl implements BookingListAdminService {
    // @Override
    // public Booking findBookingByID(int id) {
 
-   //    return bookingRepository.findById(id).get();
+   // return bookingRepository.findById(id).get();
    // }
 
    // @Override
    // public BookingAdminDTO findEmailAndUsernameByAdminBookingID(int id) {
-   //    Booking booking = bookingRepository.findById(id).get();
-   //    Times time = booking.getTime();
-   //    Session session = time.getSession();
-   //    Account account = accountRepository.findById(session.getMentor_id()).get();
-   //    Account account2 = accountRepository.findById(booking.getMentee_id()).get();
+   // Booking booking = bookingRepository.findById(id).get();
+   // Times time = booking.getTime();
+   // Session session = time.getSession();
+   // Account account = accountRepository.findById(session.getMentor_id()).get();
+   // Account account2 = accountRepository.findById(booking.getMentee_id()).get();
 
-   //    BookingAdminDTO bookingAdminDTO = new BookingAdminDTO();
-   //    bookingAdminDTO.setBookingID(booking.getBooking_id());
-   //    bookingAdminDTO.setEmail(account2.getEmail());
-   //    bookingAdminDTO.setScheduleDate(time.getStart_date().toString());
-   //    bookingAdminDTO.setScheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString());
-   //    bookingAdminDTO.setMenteeUsername(account2.getUsername());
-   //    bookingAdminDTO.setMentorUsername(account.getUsername());
-   //    bookingAdminDTO.setStatus(booking.getStatus());
-      
-   //    return bookingAdminDTO;
+   // BookingAdminDTO bookingAdminDTO = new BookingAdminDTO();
+   // bookingAdminDTO.setBookingID(booking.getBooking_id());
+   // bookingAdminDTO.setEmail(account2.getEmail());
+   // bookingAdminDTO.setScheduleDate(time.getStart_date().toString());
+   // bookingAdminDTO.setScheduleTime(time.getStart_time().toString() + "-" +
+   // time.getEnd_time().toString());
+   // bookingAdminDTO.setMenteeUsername(account2.getUsername());
+   // bookingAdminDTO.setMentorUsername(account.getUsername());
+   // bookingAdminDTO.setStatus(booking.getStatus());
+
+   // return bookingAdminDTO;
    // }
 
    // @Override
    // public void deleteBookingByID(int id) throws Exception{
-      
-   //    Optional<Booking> bookingOptional = bookingRepository.findById(id); 
-   //    if (bookingOptional.isEmpty()) {
-   //          throw new Exception("Not found");
-   //    }
-   //    bookingRepository.deleteById(id);
-      
+
+   // Optional<Booking> bookingOptional = bookingRepository.findById(id);
+   // if (bookingOptional.isEmpty()) {
+   // throw new Exception("Not found");
+   // }
+   // bookingRepository.deleteById(id);
+
    // }
 
    // @Override

@@ -32,7 +32,7 @@ public class BookingMapper {
     }
 
     public static BookingListAdminDTO toBookingDTO(BookingListAdminDTO book1) {
-        return BookingListAdminDTO.builder().bookingID(book1.getBookingID()).email(book1.getEmail())
+        return BookingListAdminDTO.builder().bookingID(book1.getBookingID()).avatar(book1.getAvatar()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate()).scheduleTime(book1.getScheduleTime())
                 .menteeUsername(book1.getMenteeUsername()).mentorUsername(book1.getMenteeUsername())
                 .build();
