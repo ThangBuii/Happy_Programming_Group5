@@ -68,7 +68,7 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
    }
 
    @Override
-   public void deleteBookingByStatus(int id) throws CustomBadRequestException {
+   public void deleteMenteeBookingByStatus(int id) throws CustomBadRequestException {
       Booking booking = bookingRepository.findById(id).get();
       if (booking != null) {
          if (booking.getStatus() == 0) {

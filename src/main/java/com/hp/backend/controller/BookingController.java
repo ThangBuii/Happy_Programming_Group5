@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,4 +50,11 @@ public class BookingController {
     ViewBookingDTO getBookingMenteeById(@PathVariable int id) throws CustomBadRequestException {
         return bookingListMenteeService.findMenteeBookingDetailByID(id);
     }
+
+    @DeleteMapping("/mentee/booking/{id}")
+    void deleteBooking(@PathVariable int id) throws CustomBadRequestException {
+        bookingListMenteeService.deleteMenteeBookingByStatus(id);
+    }
+
+    
 }
