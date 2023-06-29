@@ -32,7 +32,7 @@ public class Booking {
     private int booking_id;
 
     @Column(name = "mentee_id")
-    private int menteeId;
+    private int mentee_id;
 
     @ManyToOne
     @JoinColumn(name = "time_id")
