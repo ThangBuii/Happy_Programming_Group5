@@ -15,6 +15,6 @@ public interface SessionService {
 
     ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException;
 
-    
+    List<MentorSessionDTO> getListSessionByMentorId(int account_id) throws CustomBadRequestException;
     
 }

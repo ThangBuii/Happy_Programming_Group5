@@ -39,6 +39,13 @@ public class SessionMapper {
 
     }
 
-    
+    public MentorSessionDTO toMentorSessionDTO(Session session) {
+        Account account = accountRepository.findById(session.getMentor_id()).get();
+        Skills skills = skillsRepository.findById(session.getSkill_id()).get();
+
+        return MentorSessionDTO.builder().skill_name(skills.getSkill_name()).session_name(session.getName())
+                .duration(session.getDuration()).description(session.getDescription()).price(session.getPrice())
+                .status(session.getStatus()).session_id(session.getSession_id()).build();
+    }
 
 }

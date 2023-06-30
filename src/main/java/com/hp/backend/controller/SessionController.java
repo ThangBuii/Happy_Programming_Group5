@@ -37,15 +37,20 @@ public class SessionController {
     private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/admin/session")
-        List<SessionDTO> getSessionList() throws CustomNotFoundException {
-            return sessionService.getAllSession();
+    List<SessionDTO> getSessionList() throws CustomNotFoundException {
+        return sessionService.getAllSession();
     }
-
 
     @GetMapping("/admin/session/{id}")
-        ViewSessionDTO getSessionById(@PathVariable int id) throws CustomBadRequestException {
-            return sessionService.findSessionByID(id);
+    ViewSessionDTO getSessionById(@PathVariable int id) throws CustomBadRequestException {
+        return sessionService.findSessionByID(id);
     }
 
-    
+    @GetMapping("/mentor/session")
+    List<MentorSessionDTO> getSessionListByMentorId(HttpServletRequest request) throws CustomBadRequestException {
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        return sessionService.getListSessionByMentorId(tokenPayload.getAccount_id());
+    }
+
 }

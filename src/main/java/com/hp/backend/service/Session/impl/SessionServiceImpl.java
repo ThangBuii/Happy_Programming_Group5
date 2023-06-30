@@ -60,6 +60,18 @@ public class SessionServiceImpl implements SessionService {
         return sessionDTO;
     }
 
-    
+    @Override
+    public List<MentorSessionDTO> getListSessionByMentorId(int account_id) throws CustomBadRequestException {
+        List<MentorSessionDTO> mentorSessionDTOs = new ArrayList<>();
+        List<Session> session = sessionRepository.findAllByMentorId(account_id);
+        if (session.isEmpty()) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .message("There are no session for the mentor id: " + account_id).code("404").build());
+        }
+        for (Session sessions : session) {
+            mentorSessionDTOs.add(sessionMapper.toMentorSessionDTO(sessions));
+        }
+        return mentorSessionDTOs;
+    }
 
 }
