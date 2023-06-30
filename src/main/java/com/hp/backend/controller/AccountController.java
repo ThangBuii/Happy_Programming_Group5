@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.TokenPayload;
+import com.hp.backend.model.account.dto.AccountChangePasswordRequestDTO;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
@@ -24,6 +25,7 @@ import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
+import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -45,7 +47,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap) {
+    public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap) throws CustomBadRequestException {
         return accountService.registerAccount(accountDTOCreateMap);
     }
 
@@ -94,6 +96,20 @@ public class AccountController {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         accountService.updateMenteeProfile(mentee,tokenPayload.getAccount_id());
+    }
+
+    @PostMapping("/mentor/profile")
+    public void updateMentorProfile(@RequestBody MentorDTODetailUpdateRequest mentor ,HttpServletRequest request) throws CustomBadRequestException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        accountService.updateMentorProfile(mentor,tokenPayload.getAccount_id());
+    }
+
+    @PostMapping("/password")
+    public void changePassword(@RequestBody AccountChangePasswordRequestDTO password ,HttpServletRequest request) throws CustomBadRequestException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        accountService.changePassword(password,tokenPayload.getAccount_id());
     }
 
 }

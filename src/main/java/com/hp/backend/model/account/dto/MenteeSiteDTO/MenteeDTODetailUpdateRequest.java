@@ -8,8 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 public class MenteeDTODetailUpdateRequest {
-    private String email;
-
     private String username;
 
     private int gender;

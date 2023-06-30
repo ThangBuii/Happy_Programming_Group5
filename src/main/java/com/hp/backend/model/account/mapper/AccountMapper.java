@@ -21,6 +21,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
+import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SkillRepository;
@@ -98,16 +99,40 @@ public class AccountMapper {
                 .country(account.getCountry()).city(account.getCity()).description(account.getDescription()).build();
     }
 
-    public Account toUpdatedAccount(MenteeDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
+    public Account toUpdatedMenteeAccount(MenteeDTODetailUpdateRequest mentee, int account_id)
+            throws CustomBadRequestException {
         Account account = accountRepository.findById(account_id).get();
 
-        if(account == null){
+        if (account == null) {
             throw new CustomBadRequestException(
-                    CustomError.builder().message("Report sender is not exist").code("500").build());
+                    CustomError.builder().message("Account is not exist").code("400").build());
+        }else if(!account.getUsername().equalsIgnoreCase(mentee.getUsername()) && accountRepository.existsByUsername(mentee.getUsername())){
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Username has already existed").code("400").build());
         }
         return Account.builder().account_id(account_id).avatar(mentee.getAvatar()).email(account.getEmail())
-            .username(mentee.getUsername()).gender(mentee.getGender()).dob(mentee.getDob())
-            .country(mentee.getCountry()).city(mentee.getCity()).description(mentee.getDescription())
-            .created_date(account.getCreated_date()).role(account.getRole()).build();
+                .username(mentee.getUsername()).gender(mentee.getGender()).dob(mentee.getDob())
+                .country(mentee.getCountry()).city(mentee.getCity()).description(mentee.getDescription())
+                .created_date(account.getCreated_date()).role(account.getRole()).password(account.getPassword()).build();
+    }
+
+    public Account toUpdatedMentorAccount(MentorDTODetailUpdateRequest mentor, int account_id)
+            throws CustomBadRequestException {
+        Account account = accountRepository.findById(account_id).get();
+
+        if (account == null) {
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Account is not exist").code("400").build());
+        }else if(!account.getUsername().equalsIgnoreCase(mentor.getUsername()) && accountRepository.existsByUsername(mentor.getUsername())){
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Username has already existed").code("400").build());
+        }
+        return Account.builder().account_id(account_id).avatar(mentor.getAvatar()).email(account.getEmail())
+                .username(mentor.getUsername()).gender(mentor.getGender()).dob(mentor.getDob())
+                .country(mentor.getCountry()).city(mentor.getCity()).description(mentor.getDescription())
+                .created_date(account.getCreated_date()).role(account.getRole()).university(mentor.getUniversity())
+                .major(mentor.getMajor()).degree(mentor.getDegree()).jobtitle(mentor.getJobtitle())
+                .workplace(mentor.getWorkplace()).password(account.getPassword())
+                .short_description(mentor.getShort_description()).build();
     }
 }
