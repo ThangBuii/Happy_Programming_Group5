@@ -99,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> account = accountRepository.findById(id);
 
         if(account.isPresent() && account.get().getRole() == 1){
-            return AccountMapper.toMentorDTODetailResponse(account.get());
+            return accountMapper.toMentorDTODetailResponse(account.get());
         }else{
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());

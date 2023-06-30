@@ -9,6 +9,7 @@ import com.hp.backend.entity.Feedback;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
+import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
@@ -66,6 +67,12 @@ public class FeedbackServiceImpl implements FeedbackService {
             feedbackListResponseDTOs.add(feedbackMapper.toFeedbackListMentorResponseDTO(feedback));
         }
         return feedbackListResponseDTOs;
+    }
+
+    @Override
+    public void addFeedback(FeedbackAddRequestDTO feedback, int account_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addFeedback'");
     }
 
     

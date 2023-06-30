@@ -5,10 +5,12 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
+import com.hp.backend.entity.Skills;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
@@ -16,6 +18,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.repository.BookingRepository;
+import com.hp.backend.repository.SkillRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountMapper {
     private final BookingRepository bookingRepository;
+    private final SkillRepository skillRepository;
 
     public static AccountDTOLoginResponse toAccountDTOResponse(Account account) {
         return AccountDTOLoginResponse.builder().role(account.getRole()).build();
@@ -70,14 +74,15 @@ public class AccountMapper {
                 .account_id(account.getAccount_id()).numberOfBooking(numberOfBookings).earned(formattedValue).build();
     }
 
-    public static MentorDTODetailResponse toMentorDTODetailResponse(Account account) {
+    public MentorDTODetailResponse toMentorDTODetailResponse(Account account) {
+        List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
         return MentorDTODetailResponse.builder().account_id(account.getAccount_id())
                 .avatar(account.getAvatar()).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
                 .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription())
                 .jobtitle(account.getJobtitle()).workplace(account.getWorkplace())
-                .short_description(account.getShort_description()).build();
+                .short_description(account.getShort_description()).skills(skills).build();
     }
 
     public static MenteeDTODetailResponse toMenteeDTODetailResponse(Account account) {
