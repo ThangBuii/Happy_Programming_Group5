@@ -1,4 +1,4 @@
-package com.hp.backend.model.account.dto.AdminSiteDTO;
+package com.hp.backend.model.account.dto.MenteeSiteDTO;
 
 import java.sql.Date;
 
@@ -7,12 +7,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MenteeDTODetailResponse {
+public class MenteeDTODetailUpdateRequest {
     private String email;
 
     private String username;
-
-    private Date created_date;
 
     private int gender;
 

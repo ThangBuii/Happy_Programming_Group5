@@ -8,5 +8,5 @@ import lombok.Data;
 public class FeedbackAddRequestDTO {
     private int mentor_id;
     private String content;
-    private int rating;
+    private double rating;
 }

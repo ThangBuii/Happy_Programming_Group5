@@ -18,6 +18,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
+import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.mapper.AccountMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.service.Account.AccountService;
@@ -128,6 +129,13 @@ public class AccountServiceImpl implements AccountService {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
         }
+    }
+
+    @Override
+    public void updateMenteeProfile(MenteeDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
+        
+        Account account = accountMapper.toUpdatedAccount(mentee,account_id);
+        accountRepository.save(account);
     }
 
 }

@@ -11,8 +11,6 @@ import lombok.Data;
 @Data
 @Builder
 public class MentorDTODetailResponse {
-    private int account_id;
-
     private String email;
 
     private String username;

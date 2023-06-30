@@ -2,8 +2,11 @@ package com.hp.backend.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,40 +45,54 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String token = null;
         TokenPayload tokenPayload = null;
 
-        if(requestTokenHeader != null && requestTokenHeader.startsWith("Token ")){
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Token ")) {
             token = requestTokenHeader.substring(6).trim();
 
-            
-            try{
+            try {
                 tokenPayload = jwtTokenUtil.getTokenPayload(token);
 
-            }catch(SignatureException e){
+            } catch (SignatureException e) {
                 System.out.println("Invalid JWT signature");
-            }catch(IllegalArgumentException ex){
+            } catch (IllegalArgumentException ex) {
                 System.out.println("Unable to get JWT");
-            }catch(ExpiredJwtException ex){
+            } catch (ExpiredJwtException ex) {
                 System.out.println("Token has expired");
             }
-        }else{
+        } else {
             System.out.println("JWT TOKEN doest not start with Token");
         }
 
-        if(tokenPayload != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (tokenPayload != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             Optional<Account> accountOptional = accountRepository.findById(tokenPayload.getAccount_id());
 
-            if(accountOptional.isPresent()){
+            if (accountOptional.isPresent()) {
                 Account account = accountOptional.get();
-                if(jwtTokenUtil.validate(token,account)){
-                    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getEmail(),account.getPassword(),new ArrayList<>());
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                }else{
+                if (jwtTokenUtil.validate(token, account)) {
+                    // Extract role from the token payload
+                    int role = tokenPayload.getRole();
+
+                    // Create the authority for the role
+                    String roleString = "ROLE_" + role;
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleString);
+
+                    // Create the UserDetails object with the necessary information
+                    UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                            account.getEmail(),
+                            account.getPassword(),
+                            Collections.singleton(authority));
+
+                    // Create the authentication token and set it to the SecurityContextHolder
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } else {
                     System.out.println("Token khong hop le");
                 }
             }
         }
+
         filterChain.doFilter(request, response);
+
     }
 
 }

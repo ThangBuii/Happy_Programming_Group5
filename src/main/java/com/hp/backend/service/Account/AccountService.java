@@ -11,6 +11,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
+import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 
 
 
@@ -30,4 +31,6 @@ public interface AccountService {
     public MenteeDTODetailResponse findMenteeByID(int id) throws CustomBadRequestException;
 
     public void deleteById(int id) throws CustomBadRequestException;
+
+    public void updateMenteeProfile(MenteeDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException;
 }

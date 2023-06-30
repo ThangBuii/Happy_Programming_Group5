@@ -11,12 +11,17 @@ import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Skills;
+import com.hp.backend.exception.custom.CustomBadRequestException;
+import com.hp.backend.exception.custom.CustomInternalServerException;
+import com.hp.backend.model.CustomError;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
+import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
+import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SkillRepository;
 
@@ -27,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountMapper {
     private final BookingRepository bookingRepository;
     private final SkillRepository skillRepository;
+    private final AccountRepository accountRepository;
 
     public static AccountDTOLoginResponse toAccountDTOResponse(Account account) {
         return AccountDTOLoginResponse.builder().role(account.getRole()).build();
@@ -76,7 +82,7 @@ public class AccountMapper {
 
     public MentorDTODetailResponse toMentorDTODetailResponse(Account account) {
         List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
-        return MentorDTODetailResponse.builder().account_id(account.getAccount_id())
+        return MentorDTODetailResponse.builder()
                 .avatar(account.getAvatar()).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
@@ -86,9 +92,22 @@ public class AccountMapper {
     }
 
     public static MenteeDTODetailResponse toMenteeDTODetailResponse(Account account) {
-        return MenteeDTODetailResponse.builder().account_id(account.getAccount_id())
+        return MenteeDTODetailResponse.builder()
                 .avatar(account.getAvatar()).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).description(account.getDescription()).build();
+    }
+
+    public Account toUpdatedAccount(MenteeDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
+        Account account = accountRepository.findById(account_id).get();
+
+        if(account == null){
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Report sender is not exist").code("500").build());
+        }
+        return Account.builder().account_id(account_id).avatar(mentee.getAvatar()).email(account.getEmail())
+            .username(mentee.getUsername()).gender(mentee.getGender()).dob(mentee.getDob())
+            .country(mentee.getCountry()).city(mentee.getCity()).description(mentee.getDescription())
+            .created_date(account.getCreated_date()).role(account.getRole()).build();
     }
 }

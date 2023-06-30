@@ -23,6 +23,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
+import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -50,41 +51,49 @@ public class AccountController {
 
     @GetMapping("/admin/mentee-list")
     public List<MenteeDTOResponse> getMenteeList(){
+
         return accountService.getMenteeList();
     }
 
-    @GetMapping("admin/mentor-list")
+    @GetMapping("/admin/mentor-list")
     public List<MentorDTOResponse> getMentorList(){
         return accountService.getMentorList();
     }
 
-    @GetMapping("admin/mentee/{id}")
+    @GetMapping("/admin/mentee/{id}")
     public MenteeDTODetailResponse getMenteeByID(@PathVariable int id) throws CustomBadRequestException{
         return accountService.findMenteeByID(id);
     }
 
-    @GetMapping("admin/mentor/{id}")
+    @GetMapping("/admin/mentor/{id}")
     public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException{
         return accountService.findMentorByID(id);
     }
 
-    @DeleteMapping("admin/account/{id}")
+    @DeleteMapping("/admin/account/{id}")
     public void deleteAccount(@PathVariable int id) throws CustomBadRequestException{
         accountService.deleteById(id);
     }
 
-    @GetMapping("mentor/profile")
+    @GetMapping("/mentor/profile")
     public MentorDTODetailResponse getMentorProfile(HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return accountService.findMentorByID(tokenPayload.getAccount_id());
     }
 
-    @GetMapping("mentee/profile")
+    @GetMapping("/mentee/profile")
     public MenteeDTODetailResponse getMenteeProfile(HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return accountService.findMenteeByID(tokenPayload.getAccount_id());
+    }
+
+    @PostMapping("/mentee/profile")
+    public void updateMenteeProfile(@RequestBody MenteeDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        accountService.updateMenteeProfile(mentee,tokenPayload.getAccount_id());
     }
 
 }

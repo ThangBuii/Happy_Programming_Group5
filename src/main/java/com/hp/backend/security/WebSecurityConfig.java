@@ -15,16 +15,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
-    //private final UserDetailsService userDetailsService;
+    // private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/api/login","/api/register")
-            .permitAll()
-            .antMatchers("/api/**").authenticated()
-            .and().sessionManagement()
+        httpSecurity
+                .cors().and()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/login", "/api/register").permitAll()
+                .antMatchers("/api/admin/**").access("hasRole('0')")
+                .antMatchers("/api/mentor/**").access("hasRole('1')")
+                .antMatchers("/api/mentee/**").access("hasRole('2')")
+                .antMatchers("/api/**").access("hasAnyRole('0', '1', '2')")
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

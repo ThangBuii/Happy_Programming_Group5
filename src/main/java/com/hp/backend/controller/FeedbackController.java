@@ -58,7 +58,7 @@ public class FeedbackController {
         return feedbackService.getFeedbacksMentor(tokenPayload.getAccount_id());
     }
 
-    @PostMapping("mentor/feedback")
+    @PostMapping("mentee/feedback")
     public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request){
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);

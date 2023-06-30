@@ -70,9 +70,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void addFeedback(FeedbackAddRequestDTO feedback, int account_id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addFeedback'");
+    public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) {
+        Feedback feedback1 = feedbackMapper.toFeedback(feedback,mentee_id);
+        feedbackRepository.save(feedback1);
     }
 
     
