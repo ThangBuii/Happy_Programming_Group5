@@ -74,4 +74,12 @@ public class SessionServiceImpl implements SessionService {
         return mentorSessionDTOs;
     }
 
+    @Override
+    public void addSession(AddSessionDTO addSessionDTO, int id) {
+        sessionRepository.save(Session.builder().skill_id(addSessionDTO.getSkill_id())
+                .name(addSessionDTO.getSession_name()).duration(addSessionDTO.getDuration())
+                .description(addSessionDTO.getDescription()).price(addSessionDTO.getPrice()).status(0).mentor_id(id)
+                .build());
+    }
+
 }

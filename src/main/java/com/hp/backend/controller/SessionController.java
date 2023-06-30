@@ -53,4 +53,10 @@ public class SessionController {
         return sessionService.getListSessionByMentorId(tokenPayload.getAccount_id());
     }
 
+    @PostMapping("/mentor/session")
+        void addSession(@RequestBody AddSessionDTO addSessionDTO, HttpServletRequest request){
+            String token = jwtTokenUtil.getRequestToken(request);
+            TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+            sessionService.addSession(addSessionDTO,tokenPayload.getAccount_id());
+        }
 }
