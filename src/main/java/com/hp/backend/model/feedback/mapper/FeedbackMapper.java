@@ -9,6 +9,7 @@ import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,18 @@ public class FeedbackMapper {
         }
 
         return FeedbackListMenteeResponseDTO.builder().ava(mentor.getAvatar()).email(mentor.getEmail()).username(mentor.getUsername())
+                    .content(feedback.getContent()).created_date(feedback.getTime()).feedback_id(feedback.getFeedback_id()).rating(feedback.getRating()).build();
+    }
+
+    public FeedbackListMentorResponseDTO toFeedbackListMentorResponseDTO(Feedback feedback) throws CustomInternalServerException {
+        Account mentee = accountRepository.findById(feedback.getMentee_id()).get();
+
+        if (mentee == null) {
+            throw new CustomInternalServerException(
+                    CustomError.builder().message("Report sender is not exist").code("500").build());
+        }
+
+        return FeedbackListMentorResponseDTO.builder().ava(mentee.getAvatar()).email(mentee.getEmail()).username(mentee.getUsername())
                     .content(feedback.getContent()).created_date(feedback.getTime()).feedback_id(feedback.getFeedback_id()).rating(feedback.getRating()).build();
     }
 }

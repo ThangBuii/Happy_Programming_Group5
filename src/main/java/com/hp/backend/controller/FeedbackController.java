@@ -16,9 +16,11 @@ import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.TokenPayload;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
 import com.hp.backend.service.feedback.FeedbackService;
 import com.hp.backend.utils.JwtTokenUtil;
 
+import antlr.Token;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -44,6 +46,13 @@ public class FeedbackController {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return feedbackService.getFeedbacksMentee(tokenPayload.getAccount_id());
+    }
+
+    @GetMapping("mentor/feedbacks")
+    public List<FeedbackListMentorResponseDTO> getFeedbacksMentor(HttpServletRequest request) throws CustomInternalServerException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        return feedbackService.getFeedbacksMentor(tokenPayload.getAccount_id());
     }
 
     

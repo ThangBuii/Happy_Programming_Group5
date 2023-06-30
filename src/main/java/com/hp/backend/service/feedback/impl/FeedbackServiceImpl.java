@@ -11,6 +11,7 @@ import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
 import com.hp.backend.model.feedback.mapper.FeedbackMapper;
 import com.hp.backend.repository.FeedbackRepository;
 import com.hp.backend.service.feedback.FeedbackService;
@@ -52,6 +53,17 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         for(Feedback feedback : feedbacks){
             feedbackListResponseDTOs.add(feedbackMapper.toFeedbackListMenteeResponseDTO(feedback));
+        }
+        return feedbackListResponseDTOs;
+    }
+
+    @Override
+    public List<FeedbackListMentorResponseDTO> getFeedbacksMentor(int mentor_id) throws CustomInternalServerException {
+        List<Feedback> feedbacks = feedbackRepository.findByMentorId(mentor_id);
+        List<FeedbackListMentorResponseDTO> feedbackListResponseDTOs = new ArrayList<>();
+
+        for(Feedback feedback : feedbacks){
+            feedbackListResponseDTOs.add(feedbackMapper.toFeedbackListMentorResponseDTO(feedback));
         }
         return feedbackListResponseDTOs;
     }
