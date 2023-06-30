@@ -2,14 +2,13 @@ package com.hp.backend.model.Session.mapper;
 
 import org.springframework.stereotype.Component;
 
-
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Skills;
+import com.hp.backend.model.Session.dto.MentorSessionDTO;
 import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Session.dto.ViewSessionDTO;
 import com.hp.backend.repository.AccountRepository;
-import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.SkillsRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class SessionMapper {
-    private final SessionRepository sessionRepository;
-
     private final AccountRepository accountRepository;
 
     private final SkillsRepository skillsRepository;
@@ -41,5 +38,7 @@ public class SessionMapper {
                 .skill_name(skills.getSkill_name()).status(session.getStatus()).build();
 
     }
+
+    
 
 }

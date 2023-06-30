@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SessionRequestDTO {
-    private int id;
+public class AddSessionDTO {
+    private int skill_id;
+    private String session_name;
+    private int duration;
+    private float price;
+    private String description;
 }
