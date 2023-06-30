@@ -10,8 +10,10 @@ import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.booking.dto.BookingListMenteeDTO;
+import com.hp.backend.model.booking.dto.DashboardMenteeDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
+import com.hp.backend.model.booking.mapper.DashboardMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SessionRepository;
@@ -29,9 +31,10 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
    private final AccountRepository accountRepository;
    private final SessionRepository sessionRepository;
    private final BookingMapper bookingMapper;
+   private final DashboardMapper dashboardMapper;
 
    @Override
-   public List<BookingListMenteeDTO> getAllBooking(int id) throws CustomNotFoundException {
+   public List<BookingListMenteeDTO> getAllMenteeBooking(int id) throws CustomNotFoundException {
       List<BookingListMenteeDTO> bookingDTOs = new ArrayList<>();
       List<Booking> bookings = bookingRepository.findAllByMentee_Id(id);
       if (bookings.isEmpty()) {
@@ -81,6 +84,23 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
          throw new CustomBadRequestException(
                CustomError.builder().message("Booking with ID not found: " + id).code("400").build());
       }
+   }
+
+   @Override
+   public List<DashboardMenteeDTO> getDashboardMenteeBooking(int id) throws CustomNotFoundException {
+      List<DashboardMenteeDTO> dashboardDTOs = new ArrayList<>();
+      List<Booking> bookings = bookingRepository.findAllByMentee_Id(id);
+      if (bookings.isEmpty()) {
+         CustomError error = new CustomError("BookingsNotFound", "No bookings found for the mentee with ID " + id, "");
+         throw new CustomNotFoundException(error);
+      }
+      for (Booking booking : bookings) {
+
+         dashboardDTOs.add(dashboardMapper.findEmailAndUsernameByBookingID(booking.getBooking_id()));
+
+      }
+
+      return dashboardDTOs;
    }
 
    // @Override

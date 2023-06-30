@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,7 @@ import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.TokenPayload;
 import com.hp.backend.model.booking.dto.BookingListAdminDTO;
 import com.hp.backend.model.booking.dto.BookingListMenteeDTO;
-import com.hp.backend.model.booking.dto.BookingRequestDTO;
+import com.hp.backend.model.booking.dto.DashboardMenteeDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.service.Booking.BookingListAdminService;
 import com.hp.backend.service.Booking.BookingListMenteeService;
@@ -43,7 +42,7 @@ public class BookingController {
     List<BookingListMenteeDTO> getBookingListMentee(HttpServletRequest request) throws CustomNotFoundException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        return bookingListMenteeService.getAllBooking(tokenPayload.getAccount_id());
+        return bookingListMenteeService.getAllMenteeBooking(tokenPayload.getAccount_id());
     }
 
     @GetMapping("/mentee/booking/{id}")
@@ -52,9 +51,15 @@ public class BookingController {
     }
 
     @DeleteMapping("/mentee/booking/{id}")
-    void deleteBooking(@PathVariable int id) throws CustomBadRequestException {
+    void deleteMenteeBooking(@PathVariable int id) throws CustomBadRequestException {
         bookingListMenteeService.deleteMenteeBookingByStatus(id);
     }
 
-    
+    @GetMapping("/mentee/dashboard")
+    List<DashboardMenteeDTO> getDashboardMenteeBookingList(HttpServletRequest request) throws CustomNotFoundException {
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        return bookingListMenteeService.getDashboardMenteeBooking(tokenPayload.getAccount_id());
+    }
+
 }
