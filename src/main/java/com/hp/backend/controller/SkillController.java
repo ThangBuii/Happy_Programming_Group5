@@ -44,4 +44,9 @@ public class SkillController {
         skills.setSkill_name(skillsRequestDTO.getSkill_name());
         skillsService.saveSkills(skills);
     }
+
+    @PostMapping("/admin/skills")
+    void addSkills(@RequestBody SkillsRequestDTO skillsRequestDTO) {
+        skillsService.addSkills(skillsRequestDTO);
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.CustomError;
-import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.model.Skills.dto.SkillsRequestDTO;
 import com.hp.backend.model.Skills.mapper.SkillsMapper;
@@ -68,4 +67,8 @@ public class SkillsServiceImpl implements SkillsService {
         skillsRepository.save(skills);
     }
 
+    @Override
+    public void addSkills(SkillsRequestDTO skillsRequestDTO) {
+        skillsRepository.save(Skills.builder().skill_name(skillsRequestDTO.getSkill_name()).build());
+    }
 }
