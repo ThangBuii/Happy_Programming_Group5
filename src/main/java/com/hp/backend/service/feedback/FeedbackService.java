@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
+import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
@@ -20,6 +21,8 @@ public interface FeedbackService {
     public List<FeedbackListMenteeResponseDTO> getFeedbacksMentee(int id) throws CustomInternalServerException;
 
     public List<FeedbackListMentorResponseDTO> getFeedbacksMentor(int account_id) throws CustomInternalServerException;
+
+    public void addFeedback(FeedbackAddRequestDTO feedback, int account_id);
 
     
 

@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.TokenPayload;
+import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
@@ -53,6 +56,13 @@ public class FeedbackController {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return feedbackService.getFeedbacksMentor(tokenPayload.getAccount_id());
+    }
+
+    @PostMapping("mentor/feedback")
+    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request){
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());
     }
 
     
