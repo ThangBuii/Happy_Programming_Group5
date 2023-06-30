@@ -2,6 +2,7 @@ package com.hp.backend.service.Skills.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,17 @@ public class SkillsServiceImpl implements SkillsService {
             lSkillsDTOs.add(skillsMapper.toSkillsDTO(skill));
         }
         return lSkillsDTOs;
+    }
+
+    @Override
+    public void deleteSkillsById(int id) throws CustomBadRequestException {
+        Optional<Skills> skills = skillsRepository.findById(id);
+        if(skills.isPresent()){
+            skillsRepository.deleteById(id);
+        }else{
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Skills not exist").build());
+        }
     }
 
 }

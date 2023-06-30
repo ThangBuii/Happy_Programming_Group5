@@ -10,4 +10,5 @@ public interface SkillsService {
 
     public List<SkillsDTO> getListMentorBySkills() throws CustomBadRequestException ;
     
+    public void deleteSkillsById(int id) throws CustomBadRequestException;
 }
