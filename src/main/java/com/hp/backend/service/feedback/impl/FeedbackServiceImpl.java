@@ -2,6 +2,7 @@ package com.hp.backend.service.feedback.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 
@@ -38,9 +39,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public void deleteFeedback(int id) throws CustomBadRequestException {
-        Feedback feedback = feedbackRepository.findById(id).get();
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
 
-        if(feedback == null){
+        if(!feedback.isPresent()){
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
 

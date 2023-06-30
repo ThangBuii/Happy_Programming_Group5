@@ -27,6 +27,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/admin/**").access("hasRole('0')")
                 .antMatchers("/api/mentor/**").access("hasRole('1')")
                 .antMatchers("/api/mentee/**").access("hasRole('2')")
+                .antMatchers("/api/men/**").access("hasAnyRole('1','2')")
                 .antMatchers("/api/**").access("hasAnyRole('0', '1', '2')")
                 .and()
                 .sessionManagement()

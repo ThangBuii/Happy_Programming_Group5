@@ -155,12 +155,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void changePassword(AccountChangePasswordRequestDTO password, int account_id) throws CustomBadRequestException {
-        Account account = accountRepository.findById(account_id).get();
+        Optional<Account> account = accountRepository.findById(account_id);
 
-        if(account == null){
+        if(!account.isPresent()){
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
-        }else if(!account.getPassword().equals(password.getOld_password())){
+        }else if(!account.get().getPassword().equals(password.getOld_password())){
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Old Password is not true").build());
         }else if(!password.getRepass().equals(password.getNew_password())){
@@ -168,8 +168,8 @@ public class AccountServiceImpl implements AccountService {
                     CustomError.builder().code("400").message("Repassword is not equal to New Password").build());
         }
 
-        account.setPassword(password.getNew_password());
-        accountRepository.save(account);
+        account.get().setPassword(password.getNew_password());
+        accountRepository.save(account.get());
     }
 
 }
