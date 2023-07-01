@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MainLayout from "../../component/main-layout/MainLayout";
+import MainLayout from "../../component/main-layout";
 import {
   Table,
   TableBody,

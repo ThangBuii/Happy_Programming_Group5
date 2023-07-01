@@ -1,17 +1,79 @@
 .layoutWrapper {
-    padding: 0 30px;
+  padding: 0 30px;
+}
+
+.pageTitle {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 42px;
+  margin-bottom: 8px;
+}
+
+.layoutContent {
+  display: flex;
+}
+
+.breadcumBarWrapper {
+  background-color: rgba(246, 246, 246, 0.525);
+  border-bottom: 1px solid #e3e8eb;
+  padding: 15px 30px;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bcLeft {
+  flex: 1;
+}
+
+.bcRight {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .bcRight {
+    width: 33.333333%;
+    margin-top: 0px;
   }
-  
-  .pageTitle {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 42px;
-    margin-bottom: 8px;
+  .breadcumBarWrapper {
+    flex-direction: row;
   }
-  
-  .layoutContent {
-    display: flex;
-  }
-  
+}
+
+.bcHome {
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.bcPersonProfile {
+  padding-left: 0.5rem;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.bcPersonProfile::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+  font-size: 14px;
+}
+
+.breadcumBarWrapper h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.contentWrapper {
+  margin-top: 25px;
+  width: 100%;
+}

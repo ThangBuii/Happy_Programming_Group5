@@ -1,78 +1,54 @@
+.layoutWrapper {
+}
 
-.mentorList {
+.inputWrapper {
+  width: 100%;
+  padding: 0 15px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  align-items: stretch;
 }
 
-.mentorItem {
-  background: #e7e7d7;
-  border: 5.53571px solid #588157;
-  border-radius: 11.0714px;
-
-  width: 310px;
-  height: 420px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.customInput {
+  background-color: rgb(255, 255, 255);
+  background-clip: padding-box;
+  border: 1px solid rgb(220, 224, 235);
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+  padding: 6px 15px;
+  flex: 1;
+  color: rgb(73, 80, 87);
+  font-size: 15px;
+  min-height: 42px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.mentorItem img {
-  text-align: center;
+.customInput:focus {
+  width: auto;
+  margin: 0;
+  border: 1px solid rgb(187, 187, 187);
 }
 
-.mentorInfo {
-  position: relative;
-  width: -webkit-fill-available;
-  height: -webkit-fill-available;
-  border-top: 5.54px solid #588157;
-  padding: 10px;
+.customInput::placeholder {
+  color: #a1a8bb;
 }
 
-.mentorInfo h4 {
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 26px;
-  color: #000000;
-}
-
-.mentorInfo p {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 24px;
-  color: #000000;
-}
-
-.mentorInfo span {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.paginationWrapper {
-  margin-top: 20px;
+.searchWrapper {
+  margin-left: -1px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-}
-
-.pagiantionItem {
-  width: 60px;
-  height: 60px;
-  background: #b5c49c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 0 10px;
+  background-color: rgb(30, 136, 229);
+  color: #fff;
   cursor: pointer;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
-.pagiantionItem span {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 34px;
+.searchWrapper:hover {
+  background-color: rgb(24, 121, 205);
+}
 
-  color: #e7e7d7;
+.searchWrapper svg {
+  stroke: beige;
 }
