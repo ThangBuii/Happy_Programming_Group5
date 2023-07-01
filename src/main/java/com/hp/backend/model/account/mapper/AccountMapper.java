@@ -6,10 +6,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
+import com.hp.backend.entity.Favorite_Mentor;
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
@@ -22,6 +24,7 @@ import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
+import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SkillRepository;
@@ -134,5 +137,19 @@ public class AccountMapper {
                 .major(mentor.getMajor()).degree(mentor.getDegree()).jobtitle(mentor.getJobtitle())
                 .workplace(mentor.getWorkplace()).password(account.getPassword())
                 .short_description(mentor.getShort_description()).build();
+    }
+
+    public FavoriteListMenteeResponseDTO toFavoriteListResponseDTO(Favorite_Mentor favorite) throws CustomBadRequestException {
+        Optional<Account> mentor = accountRepository.findById(favorite.getMentor_id());
+
+        if(!mentor.isPresent()) {
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exist").build());
+        }
+        List<Skills> skills = skillRepository.findSkillsByMentorId(mentor.get().getAccount_id());
+        Account mentor1 = mentor.get();
+        return FavoriteListMenteeResponseDTO.builder().avatar(mentor1.getAvatar()).username(mentor1.getUsername())
+            .jobtitle(mentor1.getJobtitle()).workplace(mentor1.getWorkplace()).description(mentor1.getDescription())
+            .skills(skills).mentor_id(mentor1.getAccount_id()).favorite_id(favorite.getFavorite_id()).build();
     }
 }

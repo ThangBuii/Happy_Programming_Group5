@@ -9,7 +9,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Account;
+import com.hp.backend.entity.Favorite_Mentor;
 import com.hp.backend.exception.custom.CustomBadRequestException;
+import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.account.dto.AccountChangePasswordRequestDTO;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
@@ -22,7 +24,9 @@ import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.model.account.mapper.AccountMapper;
+import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
+import com.hp.backend.repository.FavoriteRepository;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -34,6 +38,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountMapper accountMapper;
     private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private final FavoriteRepository favoriteRepository;
 
     @Override
     public Map<String, AccountDTOLoginResponse> authenticate(Map<String, AccountDTOLoginRequest> accountLoginRequestMap)
@@ -170,6 +175,51 @@ public class AccountServiceImpl implements AccountService {
 
         account.get().setPassword(password.getNew_password());
         accountRepository.save(account.get());
+    }
+
+    @Override
+    public List<FavoriteListMenteeResponseDTO> getListFavorite(int account_id) throws CustomBadRequestException {
+        List<Favorite_Mentor> favorites = favoriteRepository.findByMentee_id(account_id);
+        List<FavoriteListMenteeResponseDTO> responseDTOs  = new ArrayList<>();
+        for(Favorite_Mentor favorite : favorites){
+            responseDTOs.add(accountMapper.toFavoriteListResponseDTO(favorite));
+        }
+
+        return responseDTOs;
+    }
+
+    @Override
+    public void addFavorite(int mentee_id, int mentor_id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(mentor_id);
+
+        if(!account.isPresent()){
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exist").build());
+        }
+
+        if(account.get().getRole() != 1){
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Mentor not exist").build());
+        }
+        
+        favoriteRepository.save(Favorite_Mentor.builder().mentee_id(mentee_id).mentor_id(mentor_id).build());
+    }
+
+    @Override
+    public void deleteFavorite(int favorite_id,int mentee_id) throws CustomInternalServerException, CustomBadRequestException {
+        Optional<Favorite_Mentor> favorite = favoriteRepository.findById(favorite_id);
+
+        if(!favorite.isPresent()){
+            throw new CustomInternalServerException(
+                    CustomError.builder().code("500").message("System failure").build());
+        }
+
+        if(favorite.get().getMentee_id() != mentee_id){
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Bad request").build());
+        }
+
+        favoriteRepository.delete(favorite.get());
     }
 
 }
