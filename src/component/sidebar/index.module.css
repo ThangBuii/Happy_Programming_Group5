@@ -1,0 +1,67 @@
+.sidebarWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background: #b5c49c;
+    width: 310px;
+    border: 5px solid #b5c49c;
+    border-radius: 10px;
+    height: fit-content;
+    margin-right: 20px;
+    margin-top: 25px;
+  }
+  
+  .sidebarWrapper img {
+    background: #e7e7d7;
+    object-fit: cover;
+  
+    border: 5px solid #e7e7d7;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin: 72px 72px 0 72px;
+  }
+  
+  .sidebarWrapper h4 {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 31px;
+    margin-top: 6px;
+    margin-bottom: 50px;
+  }
+  
+  .linkWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    background: #b5c49c;
+  
+    border-bottom: 1px solid #e7e7d7;
+  }
+  
+  .linkWrapper a {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+  
+    text-align: center;
+    text-decoration: none;
+    color: rgba(0, 30, 0, 1);
+  }
+  
+  .linkWrapper.linkWrapperActive {
+    background: #e7e7d7;
+    /* Secondary button */
+  
+    border-width: 1px 0px;
+    border-style: solid;
+    border-color: #b5c49c;
+  }
+  

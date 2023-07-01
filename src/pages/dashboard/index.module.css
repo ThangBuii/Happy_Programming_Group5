@@ -1,0 +1,82 @@
+.dbWrapper {
+    width: 100%;
+  }
+  
+  .dbHead {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  
+  .itemWrapper {
+    width: 310px;
+    height: 176px;
+    background: #e7e7d7;
+    /* Secondary button */
+  
+    border: 5px solid #b5c49c;
+    border-radius: 10px;
+  }
+  
+  .dbWrapper h2 {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .mentorInfoWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mentorInfoWrapper img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+  }
+  
+  .infoLeft {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .infoLeft h4 {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  
+  .infoLeft p {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+  }
+  
+  .block {
+    width: 132px;
+    height: 45px;
+    background: #b5c49c;
+    margin: auto;
+  }
+  
+  .trash{
+   margin-left: 40px;
+
+  }
+ .table {
+    background-color: #fff; /* Replace with the desired color */
+  }
+  .divbtn{
+    text-align: left ;
+  }

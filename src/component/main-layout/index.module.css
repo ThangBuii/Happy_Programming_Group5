@@ -1,0 +1,17 @@
+.layoutWrapper {
+    padding: 0 30px;
+  }
+  
+  .pageTitle {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 42px;
+    margin-bottom: 8px;
+  }
+  
+  .layoutContent {
+    display: flex;
+  }
+  
