@@ -4,7 +4,7 @@ import { Button, CircularProgress, Pagination, Rating } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SearchIcon from "@mui/icons-material/Search";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
 
 function createData(
@@ -89,10 +89,22 @@ const fakeFavouriteMentorList = [
 
 const Favourite = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [page, setPage] = useState(1);
   const [isLoading, seIsLoading] = useState(true);
   const [searchFavourite, setSearchFavourite] = useState("");
   const [mentorList, setMentorList] = useState([...fakeFavouriteMentorList]);
+
+  const handleClickViewMentor = (id) => {
+    navigate(`/mentor/${id}`, {
+      state: {
+        prevPath: {
+          to: location.pathname,
+          represent: "Favourite Mentor",
+        },
+      },
+    });
+  };
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -151,13 +163,13 @@ const Favourite = () => {
                       <img
                         src={mentor.imageUrl}
                         alt="avatar"
-                        onClick={() => navigate(`/mentor/${mentor.accountId}`)}
+                        onClick={() => handleClickViewMentor(mentor.accountId)}
                       />
                       <div className={styles.mentorInfoWrapper}>
                         <h2
                           className={styles.mentorName}
                           onClick={() =>
-                            navigate(`/mentor/${mentor.accountId}`)
+                            handleClickViewMentor(mentor.accountId)
                           }
                         >
                           {mentor.name}
@@ -193,7 +205,7 @@ const Favourite = () => {
                           <Button
                             variant="outlined"
                             onClick={() =>
-                              navigate(`/mentor/${mentor.accountId}`)
+                              handleClickViewMentor(mentor.accountId)
                             }
                           >
                             View Profile

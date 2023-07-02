@@ -1,6 +1,6 @@
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import HomeIcon from "@mui/icons-material/Home";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
@@ -131,6 +131,8 @@ const fakeRatingListData = [
 ];
 
 const MentorProfile = () => {
+  const location = useLocation();
+  const { prevPath } = location.state;
   const navigate = useNavigate();
   const params = useParams();
   const [radioOption, setRadioOption] = useState("30-79");
@@ -180,7 +182,7 @@ const MentorProfile = () => {
                   <HomeIcon />
                 </div>
                 <NavigateNextIcon />
-                <Link to="/findmentor">Find a Mentor</Link>
+                <Link to={prevPath.to}>{prevPath.represent}</Link>
                 <NavigateNextIcon />
                 <Link>{mentorInfo.name}</Link>
               </div>

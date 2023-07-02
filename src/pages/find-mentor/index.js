@@ -3,7 +3,7 @@ import CustomInputFilter from "../../component/custom-input-filter";
 import CustomButton from "../../component/custom-button";
 import Checkbox from "@mui/material/Checkbox";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -120,6 +120,18 @@ const FindMentor = () => {
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClickViewMentor = (id) => {
+    navigate(`/mentor/${id}`, {
+      state: {
+        prevPath: {
+          to: location.pathname,
+          represent: "Find Mentor",
+        },
+      },
+    });
+  };
 
   useEffect(() => {
     seIsLoading(true);
@@ -235,12 +247,12 @@ const FindMentor = () => {
                   <img
                     src={mentor.imageUrl}
                     alt="avatar"
-                    onClick={() => navigate(`/mentor/${mentor.accountId}`)}
+                    onClick={() => handleClickViewMentor(mentor.accountId)}
                   />
                   <div className={styles.mentorInfoWrapper}>
                     <h2
                       className={styles.mentorName}
-                      onClick={() => navigate(`/mentor/${mentor.accountId}`)}
+                      onClick={() => handleClickViewMentor(mentor.accountId)}
                     >
                       {mentor.name}
                     </h2>
@@ -270,7 +282,7 @@ const FindMentor = () => {
                     </div>
                     <CustomButton
                       content={"View Profille"}
-                      onClick={() => navigate(`/mentor/${mentor.accountId}`)}
+                      onClick={() => handleClickViewMentor(mentor.accountId)}
                     />
                     <div className={styles.bookMark}>
                       {mentor.isBookMark ? (

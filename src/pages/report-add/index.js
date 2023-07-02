@@ -48,7 +48,7 @@ const ReportAdd = () => {
             sx={{ mb: "20px" }}
             fullWidth
             hiddenLabel
-            value={inputValue.title}
+            value={inputValue.content}
             onChange={(event) => {
               setInputValue((pre) => ({ ...pre, content: event.target.value }));
             }}
