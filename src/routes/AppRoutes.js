@@ -14,6 +14,8 @@ import PersonProfile from "../pages/person-profile";
 import MentorProfile from "../pages/mentor-profile";
 import BookingsDetail from "../pages/bookings-detail";
 import Report from "../pages/report";
+import ReportAdd from "../pages/report-add";
+import ReportDetail from "../pages/report-detail";
 
 const AppRoutes = () => {
   return (
@@ -24,13 +26,20 @@ const AppRoutes = () => {
         <Route path="/findmentor" element={<FindMentor />} />
         <Route path="/person/:id" element={<PersonProfile />} />
         <Route path="/mentor/:id" element={<MentorProfile />} />
+
         <Route path="history" element={<History />} />
+
         <Route path="/login" element={<SigIn />} />
         <Route path="/resgiter" element={<SigUp />} />
+
         <Route path="/bookings/:id" element={<BookingsDetail />} />
         <Route path="/bookings" element={<Booking />} />
         <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+
+        <Route path="/report/add" element={<ReportAdd />} />
+        <Route path="/report/:id" element={<ReportDetail />} />
         <Route path="/report" element={<Report />} />
       </Routes>
       {/*Call Dashboard Admin */}
