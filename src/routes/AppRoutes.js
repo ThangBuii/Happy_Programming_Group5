@@ -13,6 +13,7 @@ import FindMentor from "../pages/find-mentor";
 import PersonProfile from "../pages/person-profile";
 import MentorProfile from "../pages/mentor-profile";
 import BookingsDetail from "../component/bookings-detail";
+import Report from "../component/report";
 
 const AppRoutes = () => {
   return (
@@ -29,7 +30,8 @@ const AppRoutes = () => {
         <Route path="/bookings/:id" element={<BookingsDetail />} />
         <Route path="/bookings" element={<Booking />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="favorite-mentor" element={<FavouriteMentor />} />
+        <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+        <Route path="/report" element={<Report />} />
       </Routes>
       {/*Call Dashboard Admin */}
 

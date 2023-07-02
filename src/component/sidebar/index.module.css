@@ -4,7 +4,7 @@
   align-items: center;
   height: 100vh;
   background: #b5c49c;
-  width: 310px;
+  min-width: 310px;
   border: 5px solid #b5c49c;
   border-radius: 10px;
   height: fit-content;

@@ -266,15 +266,18 @@ const BookingsDetail = () => {
                     <TableCell align="left">{item.scheduledTime}</TableCell>
                     <TableCell
                       align="center"
-                      style={{
+                      sx={{
                         backgroundColor:
                           item.status === 0
-                            ? "Pending"
+                            ? "#FBA20A"
                             : item.status === 1
-                            ? "Accepted"
+                            ? "#04AE1B"
                             : item.status === 2
-                            ? "Rejected"
-                            : "inherit",
+                            ? "#FF0000"
+                            : "#FF0000",
+                        display: "block",
+                        transform: "translateY(65%)",
+                        padding: "8px",
                       }}
                     >
                       {item.status === 0
