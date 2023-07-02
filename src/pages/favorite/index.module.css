@@ -52,3 +52,138 @@
 .searchWrapper svg {
   stroke: beige;
 }
+
+.customLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.mentorListWrapper {
+}
+
+.mentorItemWrapper {
+  display: flex;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 12px;
+  padding: 32px 28px;
+  color: rgb(74, 74, 74);
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.mentorItemWrapper img {
+  width: 202px;
+  height: 288px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mentorInfoWrapper {
+  flex: 1;
+  margin-left: 32px;
+}
+
+.mentorName {
+  color: rgb(23, 46, 89);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.archieveList {
+  margin-top: 6px;
+}
+
+.archieveItem {
+  margin-top: 2px;
+  color: rgb(17, 133, 119);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.ratingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  font-size: 13px;
+  color: rgb(74, 74, 74);
+  margin-top: 8px;
+  font-weight: 400;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(229, 231, 235);
+}
+
+.description {
+  margin: 16px 0 16px 0;
+  color: rgb(74, 74, 74);
+  height: 48px;
+  line-height: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skillList {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.skillItem {
+  padding: 4px 12px;
+  background-color: rgb(243, 244, 246);
+  border-radius: 999px;
+  color: rgb(55, 65, 81);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  margin-bottom: 8px;
+  height: 24px;
+}
+
+.bookMark {
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  background-color: rgb(8, 195, 168);
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.bookMark:hover {
+  opacity: 0.8;
+}
+
+.actionWrapper {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.paginationWrapper {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
