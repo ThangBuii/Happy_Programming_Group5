@@ -1,0 +1,87 @@
+.breadcumBarWrapper {
+  background-color: rgba(246, 246, 246, 0.525);
+  border-bottom: 1px solid #e3e8eb;
+  padding: 15px 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bcLeft {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .breadcumBarWrapper {
+    flex-direction: row;
+  }
+}
+
+.bcHome {
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.bcPersonProfile {
+  padding-left: 0.5rem;
+  color: #6c757d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bcPersonProfile::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+  font-size: 14px;
+}
+
+.breadcumBarWrapper h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.containerWrapper {
+  min-height: 600px;
+}
+
+.invoiceContent {
+  background-color: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  padding: 30px;
+}
+
+.invoiceLogo {
+  margin-bottom: 30px;
+}
+
+.invoiceLogo img {
+  width: auto;
+  max-height: 52px;
+}
+
+.invoiceItem {
+  color: #757575;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.invoiceDetails {
+  text-align: right;
+}
+
+.customText {
+  font-size: 18px;
+  color: #26292c;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: inline-block;
+}

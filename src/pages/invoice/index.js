@@ -58,10 +58,10 @@ const fakeInvoiceListData = [
   ),
 ];
 
-function convertNumberToString(number) {
+export function convertNumberToString(number, numOfString) {
   let str = number.toString();
 
-  while (str.length < 4) {
+  while (str.length < numOfString) {
     str = "0" + str;
   }
 
@@ -139,7 +139,10 @@ const Invoice = () => {
                       <Link
                         to={`/invoice/${item.invoiceId}`}
                         className={styles.customIdLink}
-                      >{`#INV-${convertNumberToString(item.invoiceId)}`}</Link>
+                      >{`#INV-${convertNumberToString(
+                        item.invoiceId,
+                        4
+                      )}`}</Link>
                     </TableCell>
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
