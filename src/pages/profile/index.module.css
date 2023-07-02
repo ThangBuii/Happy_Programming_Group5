@@ -3,13 +3,40 @@
   border-bottom: 1px solid #e3e8eb;
   padding: 15px 30px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
-
 .bcHome {
   background-color: transparent;
   font-size: 14px;
   color: #1890ff;
   cursor: pointer;
+}
+
+.bcLeft {
+  flex: 1;
+}
+
+.bcRight {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .bcRight {
+    width: 33.333333%;
+    margin-top: 0px;
+  }
+  .breadcumBarWrapper {
+    flex-direction: row;
+  }
+}
+
+.actionEdit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .bcPersonProfile {

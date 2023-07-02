@@ -106,7 +106,7 @@ const Feedback = () => {
                     CREATED DATE
                   </TableCell>
                   <TableCell
-                    sx={{ minWidth: 500 }}
+                    // sx={{ minWidth: 500 }}
                     className={styles.tableCellHead}
                     align="left"
                   >

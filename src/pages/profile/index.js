@@ -1,24 +1,38 @@
 import React from "react";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 // import FemaleOutlinedIcon from "@mui/icons-material/FemaleOutlined";
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import ProfileHelper from "../../component/profile-helper";
-import styles from "./index.module.css";
 import { useNavigate } from "react-router";
+import EditIcon from "@mui/icons-material/Edit";
+import styles from "./index.module.css";
 
-const PersonProfile = () => {
+const Profile = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={styles.mentorProfileLayoutWrapper}>
+    <div className={styles.layoutWrapper}>
       <div className={styles.breadcumBarWrapper}>
-        <div>
-          <span className={styles.bcHome} onClick={() => navigate("/")}>
-            Home
-          </span>
-          <span className={styles.bcPersonProfile}>Mentee Profile</span>
+        <div className={styles.bcLeft}>
+          <div>
+            <span className={styles.bcHome} onClick={() => navigate("/")}>
+              Home
+            </span>
+            <span className={styles.bcPersonProfile}>Mentee Profile</span>
+          </div>
+          <h2>Mentee Profile</h2>
         </div>
-        <h2>Mentee Profile</h2>
+        <div className={styles.bcRight}>
+          <div className={styles.actionEdit}>
+            <Button
+              variant="contained"
+              startIcon={<EditIcon />}
+              onClick={() => navigate("/profile/edit")}
+            >
+              Edit Profile
+            </Button>
+          </div>
+        </div>
       </div>
       <Container
         maxWidth="lg"
@@ -94,4 +108,4 @@ const PersonProfile = () => {
   );
 };
 
-export default PersonProfile;
+export default Profile;

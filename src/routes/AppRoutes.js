@@ -10,7 +10,6 @@ import FavouriteMentor from "../pages/favorite";
 import Header from "../component/Header";
 import Footer from "../component/Footer/Footer";
 import FindMentor from "../pages/find-mentor";
-import PersonProfile from "../pages/person-profile";
 import MentorProfile from "../pages/mentor-profile";
 import BookingsDetail from "../pages/bookings-detail";
 import Report from "../pages/report";
@@ -19,6 +18,8 @@ import ReportDetail from "../pages/report-detail";
 import Feedback from "../pages/feedback";
 import InvoiceView from "../pages/invoice-view";
 import Invoice from "../pages/invoice";
+import Profile from "../pages/profile";
+import EditProfile from "../pages/profile-edit";
 
 const AppRoutes = () => {
   return (
@@ -27,7 +28,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/findmentor" element={<FindMentor />} />
-        <Route path="/person/:id" element={<PersonProfile />} />
+        {/* <Route path="/person/:id" element={<PersonProfile />} /> */}
         <Route path="/mentor/:id" element={<MentorProfile />} />
 
         <Route path="history" element={<History />} />
@@ -49,6 +50,9 @@ const AppRoutes = () => {
         <Route path="/report/add" element={<ReportAdd />} />
         <Route path="/report/:id" element={<ReportDetail />} />
         <Route path="/report" element={<Report />} />
+
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       {/*Call Dashboard Admin */}
 
