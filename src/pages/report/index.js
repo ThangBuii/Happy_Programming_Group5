@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -8,7 +9,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EyeFill, Plus } from "react-bootstrap-icons";
 import styles from "./index.module.css";
 
@@ -44,6 +45,7 @@ const fakeReportListData = [
 
 const Report = () => {
   const [reportList, setReportList] = useState([...fakeReportListData]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:9999/Booking")
@@ -62,6 +64,15 @@ const Report = () => {
       pageTitle={"List Of Report"}
       layoutContent={
         <div className={styles.layoutWrapper}>
+          <div className={styles.actionAdd}>
+            <Button
+              variant="contained"
+              startIcon={<Plus />}
+              onClick={() => navigate("/report/add")}
+            >
+              Add Report
+            </Button>
+          </div>
           <TableContainer
             sx={{
               background: "#E7E7D7",
@@ -146,13 +157,6 @@ const Report = () => {
                         >
                           <EyeFill />
                           <span>View</span>
-                        </Link>
-                        <Link
-                          className={styles.customAction}
-                          to={`/report/add`}
-                        >
-                          <Plus />
-                          <span>Add</span>
                         </Link>
                       </div>
                     </TableCell>

@@ -79,3 +79,10 @@
 .pendindStatus {
   background-color: #fba20a;
 }
+
+.actionAdd {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
