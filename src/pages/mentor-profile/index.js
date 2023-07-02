@@ -2,7 +2,8 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { ReactComponent as AddressIcon } from "../../assets/address.svg";
 import { ReactComponent as RatingIcon } from "../../assets/rating.svg";
 import { useEffect, useState } from "react";
@@ -22,7 +23,7 @@ function createMentorData(
   address,
   achievement,
   description,
-  tag,
+  isBookMark,
   averateRatings,
   numOfReivews,
   skillList
@@ -34,7 +35,7 @@ function createMentorData(
     address,
     achievement,
     description,
-    tag,
+    isBookMark,
     averateRatings,
     numOfReivews,
     skillList,
@@ -188,9 +189,16 @@ const MentorProfile = () => {
                 <div className={styles.avatarImgWrapper}>
                   <img src={mentorInfo.imageUrl} alt="avatar" />
                 </div>
-                <div className={styles.tag}>
-                  <StarBorderIcon />
-                  <span>{mentorInfo.tag}</span>
+                <div className={styles.isBookMark}>
+                  {mentorInfo.isBookMark ? (
+                    <span>
+                      UnSave <BookmarkIcon />
+                    </span>
+                  ) : (
+                    <span>
+                      Save <BookmarkBorderIcon />
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

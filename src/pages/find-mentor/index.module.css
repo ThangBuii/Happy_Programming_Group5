@@ -192,7 +192,7 @@ hr {
   height: 24px;
 }
 
-.tag {
+.bookMark {
   position: absolute;
   top: 12px;
   right: 24px;
@@ -202,11 +202,16 @@ hr {
   line-height: 20px;
   font-weight: 700;
   border-radius: 9999px;
-  padding: 8px 16px;
+  padding: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+}
+
+.bookMark:hover {
+  opacity: 0.8;
 }
 
 .customBtn {

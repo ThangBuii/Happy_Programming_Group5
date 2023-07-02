@@ -1,12 +1,13 @@
 import { Container, Rating } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import CustomInputFilter from "../../component/custom-input-filter";
+import CustomButton from "../../component/custom-button";
 import Checkbox from "@mui/material/Checkbox";
 import { useEffect, useState } from "react";
-import CustomButton from "../../component/custom-button";
 import { useNavigate } from "react-router";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import styles from "./index.module.css";
 
 function createData(
@@ -15,7 +16,7 @@ function createData(
   imageUrl,
   achievement,
   description,
-  tag,
+  isBookMark,
   averateRatings,
   numOfReivews,
   skillList
@@ -26,7 +27,7 @@ function createData(
     imageUrl,
     achievement,
     description,
-    tag,
+    isBookMark,
     averateRatings,
     numOfReivews,
     skillList,
@@ -43,7 +44,7 @@ const fakeData = [
       "Sr. Software Engineer at eBay",
     ],
     "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    "Quick Responder",
+    true,
     5.0,
     7,
     ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
@@ -54,7 +55,7 @@ const fakeData = [
     "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
     ["Mentor: Career Growth | Leadership | Product Marketing"],
     "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    "Quick Responder",
+    false,
     5.0,
     7,
     ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
@@ -68,7 +69,7 @@ const fakeData = [
       "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
     ],
     "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    "Quick Responder",
+    true,
     5.0,
     7,
     ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
@@ -82,7 +83,7 @@ const fakeData = [
       "Product Leadership Coach (ex-Director of Product) at ex-ServiceNow, ex-Yandex",
     ],
     "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    "Quick Responder",
+    true,
     5.0,
     7,
     ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
@@ -271,9 +272,12 @@ const FindMentor = () => {
                       content={"View Profille"}
                       onClick={() => navigate(`/mentor/${mentor.accountId}`)}
                     />
-                    <div className={styles.tag}>
-                      <StarBorderIcon />
-                      <span>{mentor.tag}</span>
+                    <div className={styles.bookMark}>
+                      {mentor.isBookMark ? (
+                        <BookmarkIcon />
+                      ) : (
+                        <BookmarkBorderIcon />
+                      )}
                     </div>
                   </div>
                 </div>
