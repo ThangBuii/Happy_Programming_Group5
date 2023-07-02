@@ -16,6 +16,7 @@ import BookingsDetail from "../pages/bookings-detail";
 import Report from "../pages/report";
 import ReportAdd from "../pages/report-add";
 import ReportDetail from "../pages/report-detail";
+import Feedback from "../pages/feedback";
 
 const AppRoutes = () => {
   return (
@@ -37,6 +38,8 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+
+        <Route path="/feedback" element={<Feedback />} />
 
         <Route path="/report/add" element={<ReportAdd />} />
         <Route path="/report/:id" element={<ReportDetail />} />
