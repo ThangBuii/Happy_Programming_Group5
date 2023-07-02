@@ -144,7 +144,11 @@ const Feedback = () => {
                       <div className={styles.reportDetail}>{item.content}</div>
                     </TableCell>
                     <TableCell align="center">
-                      <Rating defaultValue={item.rating} readOnly />
+                      <Rating
+                        defaultValue={item.rating}
+                        readOnly
+                        precision={0.5}
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <Button variant="contained" color="warning">

@@ -62,17 +62,19 @@ const Report = () => {
   return (
     <MainLayout
       pageTitle={"List Of Report"}
+      titleControl={
+        <div className={styles.actionAdd}>
+          <Button
+            variant="contained"
+            startIcon={<Plus />}
+            onClick={() => navigate("/report/add")}
+          >
+            Add Report
+          </Button>
+        </div>
+      }
       layoutContent={
         <div className={styles.layoutWrapper}>
-          <div className={styles.actionAdd}>
-            <Button
-              variant="contained"
-              startIcon={<Plus />}
-              onClick={() => navigate("/report/add")}
-            >
-              Add Report
-            </Button>
-          </div>
           <TableContainer
             sx={{
               background: "#E7E7D7",
@@ -123,12 +125,7 @@ const Report = () => {
                       <div className={styles.reportDetail}>{item.content}</div>
                     </TableCell>
                     <TableCell align="left">{item.createDate}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        verticalAlign: "middle",
-                      }}
-                    >
+                    <TableCell align="center">
                       <span
                         className={
                           item.status === 0

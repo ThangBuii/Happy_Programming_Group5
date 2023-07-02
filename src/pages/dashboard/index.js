@@ -110,7 +110,7 @@ const fakeData = [
 
 const Dashboard = () => {
   const location = useLocation();
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState([...fakeData]);
   const postData = {
     id: 3,
   };
@@ -188,26 +188,26 @@ const Dashboard = () => {
                       </TableCell>
                       <TableCell align="left">{item.created_Date}</TableCell>
 
-                      <TableCell
-                        align="center"
-                        style={{
-                          backgroundColor:
+                      <TableCell align="center">
+                        <span
+                          className={
                             item.status === 0
-                              ? "Pending"
+                              ? styles.pendindStatus
                               : item.status === 1
-                              ? "Accepted"
+                              ? styles.acceptStatus
                               : item.status === 2
-                              ? "Rejected"
-                              : "inherit",
-                        }}
-                      >
-                        {item.status === 0
-                          ? "Pending"
-                          : item.status === 1
-                          ? "Accepted"
-                          : item.status === 2
-                          ? "Rejected"
-                          : ""}
+                              ? styles.rejectStatus
+                              : ""
+                          }
+                        >
+                          {item.status === 0
+                            ? "Pending"
+                            : item.status === 1
+                            ? "Accepted"
+                            : item.status === 2
+                            ? "Rejected"
+                            : ""}
+                        </span>
                       </TableCell>
                       <TableCell align="center">
                         <Link

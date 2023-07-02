@@ -94,7 +94,7 @@ const fakeData = [
 const Booking = () => {
   const location = useLocation();
   console.log(location.pathname, linkObjList);
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState([...fakeData]);
   //call API
   useEffect(() => {
     fetch("http://localhost:9999/Booking")

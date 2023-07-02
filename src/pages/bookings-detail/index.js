@@ -264,29 +264,26 @@ const BookingsDetail = () => {
                     </TableCell>
                     <TableCell align="left">{item.scheduledDate}</TableCell>
                     <TableCell align="left">{item.scheduledTime}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        backgroundColor:
+                    <TableCell align="center">
+                      <span
+                        className={
                           item.status === 0
-                            ? "#FBA20A"
+                            ? styles.pendindStatus
                             : item.status === 1
-                            ? "#04AE1B"
+                            ? styles.acceptStatus
                             : item.status === 2
-                            ? "#FF0000"
-                            : "#FF0000",
-                        display: "block",
-                        transform: "translateY(65%)",
-                        padding: "8px",
-                      }}
-                    >
-                      {item.status === 0
-                        ? "Pending"
-                        : item.status === 1
-                        ? "Accepted"
-                        : item.status === 2
-                        ? "Rejected"
-                        : ""}
+                            ? styles.rejectStatus
+                            : ""
+                        }
+                      >
+                        {item.status === 0
+                          ? "Pending"
+                          : item.status === 1
+                          ? "Accepted"
+                          : item.status === 2
+                          ? "Rejected"
+                          : ""}
+                      </span>
                     </TableCell>
                     <TableCell align="left">{item.createdDate}</TableCell>
                   </TableRow>
