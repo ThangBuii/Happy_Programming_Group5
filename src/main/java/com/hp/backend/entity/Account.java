@@ -2,10 +2,12 @@ package com.hp.backend.entity;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -39,7 +41,9 @@ public class Account {
     
     private int role;
 
-    private String avatar;
+    @Lob
+    @Column(name = "avatar", columnDefinition = "BLOB")
+    private byte[] avatar;
 
     private String country;
 

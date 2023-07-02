@@ -1,10 +1,6 @@
 package com.hp.backend.model.account.dto.MentorSiteDTO;
 
 import java.sql.Date;
-import java.util.List;
-
-import com.hp.backend.entity.Skills;
-
 import lombok.Builder;
 import lombok.Data;
 

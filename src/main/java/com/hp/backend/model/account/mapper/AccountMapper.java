@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,6 @@ import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Favorite_Mentor;
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
@@ -66,8 +66,9 @@ public class AccountMapper {
 
     public MenteeDTOResponse toMenteeDTOResponse(Account account) {
         int numberOfBookings = bookingRepository.countBookingsByMenteeId(account.getAccount_id());
+        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
 
-        return MenteeDTOResponse.builder().avatar(account.getAvatar()).username(account.getUsername())
+        return MenteeDTOResponse.builder().avatar(avatar).username(account.getUsername())
                 .created_date(account.getCreated_date()).account_id(account.getAccount_id())
                 .numberOfBooking(numberOfBookings).build();
     }
@@ -78,16 +79,18 @@ public class AccountMapper {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(earned);
+        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
 
-        return MentorDTOResponse.builder().avatar(account.getAvatar()).username(account.getUsername())
+        return MentorDTOResponse.builder().avatar(avatar).username(account.getUsername())
                 .created_date(account.getCreated_date())
                 .account_id(account.getAccount_id()).numberOfBooking(numberOfBookings).earned(formattedValue).build();
     }
 
     public MentorDTODetailResponse toMentorDTODetailResponse(Account account) {
         List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
+        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
         return MentorDTODetailResponse.builder()
-                .avatar(account.getAvatar()).email(account.getEmail()).username(account.getUsername())
+                .avatar(avatar).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
                 .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription())
@@ -96,8 +99,9 @@ public class AccountMapper {
     }
 
     public static MenteeDTODetailResponse toMenteeDTODetailResponse(Account account) {
+         String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
         return MenteeDTODetailResponse.builder()
-                .avatar(account.getAvatar()).email(account.getEmail()).username(account.getUsername())
+                .avatar(avatar).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).description(account.getDescription()).build();
     }
@@ -113,7 +117,8 @@ public class AccountMapper {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Username has already existed").code("400").build());
         }
-        return Account.builder().account_id(account_id).avatar(mentee.getAvatar()).email(account.getEmail())
+        byte[] avatar = Base64.getDecoder().decode(mentee.getAvatar());
+        return Account.builder().account_id(account_id).avatar(avatar).email(account.getEmail())
                 .username(mentee.getUsername()).gender(mentee.getGender()).dob(mentee.getDob())
                 .country(mentee.getCountry()).city(mentee.getCity()).description(mentee.getDescription())
                 .created_date(account.getCreated_date()).role(account.getRole()).password(account.getPassword()).build();
@@ -130,7 +135,8 @@ public class AccountMapper {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Username has already existed").code("400").build());
         }
-        return Account.builder().account_id(account_id).avatar(mentor.getAvatar()).email(account.getEmail())
+        byte[] avatar = Base64.getDecoder().decode(mentor.getAvatar());
+        return Account.builder().account_id(account_id).avatar(avatar).email(account.getEmail())
                 .username(mentor.getUsername()).gender(mentor.getGender()).dob(mentor.getDob())
                 .country(mentor.getCountry()).city(mentor.getCity()).description(mentor.getDescription())
                 .created_date(account.getCreated_date()).role(account.getRole()).university(mentor.getUniversity())
@@ -148,7 +154,8 @@ public class AccountMapper {
         }
         List<Skills> skills = skillRepository.findSkillsByMentorId(mentor.get().getAccount_id());
         Account mentor1 = mentor.get();
-        return FavoriteListMenteeResponseDTO.builder().avatar(mentor1.getAvatar()).username(mentor1.getUsername())
+        String avatar = Base64.getEncoder().encodeToString(mentor1.getAvatar());
+        return FavoriteListMenteeResponseDTO.builder().avatar(avatar).username(mentor1.getUsername())
             .jobtitle(mentor1.getJobtitle()).workplace(mentor1.getWorkplace()).description(mentor1.getDescription())
             .skills(skills).mentor_id(mentor1.getAccount_id()).favorite_id(favorite.getFavorite_id()).build();
     }

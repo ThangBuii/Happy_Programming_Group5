@@ -10,7 +10,7 @@ import lombok.Data;
 public class FeedbackListMentorResponseDTO {
     private String username;
     private String email;
-    private String ava;
+    private String avatar;
     private Date created_date;
     private double rating;
     private String content;

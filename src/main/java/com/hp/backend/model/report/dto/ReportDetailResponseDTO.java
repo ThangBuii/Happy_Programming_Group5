@@ -11,7 +11,7 @@ public class ReportDetailResponseDTO {
     private int report_id;
     private String username;
     private String email;
-    private String ava;
+    private String avatar;
     private String title;
     private String content;
     private Date created_date;

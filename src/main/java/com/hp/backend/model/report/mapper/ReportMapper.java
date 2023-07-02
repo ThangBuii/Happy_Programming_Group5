@@ -1,6 +1,8 @@
 package com.hp.backend.model.report.mapper;
 
 import java.sql.Date;
+import java.util.Base64;
+
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
@@ -31,8 +33,8 @@ public class ReportMapper {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-
-        return ReportListResponseDTO.builder().username(account.getUsername()).ava(account.getAvatar())
+        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
+        return ReportListResponseDTO.builder().username(account.getUsername()).avatar(avatar)
                 .email(account.getEmail())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate())
@@ -46,8 +48,8 @@ public class ReportMapper {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-
-        return ReportDetailResponseDTO.builder().username(account.getUsername()).ava(account.getAvatar())
+        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
+        return ReportDetailResponseDTO.builder().username(account.getUsername()).avatar(avatar)
                 .email(account.getEmail()).content(report.getContent()).answer(report.getAnswer())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate())
