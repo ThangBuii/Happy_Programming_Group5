@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./index.module.css";
 
-const linkObjList = [
+export const linkObjList = [
   {
     to: "/dashboard",
     represent: "Dashboard",
@@ -34,7 +34,6 @@ const linkObjList = [
 
 const Sidebar = () => {
   const location = useLocation();
-  console.log(location);
 
   return (
     <div className={styles.sidebarWrapper}>

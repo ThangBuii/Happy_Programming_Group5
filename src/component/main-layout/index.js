@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import Sidebar from "../sidebar/SideNavBar";
+import Sidebar from "../sidebar";
 import styles from "./index.module.css";
 
 const MainLayout = ({ pageTitle, layoutContent, titleControl }) => {

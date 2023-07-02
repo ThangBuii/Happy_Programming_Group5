@@ -8,9 +8,10 @@ import {
 } from "@mui/material";
 import MainLayout from "../../component/main-layout";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { EyeFill } from "react-bootstrap-icons";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
+import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
 
 function createData(
@@ -108,7 +109,8 @@ const fakeData = [
 ];
 
 const Dashboard = () => {
-  const [report, setReport] = useState([]);
+  const location = useLocation();
+  const [bookings, setBookings] = useState([]);
   const postData = {
     id: 3,
   };
@@ -123,10 +125,10 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setReport(result);
+        setBookings(result);
       })
       .catch((err) => {
-        setReport([...fakeData]);
+        setBookings([...fakeData]);
       });
   }, []);
 
@@ -170,44 +172,55 @@ const Dashboard = () => {
                 </TableHead>
 
                 <TableBody>
-                  {report.map((r) => (
-                    <TableRow key={r.accountId} hover={true}>
+                  {bookings.map((item) => (
+                    <TableRow key={item.accountId} hover={true}>
                       <TableCell align="left">
                         <div className={styles.mentorInfoWrapper}>
-                          <img src={r.imageUrl || AvatarDefault} alt="avatar" />
+                          <img
+                            src={item.imageUrl || AvatarDefault}
+                            alt="avatar"
+                          />
                           <div className={styles.infoLeft}>
-                            <h4>{r.username}</h4>
-                            <p>{r.email}</p>
+                            <h4>{item.username}</h4>
+                            <p>{item.email}</p>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell align="left">{r.created_Date}</TableCell>
+                      <TableCell align="left">{item.created_Date}</TableCell>
 
                       <TableCell
                         align="center"
                         style={{
                           backgroundColor:
-                            r.status === 0
+                            item.status === 0
                               ? "Pending"
-                              : r.status === 1
+                              : item.status === 1
                               ? "Accepted"
-                              : r.status === 2
+                              : item.status === 2
                               ? "Rejected"
                               : "inherit",
                         }}
                       >
-                        {r.status === 0
+                        {item.status === 0
                           ? "Pending"
-                          : r.status === 1
+                          : item.status === 1
                           ? "Accepted"
-                          : r.status === 2
+                          : item.status === 2
                           ? "Rejected"
                           : ""}
                       </TableCell>
                       <TableCell align="center">
                         <Link
                           className={styles.customAction}
-                          to={`/person/${r.menteeId}`}
+                          to={`/bookings/${item.menteeId}`}
+                          state={{
+                            prevPath: {
+                              to: location.pathname,
+                              represent: linkObjList.find(
+                                (cur) => cur.to === location.pathname
+                              ).represent,
+                            },
+                          }}
                         >
                           <EyeFill />
                           <span>View</span>

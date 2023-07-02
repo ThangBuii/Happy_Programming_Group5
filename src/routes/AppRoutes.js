@@ -12,6 +12,7 @@ import Footer from "../component/Footer/Footer";
 import FindMentor from "../pages/find-mentor";
 import PersonProfile from "../pages/person-profile";
 import MentorProfile from "../pages/mentor-profile";
+import BookingsDetail from "../component/bookings-detail";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         <Route path="history" element={<History />} />
         <Route path="/login" element={<SigIn />} />
         <Route path="/resgiter" element={<SigUp />} />
+        <Route path="/bookings/:id" element={<BookingsDetail />} />
         <Route path="/bookings" element={<Booking />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="favorite-mentor" element={<FavouriteMentor />} />

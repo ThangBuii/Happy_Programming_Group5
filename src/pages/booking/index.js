@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { EyeFill } from "react-bootstrap-icons";
+import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
 
 function createData(accountId, name, imageUrl, email, date) {
@@ -91,6 +92,8 @@ const fakeData = [
 ];
 
 const Booking = () => {
+  const location = useLocation();
+  console.log(location.pathname, linkObjList);
   const [bookings, setBookings] = useState([]);
   //call API
   useEffect(() => {
@@ -104,22 +107,6 @@ const Booking = () => {
         setBookings(fakeData);
       });
   }, []);
-
-  // delete
-  // const handleDelete = (name) => {
-  //   if (window.confirm("Muon xoa-name: " + name + "?")) {
-  //     fetch("http://localhost:9999/Booking/" + name, {
-  //       method: "DELETE",
-  //     })
-  //       .then(() => {
-  //         alert("Delete success");
-  //         window.location.reload();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.message);
-  //       });
-  //   }
-  // };
 
   return (
     <MainLayout
@@ -177,7 +164,15 @@ const Booking = () => {
                       <TableCell align="center">
                         <Link
                           className={styles.customAction}
-                          to={`/person/${item.menteeId}`}
+                          to={`/bookings/${item.menteeId}`}
+                          state={{
+                            prevPath: {
+                              to: location.pathname,
+                              represent: linkObjList.find(
+                                (cur) => cur.to === location.pathname
+                              ).represent,
+                            },
+                          }}
                         >
                           <EyeFill />
                           <span>View</span>
