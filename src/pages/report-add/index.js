@@ -21,9 +21,9 @@ const ReportAdd = () => {
             >
               Report
             </span>
-            <span className={styles.bcPersonProfile}>Report Detail</span>
+            <span className={styles.bcPersonProfile}>Add Report</span>
           </div>
-          <h2>Report Detail</h2>
+          <h2>Add Report</h2>
         </div>
       </div>
       <div className={styles.containerWrapper}>
