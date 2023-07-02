@@ -17,6 +17,8 @@ import Report from "../pages/report";
 import ReportAdd from "../pages/report-add";
 import ReportDetail from "../pages/report-detail";
 import Feedback from "../pages/feedback";
+import InvoiceView from "../pages/invoice-view";
+import Invoice from "../pages/invoice";
 
 const AppRoutes = () => {
   return (
@@ -40,6 +42,9 @@ const AppRoutes = () => {
         <Route path="/favorite-mentor" element={<FavouriteMentor />} />
 
         <Route path="/feedback" element={<Feedback />} />
+
+        <Route path="/invoice/:id" element={<InvoiceView />} />
+        <Route path="/invoice" element={<Invoice />} />
 
         <Route path="/report/add" element={<ReportAdd />} />
         <Route path="/report/:id" element={<ReportDetail />} />
