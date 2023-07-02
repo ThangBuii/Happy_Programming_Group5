@@ -12,8 +12,8 @@ import Footer from "../component/Footer/Footer";
 import FindMentor from "../pages/find-mentor";
 import PersonProfile from "../pages/person-profile";
 import MentorProfile from "../pages/mentor-profile";
-import BookingsDetail from "../component/bookings-detail";
-import Report from "../component/report";
+import BookingsDetail from "../pages/bookings-detail";
+import Report from "../pages/report";
 
 const AppRoutes = () => {
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MainLayout from "../main-layout";
+import MainLayout from "../../component/main-layout";
 import {
   Table,
   TableBody,
