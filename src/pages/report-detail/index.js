@@ -1,37 +1,23 @@
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate  } from "react-router";
 import styles from "./index.module.css";
+import {request} from '../../axios_helper'
+import { useParams } from "react-router-dom";
 
-function createData(reportId, title, content, createDate, answer) {
-  return { reportId, title, content, createDate, answer };
-}
-
-const fakeReportData = createData(
-  "report1",
-  "Chat luong gio hoc te",
-  "Nhóm học tập rất cần thiết trong dạy học theo định hướng phát triển năng lực người học. Khi học theo nhóm các em được chia sẻ ý kiến cho nhau, được hỗ trợ giúp đỡ nhau để cùng tiến bộ nhằm phát triển năng lực và phẩm chất, hoàn thiện bản thân trong quá trình học tập.",
-  "08, August, 2023",
-  {
-    answerId: "answer1",
-    answerText: "Cam on phan hoi cua ban ve mentor nay!",
-    answerAt: "08, August, 2023",
-  }
-);
 
 const ReportDetail = () => {
   const navigate = useNavigate();
-  const [report, setReport] = useState({ ...fakeReportData });
+  const {report_id} = useParams();
+  const [report, setReport] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:9999/Booking")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setReport(data);
+    request("GET", `/api/report/${report_id}`)
+      .then((response) => {
+        setReport(response.data);
       })
-      .catch((err) => {
-        console.log(err);
-        setReport({ ...fakeReportData });
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
@@ -62,16 +48,16 @@ const ReportDetail = () => {
           }}
         >
           <h4>
-            Title <span>{report.createDate}</span>
+            Title <span>{report.created_date}</span>
           </h4>
           <div className={styles.reportDetail}>{report.title}</div>
           <h4>Content</h4>
           <div className={styles.reportDetail}>{report.content}</div>
           <h4>
-            Answer <span>{report.answer.answerAt}</span>
+            Answer
           </h4>
           <div className={styles.reportAnswer}>
-            {report.answer.answerText || "Please wait for answering!"}
+            {report.answer || "Please wait for answering!"}
           </div>
         </Container>
       </div>
