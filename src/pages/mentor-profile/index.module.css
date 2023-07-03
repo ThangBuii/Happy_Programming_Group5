@@ -308,7 +308,7 @@
   }
 }
 
-hr {
+.topBgWrapper hr {
   margin: 48px 0 !important;
   background-color: rgb(219, 219, 219);
 }
