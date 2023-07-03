@@ -75,9 +75,9 @@ const ManageMentor = () => {
     setChooseId(id);
   };
 
-  const getChooseName = (mentorRowTmp, id) => {
-    if (id === "" || mentorRowTmp.lenght === 0) return "";
-    const item = mentorRowTmp.find((item) => item.id === id);
+  const getChooseName = (rowTmp, id) => {
+    if (id === "" || rowTmp.lenght === 0) return "";
+    const item = rowTmp.find((item) => item.id === id);
     if (!item) return "";
     return item.name;
   };

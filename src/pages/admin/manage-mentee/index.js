@@ -72,9 +72,9 @@ const ManageMentee = () => {
     setChooseId(id);
   };
 
-  const getChooseName = (menteeRowTmp, id) => {
-    if (id === "" || menteeRowTmp.lenght === 0) return "";
-    const item = menteeRowTmp.find((item) => item.id === id);
+  const getChooseName = (rowTmp, id) => {
+    if (id === "" || rowTmp.lenght === 0) return "";
+    const item = rowTmp.find((item) => item.id === id);
     if (!item) return "";
     return item.name;
   };
