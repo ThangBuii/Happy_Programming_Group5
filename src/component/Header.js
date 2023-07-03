@@ -1,17 +1,24 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../styles/Header.css";
-import { FaSearch, FaHeart, FaHistory, FaFingerprint, FaUser } from 'react-icons/fa';
-
-
+import {
+  FaSearch,
+  FaHeart,
+  FaHistory,
+  FaFingerprint,
+  FaUser,
+} from "react-icons/fa";
 
 function Header() {
+  const location = useLocation();
+
   return (
-    <div>
-      <Navbar className="header" expand="lg" >
+    <div
+      className={location.pathname.includes("admin") ? "headerAdminStyle" : ""}
+    >
+      <Navbar className="header" expand="lg">
         <Container>
-        
           <Navbar.Brand as={Link} to="/" className="brand">
             Happy Programming
           </Navbar.Brand>
@@ -41,7 +48,5 @@ function Header() {
       </Navbar>
     </div>
   );
-
 }
 export default Header;
-
