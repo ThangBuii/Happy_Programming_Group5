@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +19,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
+import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
@@ -27,6 +27,7 @@ import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateReque
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
+import com.hp.backend.repository.FavoriteRepository;
 import com.hp.backend.repository.SkillRepository;
 import com.hp.backend.utils.CommonUtils;
 
@@ -39,6 +40,7 @@ public class AccountMapper {
     private final SkillRepository skillRepository;
     private final AccountRepository accountRepository;
     private final CommonUtils commonUtils;
+    private final FavoriteRepository favoriteRepository;
 
     public static AccountDTOLoginResponse toAccountDTOResponse(Account account) {
         return AccountDTOLoginResponse.builder().role(account.getRole()).build();
@@ -163,5 +165,14 @@ public class AccountMapper {
         return FavoriteListMenteeResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentor1.getAvatar())).username(mentor1.getUsername())
                 .description(mentor1.getDescription()).short_description(mentor1.getShort_description())
                 .skills(skills).mentor_id(mentor1.getAccount_id()).favorite_id(favorite.getFavorite_id()).build();
+    }
+
+    public FindMentorResponseDTO toFindMentorResponse(Account account, int account_id) {
+        List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
+        boolean isFavorite = favoriteRepository.existsByMentorIdAndMenteeId(account.getAccount_id(), account_id);
+
+        return FindMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
+            .username(account.getUsername()).short_description(account.getShort_description())
+            .description(account.getDescription()).skills(skills).mentor_id(account_id).isFavorite(isFavorite).build();
     }
 }

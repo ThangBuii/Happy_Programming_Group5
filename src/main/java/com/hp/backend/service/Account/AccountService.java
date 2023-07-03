@@ -10,6 +10,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
+import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
@@ -49,4 +50,6 @@ public interface AccountService {
     public void addFavorite(int mentee_id, int mentor_id) throws CustomBadRequestException;
 
     public void deleteFavorite(int id, int mentee_id) throws CustomInternalServerException, CustomBadRequestException;
+
+    public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id);
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
@@ -21,6 +22,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
+import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
@@ -111,5 +113,12 @@ public class AccountController {
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         accountService.changePassword(password,tokenPayload.getAccount_id());
     }
+
+    @GetMapping("/findMentor")
+    public List<FindMentorResponseDTO> getListFindMentor(HttpServletRequest request,@RequestParam int skill_id){
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        return accountService.getListFindMentor(tokenPayload.getAccount_id(), skill_id);
+    } 
 
 }

@@ -18,6 +18,7 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
+import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
@@ -27,6 +28,7 @@ import com.hp.backend.model.account.mapper.AccountMapper;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
+import com.hp.backend.repository.Mentor_SkillsRepository;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -39,6 +41,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final FavoriteRepository favoriteRepository;
+    private final Mentor_SkillsRepository mentor_SkillsRepository;
 
     @Override
     public Map<String, AccountDTOLoginResponse> authenticate(Map<String, AccountDTOLoginRequest> accountLoginRequestMap)
@@ -220,6 +223,22 @@ public class AccountServiceImpl implements AccountService {
         }
 
         favoriteRepository.delete(favorite.get());
+    }
+
+    @Override
+    public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id) {
+        List<Account> accounts = new ArrayList<>();
+        if(skill_id != 0){
+            accounts = mentor_SkillsRepository.findBySkillId(skill_id);
+        }else{
+            accounts = accountRepository.findAllByRole(1);
+        }
+        List<FindMentorResponseDTO> results = new ArrayList<>();
+        for(Account account : accounts){
+            results.add(accountMapper.toFindMentorResponse(account, account_id));
+        }
+
+        return results;
     }
 
 }

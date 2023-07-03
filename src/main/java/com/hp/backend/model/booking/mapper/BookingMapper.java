@@ -12,7 +12,6 @@ import com.hp.backend.model.booking.dto.BookingListMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class BookingMapper {
 
     private final BookingRepository bookingRepository;
     private final AccountRepository accountRepository;
-    private final SessionRepository sessionRepository;
     private final CommonUtils commonUtils;
 
     public static BookingListMenteeDTO toBookingDTO(BookingListMenteeDTO book1) {
