@@ -9,11 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.hp.backend.entity.Booking;
 
-
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    @Query("SELECT COUNT(b) FROM Booking b WHERE b.mentee_id = :mentee_id")
-    int countBookingsByMenteeId(@Param("mentee_id") int menteeId);
+    @Query("SELECT COUNT(b) FROM Booking b WHERE b.menteeId = :menteeId")
+    int countBookingsByMenteeId(int menteeId);
 
     @Query("SELECT COUNT(b) AS session_count " +
             "FROM Booking b " +
