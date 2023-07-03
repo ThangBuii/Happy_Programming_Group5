@@ -1,17 +1,10 @@
-import {
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
+import { useNavigate } from "react-router";
 
 // Mentor Name,Member Since,Numbers of Booking, Action : delete(pop up co muon delete ko), View ấn vào để xem thông tin chi tiết mentor
 
@@ -37,13 +30,22 @@ const fakeRowMentorData = [
     numOfBookings: 7,
     memberSince: "08, August, 2023",
   },
+  {
+    id: "user3",
+    name: "Pzzanggg",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
+    numOfBookings: 5,
+    memberSince: "09, August, 2023",
+  },
 ];
 
 const ManageMentee = () => {
+  const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
-  const [metorRow, setMentorRow] = useState([]);
+  const [mentorRow, setMentorRow] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
+  const [chooseId, setChooseId] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:9999/all-mentor")
@@ -62,12 +64,19 @@ const ManageMentee = () => {
 
   const handleCloseDialog = () => {
     setIsModalOpen(false);
-    setDeleteId("");
+    setChooseId("");
   };
 
   const handleClickDelete = (id) => {
     setIsModalOpen(true);
-    setDeleteId(id);
+    setChooseId(id);
+  };
+
+  const getChooseName = (mentorRowTmp, id) => {
+    if (id === "" || mentorRowTmp.lenght === 0) return "";
+    const item = mentorRowTmp.find((item) => item.id === id);
+    if (!item) return "";
+    return item.name;
   };
 
   const columns = [
@@ -123,13 +132,22 @@ const ManageMentee = () => {
       headerAlign: "center",
       renderCell: ({ value, row }) => {
         return (
-          <Button
-            variant="contained"
-            color="warning"
-            onClick={() => handleClickDelete(row.id)}
-          >
-            Delete
-          </Button>
+          <div className={styles.actionWrapper}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(`/profile/${row.id}`)}
+            >
+              View
+            </Button>
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={() => handleClickDelete(row.id)}
+            >
+              Delete
+            </Button>
+          </div>
         );
       },
       renderHeader: (params) => (
@@ -139,58 +157,44 @@ const ManageMentee = () => {
   ];
 
   return (
-    <>
-      <MainAdminLayout
-        title="List of Mentee"
-        breadCum={[...breadcrumbArr]}
-        content={
-          <>
-            {isLoading ? (
-              <div className={styles.customLoading}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <div
-                className={styles.layoutWrapper}
-                style={{ height: 400, width: "100%" }}
-              >
-                <DataGrid
-                  rows={metorRow}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                />
-              </div>
-            )}
-          </>
-        }
-      />
-      <Dialog
-        open={isModalOpen}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Confirm delete mentor?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure to delete mentor with accountId is {deleteId}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Disagree</Button>
-          <Button onClick={handleCloseDialog} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <MainAdminLayout
+      title="List of Mentee"
+      breadCum={[...breadcrumbArr]}
+      content={
+        <>
+          {isLoading ? (
+            <div className={styles.customLoading}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <div
+              className={styles.layoutWrapper}
+              style={{ height: 400, width: "100%" }}
+            >
+              <DataGrid
+                rows={mentorRow}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+              />
+            </div>
+          )}
+        </>
+      }
+      isDialogOpen={isModalOpen}
+      onClose={handleCloseDialog}
+      dialogTitle="Confirm delete mentor?"
+      dialogContent={`Are you sure you want to delete user ${getChooseName(
+        mentorRow,
+        chooseId
+      )}`}
+      onAgreeDialog={() => handleClickDelete(chooseId)}
+      onDisAgreeDialog={handleCloseDialog}
+    />
   );
 };
 

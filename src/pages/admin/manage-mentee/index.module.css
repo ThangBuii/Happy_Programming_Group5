@@ -35,3 +35,10 @@
   align-items: center;
   margin-top: 100px;
 }
+
+.actionWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}

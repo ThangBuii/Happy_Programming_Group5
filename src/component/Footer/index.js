@@ -13,7 +13,7 @@ const Footer = () => {
     >
       <div className={styles.footerDs}>
         <div className={styles.dSHead}>
-          <image src={Logo} />
+          <img src={Logo} alt="avatar" />
           <h1>HAPPY PROGRAMMING</h1>
         </div>
         <p>

@@ -74,6 +74,7 @@ const AppRoutes = () => {
           <Route path="/report" element={<Report />} />
 
           <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
 
           {/*Call Dashboard Admin */}
