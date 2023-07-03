@@ -2,23 +2,42 @@ import { useState } from 'react';
 import '../styles/SignIn.css';
 import { } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import {request, setAuthToken} from '../axios_helper'
 
 const SigIn = () => {
     const navigate = useNavigate();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSignIn = () => {
-        console.log('username: ' + userName);
-        console.log('password: ' + password)
-        // Kiểm tra tên đăng nhập và mật khẩu
-        if (userName === "admin" && password === "12345") {
-            setIsValid(true);
-            navigate('/');
-        } else {
-            setIsValid(false);
-        }
+        const payload = {
+            account: {
+                email: userName,
+                password: password
+            }
+        };
+    
+        request("POST", 
+        "/api/login",
+         payload).then((response) => {
+                setAuthToken(response.data.account.token)
+                // Handle the response here (e.g., navigate to a new page)
+                navigate('/');
+            })
+            .catch(error => {
+                // Handle the error here (e.g., show an error message)
+                setIsValid(false);
+                if (error.response && error.response.data && error.response.data.errors) {
+                    setErrorMessage(error.response.data.errors.message);
+                  } else {
+                    setErrorMessage("An error occurred. Please try again.");
+                  }
+                console.error(error);
+            });
+
+        
     }
 
     return (
@@ -28,9 +47,9 @@ const SigIn = () => {
                     <div className="col-12 text-login">SIGN IN</div>
 
                     <div className="col-12 form-group login-input">
-                        <label>UserName:</label>
+                        <label>Email:</label>
                         <input
-                            type="text"
+                            type="email"
                             value={userName} onChange={(e) => { setUserName(e.target.value) }}
                             className="form-control" placeholder="Enter your username" />
                     </div>
@@ -46,7 +65,7 @@ const SigIn = () => {
                         <div>
                     <button className="btn-login" onClick={handleSignIn}>Login</button>
                     </div>
-                    {!isValid && <p class="error-message">Tên đăng nhập hoặc mật khẩu không chính xác!</p>}
+                    {!isValid && <p class="error-message">{errorMessage}</p>}
 
                     <div className="auth-links">
                         <Link to="/forgotpassword" className="forgot-pwd">Forgot your password</Link>

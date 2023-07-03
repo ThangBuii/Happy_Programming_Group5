@@ -12,50 +12,22 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { EyeFill, Plus } from "react-bootstrap-icons";
 import styles from "./index.module.css";
+import {request, setAuthToken} from '../../axios_helper'
 
 // Title, Content, Created Date, Status
 
-function createData(reportId, title, content, createDate, status) {
-  return { reportId, title, content, createDate, status };
-}
-
-const fakeReportListData = [
-  createData(
-    "report1",
-    "Chat luong gio hoc te",
-    "Nhóm học tập rất cần thiết trong dạy học theo định hướng phát triển năng lực người học. Khi học theo nhóm các em được chia sẻ ý kiến cho nhau, được hỗ trợ giúp đỡ nhau để cùng tiến bộ nhằm phát triển năng lực và phẩm chất, hoàn thiện bản thân trong quá trình học tập.",
-    "08, August, 2023",
-    0
-  ),
-  createData(
-    "report2",
-    "Chat luong gio hoc te",
-    "Nhóm học tập rất cần thiết trong dạy học theo định hướng phát triển năng lực người học. Khi học theo nhóm các em được chia sẻ ý kiến cho nhau, được hỗ trợ giúp đỡ nhau để cùng tiến bộ nhằm phát triển năng lực và phẩm chất, hoàn thiện bản thân trong quá trình học tập.",
-    "08, August, 2023",
-    1
-  ),
-  createData(
-    "report3",
-    "Chat luong gio hoc te",
-    "Nhóm học tập rất cần thiết trong dạy học theo định hướng phát triển năng lực người học. Khi học theo nhóm các em được chia sẻ ý kiến cho nhau, được hỗ trợ giúp đỡ nhau để cùng tiến bộ nhằm phát triển năng lực và phẩm chất, hoàn thiện bản thân trong quá trình học tập.",
-    "08, August, 2023",
-    2
-  ),
-];
 
 const Report = () => {
-  const [reportList, setReportList] = useState([...fakeReportListData]);
+  const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:9999/Booking")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setReportList(data);
+    request("GET", "/api/men/reports")
+      .then((response) => {
+        setReportList(response.data);
       })
-      .catch((err) => {
-        console.log(err);
-        setReportList([...fakeReportListData]);
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
@@ -114,7 +86,7 @@ const Report = () => {
               <TableBody>
                 {reportList.map((item) => (
                   <TableRow
-                    key={item.reportId}
+                    key={item.report_id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     hover={true}
                   >
@@ -124,7 +96,7 @@ const Report = () => {
                     <TableCell align="left">
                       <div className={styles.reportDetail}>{item.content}</div>
                     </TableCell>
-                    <TableCell align="left">{item.createDate}</TableCell>
+                    <TableCell align="left">{item.created_date}</TableCell>
                     <TableCell align="center">
                       <span
                         className={
@@ -150,7 +122,7 @@ const Report = () => {
                       <div className={styles.actionWrapper}>
                         <Link
                           className={styles.customAction}
-                          to={`/report/${item.reportId}`}
+                          to={`/report/${item.report_id}`}
                         >
                           <EyeFill />
                           <span>View</span>

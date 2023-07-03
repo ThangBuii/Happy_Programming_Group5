@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/SignIn.css';
 import { } from 'react-bootstrap';
 import { useState } from 'react';
+import { request, setAuthToken } from '../axios_helper'
  
 
 
@@ -12,9 +13,11 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
+  const [isValid, setIsValid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const payload = {
       account: {
         username: username,
@@ -24,20 +27,23 @@ const SignUp = () => {
       }
     };
 
-    // request("POST",
-    //   "/api/users/register",
-    //   payload).then((response) => {
-    //     setAuthToken(response.data.token);
-    //     // Handle the response here (e.g., navigate to a new page)
-    //     navigate('/login');
-    //     window.location.reload();
-        
-    //   })
-    //   .catch(error => {
-    //     // Handle the error here (e.g., show an error message)
-
-    //     console.error(error);
-    //   });
+    request("POST", "/api/register", payload)
+      .then((response) => {
+        setAuthToken(response.data.token);
+        // Handle the response here (e.g., navigate to a new page)
+        navigate("/");
+      })
+      .catch((error) => {
+        // Handle the error here (e.g., show an error message)
+        setIsValid(false);
+        if (error.response && error.response.data && error.response.data.errors) {
+          setErrorMessage(error.response.data.errors.message);
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
+      
+        console.error(error);
+      });
 
   };
 
@@ -123,6 +129,7 @@ const SignUp = () => {
                     <button onClick={handleSubmit} type="submit" class="btn btn-primary btn-block mb-4">
                       Sign up
                     </button>
+                    {!isValid && <p class="error-message">{errorMessage}</p>}
 
                     <div class="text-center">
                       <p>or sign up with:</p>
