@@ -47,7 +47,7 @@ const ManageMentor = () => {
   const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
   const [mentorRow, setMentorRow] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [chooseId, setChooseId] = useState("");
 
   useEffect(() => {
@@ -65,13 +65,13 @@ const ManageMentor = () => {
       });
   }, []);
 
-  const handleCloseDialog = () => {
-    setIsModalOpen(false);
+  const handleCloseConfirmDialog = () => {
+    setIsConfirmDialogOpen(false);
     setChooseId("");
   };
 
   const handleClickDelete = (id) => {
-    setIsModalOpen(true);
+    setIsConfirmDialogOpen(true);
     setChooseId(id);
   };
 
@@ -141,7 +141,7 @@ const ManageMentor = () => {
       },
     },
     {
-      field: "id",
+      field: "actions",
       headerName: "Actions",
       type: "string",
       flex: 0.2,
@@ -189,6 +189,13 @@ const ManageMentor = () => {
               style={{ height: 400, width: "100%" }}
             >
               <DataGrid
+                sx={{
+                  backgroundColor: "#fff",
+                  padding: "24px",
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: "rgb(248, 249, 250)",
+                  },
+                }}
                 rows={mentorRow}
                 columns={columns}
                 initialState={{
@@ -202,15 +209,15 @@ const ManageMentor = () => {
           )}
         </>
       }
-      isDialogOpen={isModalOpen}
-      onClose={handleCloseDialog}
-      dialogTitle="Confirm delete mentor?"
-      dialogContent={`Are you sure you want to delete user ${getChooseName(
+      isConfirmDialogOpen={isConfirmDialogOpen}
+      onCloseConfirmDialog={handleCloseConfirmDialog}
+      confirmDialogTitle="Confirm delete mentor?"
+      confirmDialogContent={`Are you sure you want to delete user ${getChooseName(
         mentorRow,
         chooseId
       )}`}
-      onAgreeDialog={() => handleClickDelete(chooseId)}
-      onDisAgreeDialog={handleCloseDialog}
+      onAgreeConfirmDialog={() => handleClickDelete(chooseId)}
+      onDisAgreeConfirmDialog={handleCloseConfirmDialog}
     />
   );
 };

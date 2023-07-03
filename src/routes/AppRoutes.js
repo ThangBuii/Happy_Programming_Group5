@@ -31,6 +31,7 @@ import ManageMentee from "../pages/admin/manage-mentee";
 import Footer from "../component/footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
+import ManageFeedback from "../pages/admin/manage-feedback";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -84,7 +85,7 @@ const AppRoutes = () => {
           <Route path="/admin/mentor" element={<ManageMentor />} />
           <Route path="/admin/mentee" element={<ManageMentee />} />
           <Route path="/admin/sessions" element={<ManageSession />} />
-          <Route path="/admin/skill" element={<ManageMentee />} />
+          <Route path="/admin/feedback" element={<ManageFeedback />} />
           <Route path="/admin" element={<Navigate to={"dashboard"} />} />
         </Routes>
 

@@ -15,12 +15,16 @@ const MainAdminLayout = ({
   title,
   breadCum,
   content,
-  isDialogOpen = false,
-  onClose,
-  dialogTitle = "",
-  dialogContent = "",
-  onDisAgreeDialog = onClose,
-  onAgreeDialog = onClose,
+  isConfirmDialogOpen = false,
+  onCloseConfirmDialog,
+  confirmDialogTitle = "",
+  confirmDialogContent = "",
+  onDisAgreeConfirmDialog = onCloseConfirmDialog,
+  onAgreeConfirmDialog = onCloseConfirmDialog,
+  isShowDialogOpen = false,
+  onCloseShowDialog,
+  showDialogTitle = "",
+  showDialogContent = "",
 }) => {
   return (
     <div className={styles.layoutWrapper}>
@@ -46,17 +50,35 @@ const MainAdminLayout = ({
         <div className={styles.contentDetailWrapper}>{content}</div>
       </div>
 
-      <Dialog open={isDialogOpen} onClose={onClose}>
-        <DialogTitle>{dialogTitle}</DialogTitle>
+      {/* Confirm dialog */}
+      <Dialog open={isConfirmDialogOpen} onClose={onCloseConfirmDialog}>
+        <DialogTitle>{confirmDialogTitle}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{dialogContent}</DialogContentText>
+          <DialogContentText>{confirmDialogContent}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onDisAgreeDialog}>Disagree</Button>
-          <Button onClick={onAgreeDialog} autoFocus>
+          <Button onClick={onDisAgreeConfirmDialog}>Disagree</Button>
+          <Button onClick={onAgreeConfirmDialog} autoFocus>
             Agree
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* Show Dialog */}
+      <Dialog
+        maxWidth="md"
+        open={isShowDialogOpen}
+        onClose={onCloseShowDialog}
+        sx={{
+          "& .MuiPaper-root": {
+            padding: "10px",
+          },
+        }}
+      >
+        <DialogTitle>{showDialogTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{showDialogContent}</DialogContentText>
+        </DialogContent>
       </Dialog>
     </div>
   );

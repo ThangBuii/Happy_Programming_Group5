@@ -217,6 +217,13 @@ const ManageSession = () => {
               style={{ height: 400, width: "100%" }}
             >
               <DataGrid
+                sx={{
+                  backgroundColor: "#fff",
+                  padding: "24px",
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: "rgb(248, 249, 250)",
+                  },
+                }}
                 rows={sessionRow}
                 columns={columns}
                 initialState={{
