@@ -15,16 +15,15 @@ import com.hp.backend.model.report.dto.ReportListMentorMenteeResponseDTO;
 import com.hp.backend.model.report.dto.ReportListResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.ReportRepository;
-import com.hp.backend.utils.DateUtil;
+import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class ReportMapper {
-    private final ReportRepository reportRepository;
     private final AccountRepository accountRepository;
-    private final DateUtil dateUtil;
+    private final CommonUtils commonUtils;
 
     public ReportListResponseDTO toReportListResponseDTO(Report report) throws CustomInternalServerException {
         Account account = accountRepository.findById(report.getAccount_id()).get();
@@ -33,8 +32,8 @@ public class ReportMapper {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
-        return ReportListResponseDTO.builder().username(account.getUsername()).avatar(avatar)
+        
+        return ReportListResponseDTO.builder().username(account.getUsername()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .email(account.getEmail())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate())
@@ -48,8 +47,8 @@ public class ReportMapper {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-        String avatar = Base64.getEncoder().encodeToString(account.getAvatar());
-        return ReportDetailResponseDTO.builder().username(account.getUsername()).avatar(avatar)
+        
+        return ReportDetailResponseDTO.builder().username(account.getUsername()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .email(account.getEmail()).content(report.getContent()).answer(report.getAnswer())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate())
@@ -62,7 +61,7 @@ public class ReportMapper {
     }
 
     public Report toReport(int account_id, ReportAddRequestDTO reportAddRequestDTO) {
-        Date currentDate = dateUtil.getCurrentDate();
+        Date currentDate = commonUtils.getCurrentDate();
 
         return Report.builder().account_id(account_id).date(currentDate).title(reportAddRequestDTO.getTitle())
                 .content(reportAddRequestDTO.getContent()).status(0).build();
