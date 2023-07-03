@@ -1,0 +1,15 @@
+.cutomBtn {
+  background-color: rgb(28, 61, 122);
+  border-radius: 6px;
+  padding: 10px 28px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  transition: background-color 0.5s ease;
+}
+
+.cutomBtn:hover {
+  background-color: rgb(23, 46, 89);
+}

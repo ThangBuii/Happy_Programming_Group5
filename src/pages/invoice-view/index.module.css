@@ -1,26 +1,8 @@
-.layoutWrapper {
-  padding: 0 30px;
-}
-
-.pageTitle {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 28px;
-  line-height: 42px;
-  margin-bottom: 8px;
-}
-
-.layoutContent {
-  display: flex;
-}
-
 .breadcumBarWrapper {
   background-color: rgba(246, 246, 246, 0.525);
   border-bottom: 1px solid #e3e8eb;
   padding: 15px 30px;
-  width: calc(100% + 60px);
-  margin-left: -30px;
+  width: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -30,16 +12,7 @@
   flex: 1;
 }
 
-.bcRight {
-  width: 100%;
-  margin-top: 10px;
-}
-
 @media (min-width: 768px) {
-  .bcRight {
-    width: 33.333333%;
-    margin-top: 0px;
-  }
   .breadcumBarWrapper {
     flex-direction: row;
   }
@@ -56,6 +29,7 @@
   padding-left: 0.5rem;
   color: #6c757d;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .bcPersonProfile::before {
@@ -73,7 +47,41 @@
   margin: 5px 0 0;
 }
 
-.contentWrapper {
-  margin-top: 25px;
-  width: 100%;
+.containerWrapper {
+  min-height: 600px;
+}
+
+.invoiceContent {
+  background-color: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  padding: 30px;
+}
+
+.invoiceLogo {
+  margin-bottom: 30px;
+}
+
+.invoiceLogo img {
+  width: auto;
+  max-height: 52px;
+}
+
+.invoiceItem {
+  color: #757575;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.invoiceDetails {
+  text-align: right;
+}
+
+.customText {
+  font-size: 18px;
+  color: #26292c;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: inline-block;
 }

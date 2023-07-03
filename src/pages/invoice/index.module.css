@@ -1,30 +1,5 @@
-.dbWrapper {
+.layoutWrapper {
   width: 100%;
-}
-
-.dbHead {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
-.itemWrapper {
-  width: 310px;
-  height: 176px;
-  background: #e7e7d7;
-  /* Secondary button */
-
-  border: 5px solid #b5c49c;
-  border-radius: 10px;
-}
-
-.dbWrapper h2 {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 26px;
-  line-height: 36px;
-  margin-bottom: 10px;
 }
 
 .mentorInfoWrapper {
@@ -65,26 +40,9 @@
   margin-bottom: 0;
 }
 
-.block {
-  width: 132px;
-  height: 45px;
-  background: #b5c49c;
-  margin: auto;
-}
-
-.trash {
-  margin-left: 40px;
-}
-.table {
-  background-color: #fff; /* Replace with the desired color */
-}
-.divbtn {
-  text-align: left;
-}
-
 .tableCellHead {
   font-family: "Inter";
-  font-size: 0.875rem;
+  font-size: 20px;
   font-weight: 600 !important;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -118,29 +76,6 @@
   gap: 4px;
 }
 
-.rejectStatus,
-.acceptStatus,
-.pendindStatus {
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
-  font-weight: 400;
-  user-select: none;
-
-  border-radius: 4px;
-  color: #fff;
-  text-transform: uppercase;
-  padding: 3px 10px;
-}
-
-.acceptStatus {
-  background-color: #04ae1b;
-}
-
-.rejectStatus {
-  background-color: #ff0000;
-}
-
-.pendindStatus {
-  background-color: #fba20a;
+.customIdLink {
+  text-decoration: none;
 }
