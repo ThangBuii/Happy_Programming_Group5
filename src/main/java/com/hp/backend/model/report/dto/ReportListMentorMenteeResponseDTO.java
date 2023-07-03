@@ -12,4 +12,5 @@ public class ReportListMentorMenteeResponseDTO {
     private String content;
     private Date created_date;
     private int status;
+    private int report_id;
 }

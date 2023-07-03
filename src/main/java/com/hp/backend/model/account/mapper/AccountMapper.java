@@ -96,7 +96,6 @@ public class AccountMapper {
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
                 .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription())
-                .jobtitle(account.getJobtitle()).workplace(account.getWorkplace())
                 .short_description(account.getShort_description()).skills(skills).build();
     }
 
@@ -145,8 +144,8 @@ public class AccountMapper {
                 .username(mentor.getUsername()).gender(mentor.getGender()).dob(mentor.getDob())
                 .country(mentor.getCountry()).city(mentor.getCity()).description(mentor.getDescription())
                 .created_date(account.getCreated_date()).role(account.getRole()).university(mentor.getUniversity())
-                .major(mentor.getMajor()).degree(mentor.getDegree()).jobtitle(mentor.getJobtitle())
-                .workplace(mentor.getWorkplace()).password(account.getPassword())
+                .major(mentor.getMajor()).degree(mentor.getDegree())
+                .password(account.getPassword())
                 .short_description(mentor.getShort_description()).build();
     }
 
@@ -162,7 +161,7 @@ public class AccountMapper {
         Account mentor1 = mentor.get();
         
         return FavoriteListMenteeResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentor1.getAvatar())).username(mentor1.getUsername())
-                .jobtitle(mentor1.getJobtitle()).workplace(mentor1.getWorkplace()).description(mentor1.getDescription())
+                .description(mentor1.getDescription()).short_description(mentor1.getShort_description())
                 .skills(skills).mentor_id(mentor1.getAccount_id()).favorite_id(favorite.getFavorite_id()).build();
     }
 }

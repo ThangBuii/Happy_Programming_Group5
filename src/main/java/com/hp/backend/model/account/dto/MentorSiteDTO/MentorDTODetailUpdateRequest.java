@@ -27,9 +27,5 @@ public class MentorDTODetailUpdateRequest {
 
     private String description;
 
-    private String jobtitle;
-
-    private String workplace;
-
     private String short_description;
 }

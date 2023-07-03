@@ -48,16 +48,16 @@ public class ReportMapper {
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
         
-        return ReportDetailResponseDTO.builder().username(account.getUsername()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
-                .email(account.getEmail()).content(report.getContent()).answer(report.getAnswer())
+        return ReportDetailResponseDTO.builder()
+                .content(report.getContent()).answer(report.getAnswer())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate())
-                .role(account.getRole()).status(report.getStatus()).build();
+                .build();
     }
 
     public ReportListMentorMenteeResponseDTO toReportListMenteeMentorResponseDTO(Report report) {
         return ReportListMentorMenteeResponseDTO.builder().title(report.getTitle()).content(report.getContent())
-                .created_date(report.getDate()).status(report.getStatus()).build();
+                .created_date(report.getDate()).status(report.getStatus()).report_id(report.getReport_id()).build();
     }
 
     public Report toReport(int account_id, ReportAddRequestDTO reportAddRequestDTO) {

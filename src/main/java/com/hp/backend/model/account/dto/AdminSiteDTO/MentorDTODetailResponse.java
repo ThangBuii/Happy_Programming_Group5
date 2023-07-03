@@ -35,10 +35,6 @@ public class MentorDTODetailResponse {
 
     private String description;
 
-    private String jobtitle;
-
-    private String workplace;
-
     private String short_description;
 
     private List<Skills> skills;

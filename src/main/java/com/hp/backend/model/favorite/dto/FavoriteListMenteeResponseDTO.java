@@ -12,8 +12,7 @@ import lombok.Data;
 public class FavoriteListMenteeResponseDTO {
     private String avatar;
     private String username;
-    private String jobtitle;
-    private String workplace;
+    private String short_description;
     private String description;
     private List<Skills> skills;
     private int mentor_id;
