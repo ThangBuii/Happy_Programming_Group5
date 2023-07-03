@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import History from "../pages/History";
 import SigIn from "../pages/SignIn";
 import SigUp from "../pages/SignUp";
@@ -8,7 +13,6 @@ import Booking from "../pages/booking";
 import Dashboard from "../pages/dashboard";
 import FavouriteMentor from "../pages/favorite";
 import Header from "../component/Header";
-import Footer from "../component/Footer/Footer";
 import FindMentor from "../pages/find-mentor";
 import MentorProfile from "../pages/mentor-profile";
 import BookingsDetail from "../pages/bookings-detail";
@@ -21,8 +25,10 @@ import Invoice from "../pages/invoice";
 import Profile from "../pages/profile";
 import EditProfile from "../pages/profile-edit";
 
-import Navbar from "../component/admin/navbar/Navbar";
 import React, { useState } from "react";
+import AdminDashboard from "../pages/admin/dashboard";
+import ManageMentee from "../pages/admin/manage-mentee";
+import Footer from "../component/footer";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -71,7 +77,9 @@ const AppRoutes = () => {
           <Route path="/profile" element={<Profile />} />
 
           {/*Call Dashboard Admin */}
-          <Route path="/admin" element={<Navbar />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/mentee" element={<ManageMentee />} />
+          <Route path="/admin" element={<Navigate to={"dashboard"} />} />
         </Routes>
 
         <Footer />
