@@ -20,7 +20,6 @@
 }
 
 .dSHead h1 {
-  margin-bottom: -26px;
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -30,12 +29,17 @@
   text-align: center;
 }
 
+.dSHead img {
+  width: 60px;
+  height: auto;
+}
+
 .footerDs p {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 18px;
-  margin-top: 43px;
+  margin-left: 14px;
   max-width: 268px;
 }
 

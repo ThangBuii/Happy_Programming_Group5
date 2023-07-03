@@ -29,6 +29,7 @@ import React, { useState } from "react";
 import AdminDashboard from "../pages/admin/dashboard";
 import ManageMentee from "../pages/admin/manage-mentee";
 import Footer from "../component/footer";
+import ManageMentor from "../pages/admin/manage-mentor";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -79,6 +80,7 @@ const AppRoutes = () => {
 
           {/*Call Dashboard Admin */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/mentor" element={<ManageMentor />} />
           <Route path="/admin/mentee" element={<ManageMentee />} />
           <Route path="/admin" element={<Navigate to={"dashboard"} />} />
         </Routes>

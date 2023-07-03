@@ -3,23 +3,24 @@ import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import styles from "./index.module.css";
+import { useNavigate } from "react-router";
 
-// Mentee Name,Member Since,Numbers of Booking, Action : delete(pop up co muon delete ko), View ấn vào để xem thông tin chi tiết mentor
+// Mentor Name,Member Since,Numbers of Booking,Earned, Action : delete(pop up co muon delete ko),View ấn vào để xem thông tin chi tiết mentee
 
 const breadcrumbArr = [
   { to: "/admin/dashboard", represent: "Dashboard" },
-  { to: "/admin/mentee", represent: "Mentee" },
+  { to: "/admin/mentor", represent: "Mentor" },
 ];
 
-const fakeRowMenteeData = [
+const fakeRowMentorData = [
   {
     id: "user1",
     name: "Le Minh Quan",
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 6,
+    earned: 3000,
     memberSince: "08, August, 2023",
   },
   {
@@ -28,6 +29,7 @@ const fakeRowMenteeData = [
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 7,
+    earned: 4000,
     memberSince: "08, August, 2023",
   },
   {
@@ -36,26 +38,27 @@ const fakeRowMenteeData = [
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 5,
+    earned: 2000,
     memberSince: "09, August, 2023",
   },
 ];
 
-const ManageMentee = () => {
+const ManageMentor = () => {
   const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
-  const [menteeRow, setMenteeRow] = useState([]);
+  const [mentorRow, setMentorRow] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chooseId, setChooseId] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentee")
+    fetch("http://localhost:9999/all-mentor")
       .then((resp) => resp.json())
       .then((data) => {
-        setMenteeRow(data);
+        setMentorRow(data);
       })
       .catch((err) => {
         console.log(err);
-        setMenteeRow([...fakeRowMenteeData]);
+        setMentorRow([...fakeRowMentorData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -72,9 +75,9 @@ const ManageMentee = () => {
     setChooseId(id);
   };
 
-  const getChooseName = (menteeRowTmp, id) => {
-    if (id === "" || menteeRowTmp.lenght === 0) return "";
-    const item = menteeRowTmp.find((item) => item.id === id);
+  const getChooseName = (mentorRowTmp, id) => {
+    if (id === "" || mentorRowTmp.lenght === 0) return "";
+    const item = mentorRowTmp.find((item) => item.id === id);
     if (!item) return "";
     return item.name;
   };
@@ -82,13 +85,13 @@ const ManageMentee = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Mentee Name",
+      headerName: "Mentor Name",
       type: "string",
-      flex: 0.3,
+      flex: 0.25,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Mentee Name"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Mentor Name"}</strong>
       ),
       renderCell: ({ row }) => {
         return (
@@ -105,7 +108,7 @@ const ManageMentee = () => {
       field: "memberSince",
       headerName: "Member Since",
       type: "string",
-      flex: 0.3,
+      flex: 0.25,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -116,12 +119,26 @@ const ManageMentee = () => {
       field: "numOfBookings",
       headerName: "Numbers of Booking",
       type: "number",
-      flex: 0.2,
+      flex: 0.15,
       align: "center",
       headerAlign: "center",
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Numbers of Booking"}</strong>
       ),
+    },
+    {
+      field: "earned",
+      headerName: "Earned",
+      type: "number",
+      flex: 0.15,
+      align: "center",
+      headerAlign: "center",
+      renderHeader: (params) => (
+        <strong style={{ fontSize: "16px" }}>{"Earned"}</strong>
+      ),
+      valueFormatter: (params) => {
+        return `$${params.value.toFixed(2)}`;
+      },
     },
     {
       field: "id",
@@ -158,7 +175,7 @@ const ManageMentee = () => {
 
   return (
     <MainAdminLayout
-      title="List of Mentee"
+      title="List of Mentor"
       breadCum={[...breadcrumbArr]}
       content={
         <>
@@ -172,7 +189,7 @@ const ManageMentee = () => {
               style={{ height: 400, width: "100%" }}
             >
               <DataGrid
-                rows={menteeRow}
+                rows={mentorRow}
                 columns={columns}
                 initialState={{
                   pagination: {
@@ -187,9 +204,9 @@ const ManageMentee = () => {
       }
       isDialogOpen={isModalOpen}
       onClose={handleCloseDialog}
-      dialogTitle="Confirm delete mentee?"
+      dialogTitle="Confirm delete mentor?"
       dialogContent={`Are you sure you want to delete user ${getChooseName(
-        menteeRow,
+        mentorRow,
         chooseId
       )}`}
       onAgreeDialog={() => handleClickDelete(chooseId)}
@@ -198,4 +215,4 @@ const ManageMentee = () => {
   );
 };
 
-export default ManageMentee;
+export default ManageMentor;
