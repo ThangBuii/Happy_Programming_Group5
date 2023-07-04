@@ -6,60 +6,65 @@ import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
 
-// Mentor Name, Skill Name, Duration,Session Name,Status, Action: View
+// Account Name, Title, Content, Create-date, Role(Mentee(1), Mentor(2)), Status(Reviewed(1), Pending(0)) Action: Update -> Với status đang Pending thì hiện nút update, Reviewed thì không
 
 const breadcrumbArr = [
   { to: "/admin/dashboard", represent: "Dashboard" },
-  { to: "/admin/sessions", represent: "Sessions" },
+  { to: "/admin/report", represent: "Report" },
 ];
 
-const fakeRowSessionData = [
+const fakeRowReportData = [
   {
     id: "user1",
     name: "Le Minh Quan",
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["Javascript", "CSS"],
-    duration: 6.5,
-    sessionName: "Toi la ai",
+    title: "chat luong bai viet kem",
+    content:
+      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết. Đó là các bài viết kém chất lượng xuất hiện ngày càng nhiều hơn. Thậm chí còn có những bài tôi không cho đó là bài viết. Những bài chỉ có 1 dòng, những bài chỉ có 5 cái gạch đầu dòng với mỗi dòng một từ, những bài đếm đi đếm lại chưa đến được 20 từ... Chuyện gì đã xảy ra vậy? Tôi sẽ không chỉ cụ thể bài viết nào ra đây, nhưng các bạn có thể dễ dàng tìm thấy chúng thôi.",
+    createdDate: "October 13, 2014",
+    role: 1,
     status: 0,
   },
   {
     id: "user2",
-    name: "Hasagiiiii",
+    name: "Pzzang",
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["C#", "C", "C++", "Python", "Java", "React"],
-    duration: 8,
-    sessionName: "Bi kip 10 diem dai hoc",
+    title: "chat luong bai viet kem",
+    content: "Có một điều mà tôi nghĩ những người thường xuyên theo dõi.",
+    createdDate: "October 13, 2014",
+    role: 2,
     status: 1,
   },
   {
     id: "user3",
-    name: "Pzzanggg",
+    name: "Zed99",
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["Chem gio"],
-    duration: 2.6,
-    sessionName: "It vua moi nghe",
-    status: 2,
+    title: "chat luong bai viet kem",
+    content:
+      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết.",
+    createdDate: "October 13, 2014",
+    role: 1,
+    status: 0,
   },
 ];
 
-const ManageSession = () => {
+const ManageReport = () => {
   // const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
-  const [sessionRow, setSessionRow] = useState([]);
+  const [reportRow, setReportRow] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:9999/all-mentor")
       .then((resp) => resp.json())
       .then((data) => {
-        setSessionRow(data);
+        setReportRow(data);
       })
       .catch((err) => {
         console.log(err);
-        setSessionRow([...fakeRowSessionData]);
+        setReportRow([...fakeRowReportData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -71,7 +76,7 @@ const ManageSession = () => {
       field: "name",
       headerName: "Mentor Name",
       type: "string",
-      flex: 0.2,
+      flex: 0.15,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -89,58 +94,54 @@ const ManageSession = () => {
       },
     },
     {
-      field: "skillList",
-      headerName: "Skill List",
+      field: "title",
+      headerName: "Title",
       type: "string",
-      flex: 0.2,
-      minWidth: 270,
+      flex: 0.15,
       align: "left",
       headerAlign: "left",
-      renderCell: ({ value }) => {
-        return (
-          <div className={styles.skillList}>
-            {value.map((skill, index) => {
-              if (index <= 2)
-                return (
-                  <div key={index} className={styles.skillItem}>
-                    {skill}
-                  </div>
-                );
-              else return null;
-            })}
-            {value.length > 3 && <span>+ {value.length - 3} more</span>}
-          </div>
-        );
-      },
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Skill List"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Title"}</strong>
       ),
     },
     {
-      field: "duration",
-      headerName: "Duration",
+      field: "content",
+      headerName: "Content",
+      type: "string",
+      flex: 0.4,
+      align: "left",
+      headerAlign: "left",
+      renderHeader: (params) => (
+        <strong style={{ fontSize: "16px" }}>{"Content"}</strong>
+      ),
+    },
+    {
+      field: "role",
+      headerName: "Role",
       type: "number",
       flex: 0.1,
       align: "center",
       headerAlign: "center",
-      renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Duration"}</strong>
-      ),
-      valueFormatter: (params) => {
-        return `${params.value} h`;
+      renderCell: ({ value }) => {
+        return (
+          <span
+            className={
+              value === 1
+                ? styles.acceptStatus
+                : value === 2
+                ? styles.rejectStatus
+                : ""
+            }
+          >
+            {value === 1 ? "Mentee" : value === 2 ? "Mentor" : ""}
+          </span>
+        );
       },
-    },
-    {
-      field: "sessionName",
-      headerName: "Session Name",
-      type: "number",
-      flex: 0.25,
-      align: "left",
-      headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Session Name"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Role"}</strong>
       ),
     },
+
     {
       field: "status",
       headerName: "Status",
@@ -179,19 +180,12 @@ const ManageSession = () => {
       field: "actions",
       headerName: "Actions",
       type: "string",
-      flex: 0.15,
+      flex: 0.1,
       align: "center",
       headerAlign: "center",
       renderCell: ({ value, row }) => {
         return (
           <div className={styles.actionWrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              // onClick={() => navigate(`/profile/${row.id}`)}
-            >
-              View
-            </Button>
             {row.status === 0 && (
               <Button variant="contained" color="success">
                 Accept
@@ -229,7 +223,7 @@ const ManageSession = () => {
                     backgroundColor: "rgb(248, 249, 250)",
                   },
                 }}
-                rows={sessionRow}
+                rows={reportRow}
                 columns={columns}
                 initialState={{
                   pagination: {
@@ -246,4 +240,4 @@ const ManageSession = () => {
   );
 };
 
-export default ManageSession;
+export default ManageReport;

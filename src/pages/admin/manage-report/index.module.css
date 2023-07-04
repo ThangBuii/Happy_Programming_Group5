@@ -1,0 +1,102 @@
+.layoutWrapper p {
+  margin-bottom: 0;
+}
+
+.mentorInfoWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.mentorInfoWrapper img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+.infoLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.infoLeft h4 {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-style: normal;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.customLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.actionWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.skillList {
+  display: flex;
+  gap: 8px;
+}
+
+.skillItem {
+  padding: 6px 16px;
+  background-color: #d7dce6;
+  border-radius: 9999px;
+  color: rgb(55, 65, 81);
+  margin: 0 4px 0 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.skillItem:hover {
+  background-color: rgb(206, 209, 217);
+}
+
+.skillList span {
+  color: rgb(51, 65, 85);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 24px;
+  position: relative;
+  top: 7px;
+  cursor: pointer;
+}
+
+.rejectStatus,
+.acceptStatus,
+.pendindStatus {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  font-weight: 400;
+  user-select: none;
+
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+.acceptStatus {
+  background-color: #04ae1b;
+}
+
+.rejectStatus {
+  background-color: #ff0000;
+}
+
+.pendindStatus {
+  background-color: #fba20a;
+}
