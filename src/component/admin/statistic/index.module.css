@@ -1,0 +1,38 @@
+.layoutWrapper {
+  border: 1px solid #f0f0f0;
+  margin-bottom: 30px;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.headWrapper {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.iconWrapper {
+  align-items: center;
+  display: inline-flex;
+  font-size: 30px;
+  height: 50px;
+  justify-content: center;
+  line-height: 48px;
+  text-align: center;
+  width: 50px;
+  border: 3px solid;
+  border-radius: 50px;
+  padding: 28px;
+
+  /* border-color: #1e88e5 !important; */
+}
+
+.headWrapper h3 {
+  font-size: 28px;
+  margin-left: auto;
+}
+
+.bottomWrapper h6 {
+  color: #757575 !important;
+}
