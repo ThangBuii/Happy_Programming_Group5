@@ -49,6 +49,18 @@ const fakeRowReportData = [
     role: 1,
     status: 0,
   },
+  {
+    id: "user4",
+    name: "Zed99",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
+    title: "chat luong bai viet kem",
+    content:
+      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết.",
+    createdDate: "October 13, 2014",
+    role: 1,
+    status: 0,
+  },
 ];
 
 const ManageReport = () => {
@@ -76,7 +88,7 @@ const ManageReport = () => {
       field: "name",
       headerName: "Mentor Name",
       type: "string",
-      flex: 0.15,
+      flex: 0.13,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -113,6 +125,11 @@ const ManageReport = () => {
       headerAlign: "left",
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Content"}</strong>
+      ),
+      renderCell: ({ value }) => (
+        <div className={styles.customContent}>
+          <span>{value}</span>
+        </div>
       ),
     },
     {
@@ -202,7 +219,7 @@ const ManageReport = () => {
 
   return (
     <MainAdminLayout
-      title="List of Sessions"
+      title="List of Reports"
       breadCum={[...breadcrumbArr]}
       content={
         <>
@@ -213,7 +230,7 @@ const ManageReport = () => {
           ) : (
             <div
               className={styles.layoutWrapper}
-              style={{ height: 400, width: "100%" }}
+              style={{ height: 570, width: "100%" }}
             >
               <DataGrid
                 sx={{
@@ -221,6 +238,10 @@ const ManageReport = () => {
                   padding: "24px",
                   "& .MuiDataGrid-columnHeaders": {
                     backgroundColor: "rgb(248, 249, 250)",
+                  },
+                  "& .MuiDataGrid-row, & .MuiDataGrid-cell": {
+                    maxHeight: "80px !important",
+                    minHeight: "80px !important",
                   },
                 }}
                 rows={reportRow}

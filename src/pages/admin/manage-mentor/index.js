@@ -21,7 +21,7 @@ const fakeRowMentorData = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 6,
     earned: 3000,
-    memberSince: "08, August, 2023",
+    memberSince: "October 13, 2014",
   },
   {
     id: "user2",
@@ -30,7 +30,7 @@ const fakeRowMentorData = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 7,
     earned: 4000,
-    memberSince: "08, August, 2023",
+    memberSince: "October 23, 2014",
   },
   {
     id: "user3",
@@ -39,7 +39,7 @@ const fakeRowMentorData = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 5,
     earned: 2000,
-    memberSince: "09, August, 2023",
+    memberSince: "October 12, 2015",
   },
 ];
 
@@ -107,10 +107,13 @@ const ManageMentor = () => {
     {
       field: "memberSince",
       headerName: "Member Since",
-      type: "string",
+      type: "date",
       flex: 0.25,
       align: "left",
       headerAlign: "left",
+      valueGetter: ({ value }) => {
+        return new Date(value);
+      },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>
       ),

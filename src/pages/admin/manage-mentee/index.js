@@ -20,7 +20,7 @@ const fakeRowMenteeData = [
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 6,
-    memberSince: "08, August, 2023",
+    memberSince: "October 13, 2014",
   },
   {
     id: "user2",
@@ -28,7 +28,7 @@ const fakeRowMenteeData = [
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 7,
-    memberSince: "08, August, 2023",
+    memberSince: "October 13, 2014",
   },
   {
     id: "user3",
@@ -36,7 +36,7 @@ const fakeRowMenteeData = [
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
     numOfBookings: 5,
-    memberSince: "09, August, 2023",
+    memberSince: "October 13, 2015",
   },
 ];
 
@@ -104,10 +104,13 @@ const ManageMentee = () => {
     {
       field: "memberSince",
       headerName: "Member Since",
-      type: "string",
+      type: "date",
       flex: 0.3,
       align: "left",
       headerAlign: "left",
+      valueGetter: ({ value }) => {
+        return new Date(value);
+      },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>
       ),
