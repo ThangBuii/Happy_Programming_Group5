@@ -31,6 +31,18 @@ export const linkAdminList = [
     to: "/admin/skill",
     represent: "Skill",
   },
+  {
+    to: "/admin/report",
+    represent: "Report",
+  },
+  {
+    to: "/admin/revenue",
+    represent: "Revenue",
+  },
+  {
+    to: "/admin/invoice",
+    represent: "Invoice",
+  },
 ];
 
 const AdminSidebar = () => {

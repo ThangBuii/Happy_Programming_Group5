@@ -32,6 +32,7 @@ import Footer from "../component/footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";
+import ManageRevenue from "../pages/admin/manage-revenue";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -73,8 +74,8 @@ const AppRoutes = () => {
           <Route path="/invoice" element={<Invoice />} />
 
           <Route path="/report/add" element={<ReportAdd />} />
-        <Route path="/report/:report_id" element={<ReportDetail />} />
-        <Route path="/report" element={<Report />} />
+          <Route path="/report/:report_id" element={<ReportDetail />} />
+          <Route path="/report" element={<Report />} />
 
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/profile/:id" element={<Profile />} />
@@ -86,6 +87,7 @@ const AppRoutes = () => {
           <Route path="/admin/mentee" element={<ManageMentee />} />
           <Route path="/admin/sessions" element={<ManageSession />} />
           <Route path="/admin/feedback" element={<ManageFeedback />} />
+          <Route path="/admin/revenue" element={<ManageRevenue />} />
           <Route path="/admin" element={<Navigate to={"dashboard"} />} />
         </Routes>
 
