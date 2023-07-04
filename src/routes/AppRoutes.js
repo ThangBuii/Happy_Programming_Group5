@@ -34,6 +34,7 @@ import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";
 import ManageRevenue from "../pages/admin/manage-revenue";
 import ManageBooking from "../pages/admin/manage-booking";
+import ManageInvoice from "../pages/admin/manage-invoice";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -90,6 +91,7 @@ const AppRoutes = () => {
           <Route path="/admin/feedback" element={<ManageFeedback />} />
           <Route path="/admin/revenue" element={<ManageRevenue />} />
           <Route path="/admin/bookings" element={<ManageBooking />} />
+          <Route path="/admin/invoice" element={<ManageInvoice />} />
           <Route path="/admin" element={<Navigate to={"dashboard"} />} />
         </Routes>
 
