@@ -1,0 +1,219 @@
+.breadcumBarWrapper {
+  background-color: rgba(246, 246, 246, 0.525);
+  border-bottom: 1px solid #e3e8eb;
+  padding: 15px 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bcLeft {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .breadcumBarWrapper {
+    flex-direction: row;
+  }
+}
+
+.bcHome {
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.bcPersonProfile {
+  padding-left: 0.5rem;
+  color: #6c757d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bcPersonProfile::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+  font-size: 14px;
+}
+
+.breadcumBarWrapper h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.containerWrapper {
+  min-height: 600px;
+}
+
+.loadingWrapper {
+  width: 100%;
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mentorInfoWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.mentorInfoWrapper img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+.infoLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.infoLeft h4 {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 0;
+}
+
+.infoLeft p {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 19px;
+  margin-bottom: 0;
+}
+
+.topWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topWrapper span {
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.contentWrapper h4 {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.sessionDetail {
+  font-size: 16px;
+  padding: 16px;
+  background-color: antiquewhite;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.timeListWrapper {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.timeItemWrapper {
+  margin-bottom: 24px;
+  transition-duration: 150ms !important;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  border: 2px solid #d0dce6;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.timeItemWrapper:hover {
+  background-color: rgb(224, 237, 254);
+}
+
+.timeItemActive {
+  background-color: rgb(224, 237, 254);
+}
+
+.timeItemWrapper span:nth-child(1) {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(74, 74, 74);
+}
+
+.timeItemWrapper span:nth-child(2) {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(240, 82, 82);
+  padding-top: 8px;
+}
+
+.spotListWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.spotItem {
+  padding: 12px 20px;
+  background-color: #fff;
+  border: 1px solid rgb(209, 213, 219);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.notFound {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.skillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.skillItem {
+  padding: 6px 16px;
+  background-color: rgb(243, 244, 246);
+  border-radius: 9999px;
+  color: rgb(55, 65, 81);
+  margin: 0 4px 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.skillItem:hover {
+  background-color: rgb(229, 231, 235);
+}
+
+.skillList a {
+  color: rgb(51, 65, 85);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  position: relative;
+  top: 7px;
+}

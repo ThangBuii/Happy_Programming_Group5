@@ -3,7 +3,7 @@ import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
 
 // Mentor Name, Skill Name, Duration,Session Name,Status, Action: View
@@ -47,7 +47,8 @@ const fakeRowSessionData = [
 ];
 
 const ManageSession = () => {
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
   const [listIdLoading, setListIdLoading] = useState([]);
   const [snackBarState, setSnackBarState] = useState({
@@ -246,7 +247,16 @@ const ManageSession = () => {
             <Button
               variant="contained"
               color="primary"
-              // onClick={() => navigate(`/profile/${row.id}`)}
+              onClick={() =>
+                navigate(`/sessions/${row.id}`, {
+                  state: {
+                    prevPath: {
+                      to: location.pathname,
+                      represent: "Manage Sessions",
+                    },
+                  },
+                })
+              }
             >
               View
             </Button>
