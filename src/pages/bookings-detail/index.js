@@ -1,5 +1,6 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import {
+  CircularProgress,
   Container,
   Table,
   TableBody,
@@ -32,147 +33,50 @@ function createData(
   };
 }
 
-const fakeBookingDetailData = [
-  createData(
-    {
-      accountId: "user1",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user2",
-      name: "Ngo Ba Kha",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    0,
-    "08, August, 2023"
-  ),
-  createData(
-    {
-      accountId: "user3",
-      name: "Le Van Luyen1",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user4",
-      name: "Ngo Ba Kha2",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    1,
-    "08, August, 2023"
-  ),
-  createData(
-    {
-      accountId: "user5",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user6",
-      name: "Ngo Ba Kha",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    2,
-    "08, August, 2023"
-  ),
-  createData(
-    {
-      accountId: "user7",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user8",
-      name: "Ngo Ba Kha",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    2,
-    "08, August, 2023"
-  ),
-  createData(
-    {
-      accountId: "user9",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user10",
-      name: "Ngo Ba Kha",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    0,
-    "08, August, 2023"
-  ),
-  createData(
-    {
-      accountId: "user11",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    {
-      accountId: "user12",
-      name: "Ngo Ba Kha",
-      email: "kha@gmail.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    "08, August, 2023",
-    "08, August, 2023",
-    0,
-    "08, August, 2023"
-  ),
-];
+const fakeBookingDetailData = createData(
+  {
+    accountId: "user1",
+    name: "Le Van Luyen",
+    email: "luyen@xxvideo.com",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
+  },
+  {
+    accountId: "user2",
+    name: "Ngo Ba Kha",
+    email: "kha@gmail.com",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
+  },
+  "08, August, 2023",
+  "08, August, 2023",
+  0,
+  "08, August, 2023"
+);
 
 const BookingsDetail = () => {
+  const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { prevPath } = location.state;
-  const [bookings, setBookings] = useState([...fakeBookingDetailData]);
+  const [booking, setBooking] = useState(null);
+  const [isLoading, seIsLoading] = useState(true);
 
   //call API
   useEffect(() => {
-    fetch("http://localhost:9999/booking-details")
+    fetch(`http://localhost:9999/booking-details/${params.id}`)
       .then((resp) => resp.json())
       .then((data) => {
-        setBookings(data);
+        setBooking(data);
       })
       .catch((err) => {
         console.log(err);
-        setBookings([...fakeBookingDetailData]);
+        setBooking({ ...fakeBookingDetailData });
+      })
+      .finally(() => {
+        seIsLoading(false);
       });
-  }, []);
+  }, [params.id]);
 
   return (
     <div className={styles.layoutWrapper}>
@@ -232,62 +136,78 @@ const BookingsDetail = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {bookings.map((item) => (
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={6}>
+                      <div className={styles.customLoading}>
+                        <CircularProgress />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : booking ? (
                   <TableRow
-                    key={`${item.mentorInfo.accountId}-${item.menteeInfo.accountId}`}
+                    key={`${booking.mentorInfo.accountId}-${booking.menteeInfo.accountId}`}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     hover={true}
                   >
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
                         <img
-                          src={item.mentorInfo.imageUrl || AvatarDefault}
+                          src={booking.mentorInfo.imageUrl || AvatarDefault}
                           alt="avatar"
                         />
                         <div className={styles.infoLeft}>
-                          <h4>{item.mentorInfo.name}</h4>
-                          <p>{item.mentorInfo.email}</p>
+                          <h4>{booking.mentorInfo.name}</h4>
+                          <p>{booking.mentorInfo.email}</p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
                         <img
-                          src={item.menteeInfo.imageUrl || AvatarDefault}
+                          src={booking.menteeInfo.imageUrl || AvatarDefault}
                           alt="avatar"
                         />
                         <div className={styles.infoLeft}>
-                          <h4>{item.menteeInfo.name}</h4>
-                          <p>{item.menteeInfo.email}</p>
+                          <h4>{booking.menteeInfo.name}</h4>
+                          <p>{booking.menteeInfo.email}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell align="left">{item.scheduledDate}</TableCell>
-                    <TableCell align="left">{item.scheduledTime}</TableCell>
+                    <TableCell align="left">{booking.scheduledDate}</TableCell>
+                    <TableCell align="left">{booking.scheduledTime}</TableCell>
                     <TableCell align="center">
                       <span
                         className={
-                          item.status === 0
+                          booking.status === 0
                             ? styles.pendindStatus
-                            : item.status === 1
+                            : booking.status === 1
                             ? styles.acceptStatus
-                            : item.status === 2
+                            : booking.status === 2
                             ? styles.rejectStatus
                             : ""
                         }
                       >
-                        {item.status === 0
+                        {booking.status === 0
                           ? "Pending"
-                          : item.status === 1
+                          : booking.status === 1
                           ? "Accepted"
-                          : item.status === 2
+                          : booking.status === 2
                           ? "Rejected"
                           : ""}
                       </span>
                     </TableCell>
-                    <TableCell align="left">{item.createdDate}</TableCell>
+                    <TableCell align="left">{booking.createdDate}</TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6}>
+                      <h3 style={{ fontSize: "20px", textAlign: "center" }}>
+                        No Booking Detail Found!
+                      </h3>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

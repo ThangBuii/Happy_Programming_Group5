@@ -119,3 +119,13 @@
 .pendindStatus {
   background-color: #fba20a;
 }
+
+.bookingWrapper {
+  min-height: 580px;
+}
+
+.customLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

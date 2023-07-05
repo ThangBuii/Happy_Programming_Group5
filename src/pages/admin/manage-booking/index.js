@@ -3,7 +3,7 @@ import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
 
 // Mentee Name,Mentor Name,SessionID, Booking Time(Hiển thị tương tự trong sample), Status(Pending, Accepted, Rejected), Amount, Action: View -> Ấn vào hiện Booking Details
@@ -80,7 +80,8 @@ const fakeRowBookingData = [
 ];
 
 const ManageBooking = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, seIsLoading] = useState(true);
   const [bookingRow, setBookingRow] = useState([]);
   // const [chooseId, setChooseId] = useState("");
@@ -101,7 +102,14 @@ const ManageBooking = () => {
   }, []);
 
   const handleClickView = (id) => {
-    // setChooseId(id);
+    navigate(`/bookings/${id}`, {
+      state: {
+        prevPath: {
+          to: location.pathname,
+          represent: "Manage Bookings",
+        },
+      },
+    });
   };
 
   const columns = [

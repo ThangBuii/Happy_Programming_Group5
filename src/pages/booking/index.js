@@ -164,7 +164,7 @@ const Booking = () => {
                       <TableCell align="center">
                         <Link
                           className={styles.customAction}
-                          to={`/bookings/${item.menteeId}`}
+                          to={`/bookings/${item.accountId}`}
                           state={{
                             prevPath: {
                               to: location.pathname,
