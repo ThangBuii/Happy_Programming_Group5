@@ -113,3 +113,35 @@
   overflow: hidden;
   margin: 10px 0;
 }
+
+.titleWrapper h4 {
+  font-size: 20px;
+}
+
+.topCtWrarpper h4 {
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topCtWrarpper h4 span {
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.reportDetail {
+  font-size: 16px;
+  padding: 16px;
+  background-color: antiquewhite;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.botCtWrarpper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

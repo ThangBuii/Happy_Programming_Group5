@@ -1,8 +1,8 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
 
@@ -67,6 +67,78 @@ const ManageReport = () => {
   // const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
   const [reportRow, setReportRow] = useState([]);
+  const [isShowDialogOpen, setIsShowDialogOpen] = useState(false);
+  const [chooseId, setChooseId] = useState("");
+  const inputRef = useRef(null);
+  const [listIdLoading, setListIdLoading] = useState([]);
+  const [snackBarState, setSnackBarState] = useState({
+    isSnackBarOpen: false,
+    severity: "",
+    content: "",
+  });
+
+  const handleClickUpdate = (id) => {
+    setIsShowDialogOpen(true);
+    setChooseId(id);
+  };
+
+  const handleCloseShowDialog = () => {
+    setIsShowDialogOpen(false);
+    setChooseId("");
+  };
+
+  const handleGetReport = (id) => {
+    return reportRow.find((item) => item.id === id);
+  };
+
+  const handleConfirmUpdate = async (id) => {
+    setListIdLoading((pre) => [...pre, id]);
+
+    console.log("check data: >> ", inputRef.current.value, id);
+
+    // post ma gui data len voi inputRef.current.value ******
+    await fetch(`http://localhost:9999/report/review/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.isSuccess === 0) {
+          setReportRow((pre) =>
+            pre.map((item) => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  status: 1,
+                };
+              }
+              return item;
+            })
+          );
+          handleCloseShowDialog(id);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackBarState((pre) => ({
+          isSnackBarOpen: true,
+          severity: "error",
+          content: "Something went wrong!",
+        }));
+      })
+      .finally(() => {
+        setListIdLoading((pre) => pre.filter((item) => item !== id));
+      });
+  };
+
+  const onCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBarState((pre) => ({
+      isSnackBarOpen: false,
+      severity: "",
+      content: "",
+    }));
+  };
 
   useEffect(() => {
     fetch("http://localhost:9999/all-mentor")
@@ -204,8 +276,13 @@ const ManageReport = () => {
         return (
           <div className={styles.actionWrapper}>
             {row.status === 0 && (
-              <Button variant="contained" color="success">
-                Accept
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => handleClickUpdate(row.id)}
+                disabled={listIdLoading.includes(row.id)}
+              >
+                Update
               </Button>
             )}
           </div>
@@ -257,6 +334,62 @@ const ManageReport = () => {
           )}
         </>
       }
+      isShowDialogOpen={isShowDialogOpen}
+      onCloseShowDialog={handleCloseShowDialog}
+      showDialogTitle={
+        <div className={styles.titleWrapper}>
+          <h4>Update Report</h4>
+        </div>
+      }
+      showDialogContent={
+        handleGetReport(chooseId) && (
+          <div className={styles.contentWrapper}>
+            <div className={styles.topCtWrarpper}>
+              <h4>
+                Title <span>{handleGetReport(chooseId).createdDate}</span>
+              </h4>
+              <div className={styles.reportDetail}>
+                {handleGetReport(chooseId).title}
+              </div>
+              <h4>Content</h4>
+              <div className={styles.reportDetail}>
+                {handleGetReport(chooseId).content}
+              </div>
+              <h4>Answer</h4>
+              <div className={styles.reportAnswer}>
+                <TextField
+                  multiline
+                  minRows={3}
+                  maxRows={5}
+                  fullWidth
+                  inputRef={inputRef}
+                />
+              </div>
+            </div>
+            <div className={styles.botCtWrarpper}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleConfirmUpdate(chooseId)}
+                disabled={listIdLoading.includes(chooseId)}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleCloseShowDialog}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        )
+      }
+      isSnackBarOpen={snackBarState.isSnackBarOpen}
+      onCloseSnackBar={onCloseSnackBar}
+      severity={snackBarState.severity}
+      severityContent={snackBarState.content}
     />
   );
 };
