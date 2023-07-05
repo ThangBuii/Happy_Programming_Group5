@@ -12,7 +12,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { EyeFill, Plus } from "react-bootstrap-icons";
 import styles from "./index.module.css";
-import {request, setAuthToken} from '../../axios_helper'
+import {request} from '../../axios_helper'
 
 // Title, Content, Created Date, Status
 

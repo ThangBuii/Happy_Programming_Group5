@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
+import { request } from '../../axios_helper'
 
 function createData(
   accountId,
@@ -31,69 +32,13 @@ function createData(
   };
 }
 
-const fakeFavouriteMentorList = [
-  createData(
-    "mentor1",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-      "Sr. Software Engineer at eBay",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor2",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    ["Mentor: Career Growth | Leadership | Product Marketing"],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    false,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor3",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Founder at multiple digital agencies",
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor4",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-      "Product Leadership Coach (ex-Director of Product) at ex-ServiceNow, ex-Yandex",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-];
-
 const Favourite = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [page, setPage] = useState(1);
   const [isLoading, seIsLoading] = useState(true);
   const [searchFavourite, setSearchFavourite] = useState("");
-  const [mentorList, setMentorList] = useState([...fakeFavouriteMentorList]);
+  const [mentorList, setMentorList] = useState([]);
 
   const handleClickViewMentor = (id) => {
     navigate(`/mentor/${id}`, {
@@ -110,18 +55,31 @@ const Favourite = () => {
     setPage(value);
   };
 
+  // useEffect(() => {
+  //   seIsLoading(true);
+  //   Promise.all([fetch("http://localhost:9999/all-mentor")])
+  //     .then((responses) => {
+  //       return Promise.all(responses.map((response) => response.json()));
+  //     })
+  //     .then(([data1, data2]) => {
+  //       setMentorList(data1);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setMentorList([...fakeFavouriteMentorList]);
+  //     })
+  //     .finally(() => {
+  //       seIsLoading(false);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    seIsLoading(true);
-    Promise.all([fetch("http://localhost:9999/all-mentor")])
-      .then((responses) => {
-        return Promise.all(responses.map((response) => response.json()));
+    request("GET", "/api/mentee/favorite")
+      .then((response) => {
+        setMentorList(response.data);
       })
-      .then(([data1, data2]) => {
-        setMentorList(data1);
-      })
-      .catch((err) => {
-        console.log(err);
-        setMentorList([...fakeFavouriteMentorList]);
+      .catch((error) => {
+        console.error(error);
       })
       .finally(() => {
         seIsLoading(false);
@@ -157,47 +115,35 @@ const Favourite = () => {
                 <div className={styles.mentorListWrapper}>
                   {mentorList.map((mentor) => (
                     <div
-                      key={mentor.accountId}
+                      key={mentor.mentor_id}
                       className={styles.mentorItemWrapper}
                     >
                       <img
-                        src={mentor.imageUrl}
+                        src={mentor.avatar}
                         alt="avatar"
-                        onClick={() => handleClickViewMentor(mentor.accountId)}
+                        onClick={() => handleClickViewMentor(mentor.mentor_id)}
                       />
                       <div className={styles.mentorInfoWrapper}>
                         <h2
                           className={styles.mentorName}
                           onClick={() =>
-                            handleClickViewMentor(mentor.accountId)
+                            handleClickViewMentor(mentor.mentor_id)
                           }
                         >
-                          {mentor.name}
+                          {mentor.username}
                         </h2>
                         <div className={styles.archieveList}>
-                          {mentor.achievement.map((item, index) => (
-                            <div key={index} className={styles.archieveItem}>
-                              {item}
-                            </div>
-                          ))}
+                          {mentor.short_description}
                         </div>
-                        <div className={styles.ratingWrapper}>
-                          <Rating
-                            defaultValue={mentor.averateRatings}
-                            readOnly
-                          />
-                          <div className={styles.ratings}>
-                            <b>{mentor.averateRatings}</b>
-                          </div>
-                          <span>({mentor.numOfReivews} reviews)</span>
-                        </div>
+
                         <div className={styles.description}>
                           {mentor.description}
                         </div>
+                        
                         <div className={styles.skillList}>
-                          {mentor.skillList.map((skill, index) => (
-                            <div key={index} className={styles.skillItem}>
-                              {skill}
+                          {mentor.skills.map((skill) => (
+                            <div key={skill.skill_id} className={styles.skillItem}>
+                              {skill.skill_name}
                             </div>
                           ))}
                         </div>
@@ -205,7 +151,7 @@ const Favourite = () => {
                           <Button
                             variant="outlined"
                             onClick={() =>
-                              handleClickViewMentor(mentor.accountId)
+                              handleClickViewMentor(mentor.mentor_id)
                             }
                           >
                             View Profile
@@ -213,11 +159,9 @@ const Favourite = () => {
                           <Button variant="contained">Book Now</Button>
                         </div>
                         <div className={styles.bookMark}>
-                          {mentor.isBookMark ? (
-                            <BookmarkIcon />
-                          ) : (
-                            <BookmarkBorderIcon />
-                          )}
+
+                          <BookmarkIcon />
+
                         </div>
                       </div>
                     </div>
