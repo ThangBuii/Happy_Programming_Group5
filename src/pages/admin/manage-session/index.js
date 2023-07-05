@@ -49,6 +49,12 @@ const fakeRowSessionData = [
 const ManageSession = () => {
   // const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
+  const [listIdLoading, setListIdLoading] = useState([]);
+  const [snackBarState, setSnackBarState] = useState({
+    isSnackBarOpen: false,
+    severity: "",
+    content: "",
+  });
   const [sessionRow, setSessionRow] = useState([]);
 
   useEffect(() => {
@@ -65,6 +71,60 @@ const ManageSession = () => {
         seIsLoading(false);
       });
   }, []);
+
+  const handleClickAccept = async (id) => {
+    await processStatus(id, "ACCECPT");
+  };
+  const handleClickReject = async (id) => {
+    await processStatus(id, "REJECT");
+  };
+
+  const processStatus = async (id, action) => {
+    setListIdLoading((pre) => [...pre, id]);
+
+    // may cai nay nen dung post, sau co the sua lai nha
+    await fetch(`http://localhost:9999/session/${action}/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.isSuccess === 0)
+          setSessionRow((pre) =>
+            pre.map((item) => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  status: data.status || action === "ACCECPT" ? 1 : 2,
+                };
+              }
+              return item;
+            })
+          );
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackBarState((pre) => ({
+          isSnackBarOpen: true,
+          severity: "error",
+          content: "Something went wrong!",
+        }));
+      })
+      .finally(() => {
+        setListIdLoading((pre) => pre.filter((item) => item !== id));
+      });
+
+    console.log(listIdLoading);
+  };
+
+  const onCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBarState((pre) => ({
+      isSnackBarOpen: false,
+      severity: "",
+      content: "",
+    }));
+  };
 
   const columns = [
     {
@@ -134,7 +194,7 @@ const ManageSession = () => {
       field: "sessionName",
       headerName: "Session Name",
       type: "number",
-      flex: 0.25,
+      flex: 0.15,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -179,7 +239,7 @@ const ManageSession = () => {
       field: "actions",
       headerName: "Actions",
       type: "string",
-      flex: 0.15,
+      flex: 0.25,
       align: "center",
       headerAlign: "center",
       renderCell: ({ value, row }) => {
@@ -193,9 +253,24 @@ const ManageSession = () => {
               View
             </Button>
             {row.status === 0 && (
-              <Button variant="contained" color="success">
-                Accept
-              </Button>
+              <>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => handleClickAccept(row.id)}
+                  disabled={listIdLoading.includes(row.id)}
+                >
+                  Accept
+                </Button>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={() => handleClickReject(row.id)}
+                  disabled={listIdLoading.includes(row.id)}
+                >
+                  Reject
+                </Button>
+              </>
             )}
           </div>
         );
@@ -242,6 +317,10 @@ const ManageSession = () => {
           )}
         </>
       }
+      isSnackBarOpen={snackBarState.isSnackBarOpen}
+      onCloseSnackBar={onCloseSnackBar}
+      severity={snackBarState.severity}
+      severityContent={snackBarState.content}
     />
   );
 };

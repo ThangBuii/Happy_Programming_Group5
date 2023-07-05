@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
+import { async } from "q";
 
 // Mentor Name, Mentee Name, Created Date, Action: View xem thong tin chi tiet feedback, Action: delete có pop up ban có chắc ko
 
@@ -89,6 +90,12 @@ const ManageFeedback = () => {
   // const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  const [listIdLoading, setListIdLoading] = useState([]);
+  const [snackBarState, setSnackBarState] = useState({
+    isSnackBarOpen: false,
+    severity: "",
+    content: "",
+  });
   const [feedbackRow, setFeedbackRow] = useState([]);
   const [feedbackDetail, setFeedbackDetail] = useState(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -145,6 +152,43 @@ const ManageFeedback = () => {
   const handleClickDelete = (id) => {
     setIsConfirmDialogOpen(true);
     setChooseId(id);
+  };
+
+  const handleAgreeDelete = async (id) => {
+    handleCloseConfirmDialog(id);
+    setListIdLoading((pre) => [...pre, id]);
+
+    await fetch(`http://localhost:9999/feedback/delete/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.isSuccess === 0)
+          setFeedbackRow((pre) => pre.filter((item) => item.id !== id));
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackBarState((pre) => ({
+          isSnackBarOpen: true,
+          severity: "error",
+          content: "Something went wrong!",
+        }));
+      })
+      .finally(() => {
+        setListIdLoading((pre) => pre.filter((item) => item !== id));
+      });
+
+    console.log(listIdLoading);
+  };
+
+  const onCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBarState((pre) => ({
+      isSnackBarOpen: false,
+      severity: "",
+      content: "",
+    }));
   };
 
   const columns = [
@@ -231,6 +275,7 @@ const ManageFeedback = () => {
               variant="contained"
               color="warning"
               onClick={() => handleClickDelete(row.id)}
+              disabled={listIdLoading.includes(row.id)}
             >
               Delete
             </Button>
@@ -283,7 +328,7 @@ const ManageFeedback = () => {
       onCloseConfirmDialog={handleCloseConfirmDialog}
       confirmDialogTitle="Confirm delete feedback?"
       confirmDialogContent={`Are you sure you want to delete this feedback?`}
-      onAgreeConfirmDialog={() => handleClickDelete(chooseId)}
+      onAgreeConfirmDialog={() => handleAgreeDelete(chooseId)}
       onDisAgreeConfirmDialog={handleCloseConfirmDialog}
       isShowDialogOpen={isShowDialogOpen}
       onCloseShowDialog={handleCloseShowDialog}
@@ -340,6 +385,10 @@ const ManageFeedback = () => {
           )}
         </>
       }
+      isSnackBarOpen={snackBarState.isSnackBarOpen}
+      onCloseSnackBar={onCloseSnackBar}
+      severity={snackBarState.severity}
+      severityContent={snackBarState.content}
     />
   );
 };

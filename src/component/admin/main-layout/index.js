@@ -1,4 +1,5 @@
 import {
+  Alert,
   Breadcrumbs,
   Button,
   Dialog,
@@ -6,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
 } from "@mui/material";
 import AdminSidebar from "../sidebar";
 import { Link } from "react-router-dom";
@@ -25,6 +27,10 @@ const MainAdminLayout = ({
   onCloseShowDialog,
   showDialogTitle = "",
   showDialogContent = "",
+  isSnackBarOpen = false,
+  onCloseSnackBar,
+  severity = "info",
+  severityContent = "",
 }) => {
   return (
     <div className={styles.layoutWrapper}>
@@ -80,6 +86,23 @@ const MainAdminLayout = ({
           <DialogContentText>{showDialogContent}</DialogContentText>
         </DialogContent>
       </Dialog>
+
+      {/* Snack bar */}
+      <Snackbar
+        open={isSnackBarOpen}
+        autoHideDuration={6000}
+        onClose={onCloseSnackBar}
+      >
+        <Alert
+          onClose={onCloseSnackBar}
+          severity={severity === "" ? "info" : severity}
+          elevation={6}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {severityContent}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
