@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +63,11 @@ public class FeedbackController {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());
+    }
+
+    @GetMapping("feedbacks/{id}")
+    public List<FeedbackListMentorResponseDTO> getFeedbacksFindMentor(@PathVariable int id) throws CustomInternalServerException{
+        return feedbackService.getFeedbacksMentor(id);
     }
 
     
