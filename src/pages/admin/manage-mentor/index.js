@@ -49,6 +49,12 @@ const ManageMentor = () => {
   const [mentorRow, setMentorRow] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [chooseId, setChooseId] = useState("");
+  const [listIdLoading, setListIdLoading] = useState([]);
+  const [snackBarState, setSnackBarState] = useState({
+    isSnackBarOpen: false,
+    severity: "",
+    content: "",
+  });
 
   useEffect(() => {
     fetch("http://localhost:9999/all-mentor")
@@ -80,6 +86,41 @@ const ManageMentor = () => {
     const item = rowTmp.find((item) => item.id === id);
     if (!item) return "";
     return item.name;
+  };
+
+  const handleAgreeDelete = async (id) => {
+    handleCloseConfirmDialog(id);
+    setListIdLoading((pre) => [...pre, id]);
+
+    await fetch(`http://localhost:9999/mentee/delete/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.isSuccess === 0)
+          setMentorRow((pre) => pre.filter((item) => item.id !== id));
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackBarState((pre) => ({
+          isSnackBarOpen: true,
+          severity: "error",
+          content: "Something went wrong!",
+        }));
+      })
+      .finally(() => {
+        setListIdLoading((pre) => pre.filter((item) => item !== id));
+      });
+  };
+
+  const onCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBarState((pre) => ({
+      isSnackBarOpen: false,
+      severity: "",
+      content: "",
+    }));
   };
 
   const columns = [
@@ -164,6 +205,7 @@ const ManageMentor = () => {
               variant="contained"
               color="warning"
               onClick={() => handleClickDelete(row.id)}
+              disabled={listIdLoading.includes(row.id)}
             >
               Delete
             </Button>
@@ -219,8 +261,12 @@ const ManageMentor = () => {
         mentorRow,
         chooseId
       )}`}
-      onAgreeConfirmDialog={() => handleClickDelete(chooseId)}
+      onAgreeConfirmDialog={() => handleAgreeDelete(chooseId)}
       onDisAgreeConfirmDialog={handleCloseConfirmDialog}
+      isSnackBarOpen={snackBarState.isSnackBarOpen}
+      onCloseSnackBar={onCloseSnackBar}
+      severity={snackBarState.severity}
+      severityContent={snackBarState.content}
     />
   );
 };

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
-import { async } from "q";
 
 // Mentor Name, Mentee Name, Created Date, Action: View xem thong tin chi tiet feedback, Action: delete có pop up ban có chắc ko
 
@@ -175,8 +174,6 @@ const ManageFeedback = () => {
       .finally(() => {
         setListIdLoading((pre) => pre.filter((item) => item !== id));
       });
-
-    console.log(listIdLoading);
   };
 
   const onCloseSnackBar = (event, reason) => {

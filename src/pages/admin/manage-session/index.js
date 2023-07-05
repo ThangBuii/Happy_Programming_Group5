@@ -110,8 +110,6 @@ const ManageSession = () => {
       .finally(() => {
         setListIdLoading((pre) => pre.filter((item) => item !== id));
       });
-
-    console.log(listIdLoading);
   };
 
   const onCloseSnackBar = (event, reason) => {
