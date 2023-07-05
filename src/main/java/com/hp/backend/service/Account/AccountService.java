@@ -52,4 +52,6 @@ public interface AccountService {
     public void deleteFavorite(int id, int mentee_id) throws CustomInternalServerException, CustomBadRequestException;
 
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id);
+
+    public String getAccountName(int receiver_id) throws CustomBadRequestException;
 }

@@ -241,4 +241,15 @@ public class AccountServiceImpl implements AccountService {
         return results;
     }
 
+    @Override
+    public String getAccountName(int receiver_id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(receiver_id);
+        if(!account.isPresent()){
+             throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exists").build());
+        }
+
+        return account.get().getUsername();
+    }
+
 }
