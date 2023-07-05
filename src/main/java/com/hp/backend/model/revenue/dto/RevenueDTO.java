@@ -16,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RevenueDTO {
+    private int revenue_id;
     private int receipt_id;
     private Date created_Date;
     private String amount;

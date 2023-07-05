@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DashboardMentorDTO {
     private int bookingID;
+    private String avatar;
     private String username;
     private String email;
     private Date created_Date;

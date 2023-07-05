@@ -12,6 +12,7 @@ import com.hp.backend.entity.Times;
 import com.hp.backend.model.receipt.dto.InvoiceAdminDTO;
 import com.hp.backend.model.receipt.dto.InvoiceDTO;
 import com.hp.backend.repository.AccountRepository;
+import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InvoiceMapper {
     private final AccountRepository accountRepository;
+    private final CommonUtils commonUtils;
 
     public InvoiceDTO toMenteeInvoiceDTO(Receipt receipt) {
         Booking booking = receipt.getBooking();
@@ -28,7 +30,7 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceDTO.builder().receipt_id(receipt.getReceipt_id()).username(mentor.getUsername())
-                .email(mentor.getEmail()).avatar(mentor.getAvatar()).amount(formattedValue)
+                .email(mentor.getEmail()).avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).amount(formattedValue)
                 .created_Date(receipt.getCreated_date())
                 .build();
 
@@ -38,11 +40,11 @@ public class InvoiceMapper {
         Booking booking = receipt.getBooking();
         Times time = booking.getTime();
         Session session = time.getSession();
-        Account mentor = accountRepository.findById(session.getMentor_id()).get();
+        Account mentee = accountRepository.findById(booking.getMentee_id()).get();
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
-        return InvoiceDTO.builder().receipt_id(receipt.getReceipt_id()).username(mentor.getUsername())
-                .email(mentor.getEmail()).avatar(mentor.getAvatar()).amount(formattedValue)
+        return InvoiceDTO.builder().receipt_id(receipt.getReceipt_id()).username(mentee.getUsername())
+                .email(mentee.getEmail()).avatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).amount(formattedValue)
                 .created_Date(receipt.getCreated_date())
                 .build();
 
@@ -57,8 +59,8 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceAdminDTO.builder().receipt_id(receipt.getReceipt_id()).menteeUsername(mentee.getUsername())
-                .menteeEmail(mentee.getEmail()).menteeAvatar(mentee.getAvatar()).mentorUsername(mentor.getUsername())
-                .mentorEmail(mentor.getEmail()).mentorAvatar(mentor.getAvatar())
+                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).mentorUsername(mentor.getUsername())
+                .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .amount(formattedValue).created_Date(receipt.getCreated_date())
                 .build();
 

@@ -25,21 +25,21 @@ public class BookingMapper {
     private final CommonUtils commonUtils;
 
     public static BookingListMenteeDTO toBookingDTO(BookingListMenteeDTO book1) {
-        return BookingListMenteeDTO.builder().bookingID(book1.getBookingID()).username(book1.getUsername()).email(book1.getEmail())
+        return BookingListMenteeDTO.builder().bookingID(book1.getBookingID()).avatar(book1.getAvatar()).username(book1.getUsername()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate())
                 .scheduleTime(book1.getScheduleTime())
                 .build();
     }
 
     public static BookingListAdminDTO toBookingDTO(BookingListAdminDTO book1) {
-        return BookingListAdminDTO.builder().bookingID(book1.getBookingID()).avatar(book1.getAvatar()).email(book1.getEmail())
+        return BookingListAdminDTO.builder().bookingID(book1.getBookingID()).avatarMentee(book1.getAvatarMentee()).avatarMentor(book1.getAvatarMentor()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate()).scheduleTime(book1.getScheduleTime())
                 .menteeUsername(book1.getMenteeUsername()).mentorUsername(book1.getMenteeUsername())
                 .build();
     }
 
     public static BookingListMentorDTO toBookingDTO(BookingListMentorDTO book1) {
-        return BookingListMentorDTO.builder().bookingID(book1.getBookingID()).username(book1.getUsername()).email(book1.getEmail())
+        return BookingListMentorDTO.builder().bookingID(book1.getBookingID()).avatar(book1.getAvatar()).username(book1.getUsername()).email(book1.getEmail())
                 .scheduleDate(book1.getScheduleDate())
                 .scheduleTime(book1.getScheduleTime())
                 .build();
@@ -74,7 +74,7 @@ public class BookingMapper {
         // bookingAdminDTO.setMentorUsername(account.getUsername());
         // bookingAdminDTO.setStatus(booking.getStatus());
 
-        return BookingListAdminDTO.builder().bookingID(booking.getBooking_id()).email(account2.getEmail())
+        return BookingListAdminDTO.builder().bookingID(booking.getBooking_id()).avatarMentor(commonUtils.imageToFrontEnd(account.getAvatar())).avatarMentee(commonUtils.imageToFrontEnd(account2.getAvatar())).email(account2.getEmail())
                 .scheduleDate(time.getStart_date().toString())
                 .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString())
                 .menteeUsername(account2.getUsername()).mentorUsername(account.getUsername())

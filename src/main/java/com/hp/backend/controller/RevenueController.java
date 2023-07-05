@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hp.backend.model.booking.dto.BookingListAdminDTO;
 import com.hp.backend.model.revenue.dto.RevenueDTO;
+import com.hp.backend.service.Revenue.RevenueListService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,8 +17,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class RevenueController {
-    @GetMapping("/revenue")
-    List<RevenueDTO> getAdminBookingList() {
+    private final RevenueListService revenueListService;
+    @GetMapping("admin/revenue")
+    public List<RevenueDTO> getListRevenue() {
         return revenueListService.getRevenueList();
     }
 }
