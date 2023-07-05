@@ -1,0 +1,27 @@
+.layoutWrapper p {
+  margin-bottom: 0;
+}
+
+.customLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.topControl {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.titleWrapper h4 {
+  font-size: 20px;
+}
+
+.botCtWrarpper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
