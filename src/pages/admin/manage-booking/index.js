@@ -90,7 +90,7 @@ const ManageBooking = () => {
     fetch("http://localhost:9999/all-bookings")
       .then((resp) => resp.json())
       .then((data) => {
-        setBookingRow(data);
+        setBookingRow([...data]);
       })
       .catch((err) => {
         console.log(err);

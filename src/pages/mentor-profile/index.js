@@ -60,6 +60,15 @@ function createRatingListData(
   };
 }
 
+function createSessionData(
+  sessionId,
+  sessionName,
+  sessionDuration,
+  sessionPrice
+) {
+  return { sessionId, sessionName, sessionDuration, sessionPrice };
+}
+
 const fakeMentorData = createMentorData(
   "mentor1",
   "Kerry Ritter",
@@ -130,18 +139,43 @@ const fakeRatingListData = [
   ),
 ];
 
+const fakeSessionList = [
+  createSessionData("session1", "Resume Feedback1", 30, 79),
+  createSessionData("session2", "Resume Feedback2", 40, 89),
+  createSessionData("session3", "Resume Feedback3", 20, 29),
+  createSessionData("session4", "Resume Feedback4", 60, 69),
+];
+
 const MentorProfile = () => {
   const location = useLocation();
-  const { prevPath } = location.state;
+  const prevPath = location.state?.prevPath || null;
   const navigate = useNavigate();
   const params = useParams();
-  const [radioOption, setRadioOption] = useState("30-79");
   const [isLoading, seIsLoading] = useState(true);
   const [mentorInfo, setMentorInfo] = useState({});
   const [ratingList, setRatingList] = useState([]);
+  const [sessionList, setSessionList] = useState([]);
+  const [sessionIdChoosed, setSessionIdChoosed] = useState("");
 
   const handleRadioChange = (event) => {
-    setRadioOption(event.target.value);
+    setSessionIdChoosed(event.target.value);
+  };
+
+  const handleClickBook = () => {
+    navigate(`/mentor/${mentorInfo.accountId}/checkout/${sessionIdChoosed}`, {
+      state: {
+        listPrevPath: [
+          {
+            to: prevPath?.to || null,
+            represent: prevPath?.represent || null,
+          },
+          {
+            to: location.pathname,
+            represent: mentorInfo.name,
+          },
+        ],
+      },
+    });
   };
 
   useEffect(() => {
@@ -149,18 +183,26 @@ const MentorProfile = () => {
     Promise.all([
       fetch(`http://localhost:9999/mentor/${params.id}`), // find mentor by mentorId
       fetch(`http://localhost:9999/rating-list/${params.id}`), // find all ratings list by mentorId
+      fetch(`http://localhost:9999/session-list/${params.id}`), // find all session list by mentorId
     ])
       .then((responses) => {
         return Promise.all(responses.map((response) => response.json()));
       })
-      .then(([data1, data2]) => {
-        setMentorInfo(...data1);
+      .then(([data1, data2, data3]) => {
+        setMentorInfo({ ...data1 });
         setRatingList([...data2]);
+        setSessionList([...data3]);
+
+        if (data3.length > 0) setSessionIdChoosed(data3[0].sessionId);
       })
       .catch((err) => {
         console.log(err);
         setMentorInfo({ ...fakeMentorData });
         setRatingList([...fakeRatingListData]);
+        setSessionList([...fakeSessionList]);
+
+        if (fakeSessionList.length > 0)
+          setSessionIdChoosed(fakeSessionList[0].sessionId);
       })
       .finally(() => {
         seIsLoading(false);
@@ -181,8 +223,12 @@ const MentorProfile = () => {
                 <div onClick={() => navigate("/")} className={styles.home}>
                   <HomeIcon />
                 </div>
-                <NavigateNextIcon />
-                <Link to={prevPath.to}>{prevPath.represent}</Link>
+                {prevPath && (
+                  <>
+                    <NavigateNextIcon />
+                    <Link to={prevPath.to}>{prevPath.represent}</Link>
+                  </>
+                )}
                 <NavigateNextIcon />
                 <Link>{mentorInfo.name}</Link>
               </div>
@@ -259,53 +305,27 @@ const MentorProfile = () => {
                   <div className={styles.serviceHead}>Sessions</div>
                   <div className={styles.serviceContent}>
                     <RadioGroup
-                      value={radioOption}
+                      value={sessionIdChoosed}
                       onChange={handleRadioChange}
                     >
-                      <FormControlLabel
-                        className={styles.radioItem}
-                        value="30-79"
-                        control={<Radio />}
-                        label={
-                          <div className={styles.labelWrapper}>
-                            <h4>Resume Feedback</h4>
-                            <span>30 minutes, $79 per session</span>
-                          </div>
-                        }
-                      />
-                      <FormControlLabel
-                        className={styles.radioItem}
-                        value="45-99"
-                        control={<Radio />}
-                        label={
-                          <div className={styles.labelWrapper}>
-                            <h4>Work Review</h4>
-                            <span>45 minutes, $99 per session</span>
-                          </div>
-                        }
-                      />
-                      <FormControlLabel
-                        className={styles.radioItem}
-                        value="60-129"
-                        control={<Radio />}
-                        label={
-                          <div className={styles.labelWrapper}>
-                            <h4>Interview Preparation</h4>
-                            <span>60 minutes, $129 per session</span>
-                          </div>
-                        }
-                      />
-                      <FormControlLabel
-                        className={styles.radioItem}
-                        value="60-169"
-                        control={<Radio />}
-                        label={
-                          <div className={styles.labelWrapper}>
-                            <h4>Expert Consultation</h4>
-                            <span>60 minutes, $169 per session</span>
-                          </div>
-                        }
-                      />
+                      {sessionList.length > 0 &&
+                        sessionList.map((item) => (
+                          <FormControlLabel
+                            className={styles.radioItem}
+                            key={item.sessionId}
+                            value={item.sessionId}
+                            control={<Radio />}
+                            label={
+                              <div className={styles.labelWrapper}>
+                                <h4>{item.sessionName}</h4>
+                                <span>
+                                  {item.sessionDuration} minutes, $
+                                  {item.sessionPrice.toFixed(2)} per session
+                                </span>
+                              </div>
+                            }
+                          />
+                        ))}
                     </RadioGroup>
                   </div>
                   <div className={styles.action}>
@@ -318,6 +338,7 @@ const MentorProfile = () => {
                           backgroundColor: "rgb(17, 133, 119)",
                         },
                       }}
+                      onClick={handleClickBook}
                     >
                       Book now
                     </Button>

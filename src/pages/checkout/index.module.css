@@ -1,0 +1,162 @@
+.layoutWrapper {
+  background-color: rgb(249, 250, 251);
+  min-height: 700px;
+}
+
+.customLoading {
+  width: 100%;
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.breadcumWrapper {
+  display: flex;
+  padding: 32px 0 32px 0px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: rgb(107, 114, 128);
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.breadcumWrapper a {
+  color: rgb(107, 114, 128);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.timeListWrapper {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.timeItemWrapper {
+  margin-bottom: 24px;
+  transition-duration: 150ms !important;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  border: 2px solid #d0dce6;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.timeItemWrapper:hover {
+  background-color: rgb(224, 237, 254);
+}
+
+.timeItemActive {
+  background-color: rgb(224, 237, 254);
+}
+
+.timeItemWrapper span:nth-child(1) {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(74, 74, 74);
+}
+
+.timeItemWrapper span:nth-child(2) {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(240, 82, 82);
+  padding-top: 8px;
+}
+
+.spotListWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.spotItem {
+  padding: 12px 20px;
+  background-color: #fff;
+  border: 1px solid rgb(209, 213, 219);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.notFound {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.rightTitle {
+  font-weight: 500;
+  color: rgb(17, 24, 39);
+  font-size: 18px;
+  margin-bottom: 11px;
+}
+
+.checkoutWrapper {
+  background-color: rgb(255, 255, 255);
+  margin-top: 16px;
+  border-radius: 8px;
+}
+
+.topWrapper {
+  display: flex;
+  padding: 24px;
+}
+
+.imageWrapper img {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+}
+
+.sessionName {
+  display: flex;
+  flex-direction: column;
+  margin-left: 24px;
+}
+
+.sessionName span:nth-child(1) {
+  color: rgb(74, 74, 74);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.sessionName span:nth-child(2) {
+  color: rgb(107, 114, 128);
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.checkoutDes,
+.actionWrapper {
+  padding: 24px;
+}
+
+.checkoutItem,
+.checkoutMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(74, 74, 74);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.checkoutMain {
+  color: rgb(74, 74, 74);
+  font-size: 16px;
+}
