@@ -1,6 +1,4 @@
-package com.hp.backend.model.booking.dto;
-
-import java.sql.Date;
+package com.hp.backend.model.receipt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +13,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReceiptDTO {
-    private int receipt_id;
-    private int booking_id;
-    private String payment_method;
-    private Date created_id;
+public class InvoiceRequestDTO {
+    private int id;
 }
