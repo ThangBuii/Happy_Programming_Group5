@@ -11,6 +11,7 @@ import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
 import com.hp.backend.model.receipt.dto.InvoiceAdminDTO;
 import com.hp.backend.model.receipt.dto.InvoiceDTO;
+import com.hp.backend.model.receipt.dto.ViewInvoiceDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.utils.CommonUtils;
 
@@ -59,11 +60,17 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceAdminDTO.builder().receipt_id(receipt.getReceipt_id()).menteeUsername(mentee.getUsername())
-                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).mentorUsername(mentor.getUsername())
+                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
+                .mentorUsername(mentor.getUsername())
                 .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .amount(formattedValue).created_Date(receipt.getCreated_date())
                 .build();
 
+    }
+
+    public ViewInvoiceDTO toViewInvoiceDTO(Receipt receipt) {
+        return ViewInvoiceDTO.builder().paymen_method(receipt.getPayment_method()).receipt_id(receipt.getReceipt_id())
+                .created_Date(receipt.getCreated_date()).build();
     }
 
 }
