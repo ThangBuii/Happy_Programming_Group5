@@ -16,56 +16,9 @@ const fakeSessionsDetail = {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
   },
   created_date: "October 13, 2014",
-  timeList: [
-    {
-      day: "Mon",
-      spots: [
-        { slotFrom: "8:30", slotTo: "11:00" },
-        { slotFrom: "12:30", slotTo: "13:00" },
-      ],
-    },
-    {
-      day: "Tue",
-      spots: [
-        { slotFrom: "9:00", slotTo: "10:00" },
-        { slotFrom: "14:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Wed",
-      spots: [
-        { slotFrom: "11:00", slotTo: "12:00" },
-        { slotFrom: "13:00", slotTo: "14:00" },
-        { slotFrom: "15:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Thu",
-      spots: [
-        { slotFrom: "10:00", slotTo: "11:00" },
-        { slotFrom: "12:00", slotTo: "13:00" },
-        { slotFrom: "14:00", slotTo: "15:00" },
-        { slotFrom: "16:00", slotTo: "17:00" },
-      ],
-    },
-    {
-      day: "Fri",
-      spots: [{ slotFrom: "9:00", slotTo: "12:00" }],
-    },
-    {
-      day: "Sat",
-      spots: [
-        { slotFrom: "9:00", slotTo: "10:00" },
-        { slotFrom: "11:00", slotTo: "12:00" },
-        { slotFrom: "13:00", slotTo: "14:00" },
-        { slotFrom: "15:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Sun",
-      spots: [],
-    },
-  ],
+  duration: "30",
+  price: 200,
+  description: "Nice session to become billion",
   skillList: [
     "NestJS",
     "React",
@@ -91,7 +44,6 @@ const SessionsDetail = () => {
   const { sessions_id } = useParams();
   const [sessions, setSessions] = useState({});
   const [isLoading, seIsLoading] = useState(true);
-  const [dayChoosed, setDayChoosed] = useState("Mon");
 
   useEffect(() => {
     seIsLoading(true);
@@ -107,14 +59,6 @@ const SessionsDetail = () => {
         seIsLoading(false);
       });
   }, [sessions_id]);
-
-  const getSpots = (sessionsTmp, dayChoosedTmp) => {
-    if (!sessionsTmp.timeList || sessionsTmp.timeList.length === 0) return [];
-    const result = sessionsTmp.timeList.find(
-      (item) => item.day === dayChoosedTmp
-    ).spots;
-    return result || [];
-  };
 
   return (
     <div className={styles.layoutWrapper}>
@@ -164,35 +108,12 @@ const SessionsDetail = () => {
             <div className={styles.contentWrapper}>
               <h4>Session Name</h4>
               <div className={styles.sessionDetail}>{sessions.sessionName}</div>
-              <h4>Session Spots</h4>
-              <div className={styles.timeListWrapper}>
-                {sessions.timeList.map((item) => (
-                  <div
-                    key={item.day}
-                    className={`${styles.timeItemWrapper} ${
-                      item.day === dayChoosed ? styles.timeItemActive : ""
-                    }`}
-                    onClick={() => setDayChoosed(item.day)}
-                  >
-                    <span>{item.day}</span>
-                    <span>{item.spots.length} spots</span>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.spotListWrapper}>
-                {getSpots(sessions, dayChoosed) &&
-                getSpots(sessions, dayChoosed).length > 0 ? (
-                  getSpots(sessions, dayChoosed).map((item, index) => (
-                    <div key={index} className={styles.spotItem}>
-                      {item.slotFrom} - {item.slotTo}
-                    </div>
-                  ))
-                ) : (
-                  <div className={styles.notFound}>
-                    Don't have any slot on this day!
-                  </div>
-                )}
-              </div>
+              <h4>Session Duration</h4>
+              <div className={styles.sessionDetail}>{sessions.duration}</div>
+              <h4>Session Price</h4>
+              <div className={styles.sessionDetail}>{sessions.price}</div>
+              <h4>Session Description</h4>
+              <div className={styles.sessionDetail}>{sessions.description}</div>
               <h4>Session Skills</h4>
               <div className={styles.skillList}>
                 {sessions.skillList.map((skill, index) => (
