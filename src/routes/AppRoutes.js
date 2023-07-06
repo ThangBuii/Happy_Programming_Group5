@@ -39,6 +39,7 @@ import ManageReport from "../pages/admin/manage-report";
 import ManageSkill from "../pages/admin/manage-skill";
 import Checkout from "../pages/checkout";
 import ScheduleTimings from "../pages/schedule-timings";
+import SessionsDetail from "../pages/sessions-detail";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -88,6 +89,8 @@ const AppRoutes = () => {
           <Route path="/report/add" element={<ReportAdd />} />
           <Route path="/report/:report_id" element={<ReportDetail />} />
           <Route path="/report" element={<Report />} />
+
+          <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
 
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/profile/:id" element={<Profile />} />
