@@ -5,6 +5,7 @@ import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styles from "./index.module.css";
+import { request } from '../../../axios_helper'
 
 // Mentee Name,Member Since,Numbers of Booking, Action : delete(pop up co muon delete ko), View ấn vào để xem thông tin chi tiết mentor
 
@@ -53,15 +54,32 @@ const ManageMentee = () => {
     content: "",
   });
 
+  // useEffect(() => {
+  //   fetch("http://localhost:9999/all-mentee")
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setMenteeRow(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setMenteeRow([...fakeRowMenteeData]);
+  //     })
+  //     .finally(() => {
+  //       seIsLoading(false);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentee")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setMenteeRow(data);
+    request("GET", "/api/admin/mentee-list")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.account_id,
+          ...row,
+        }));
+        setMenteeRow(rowsWithIds);
       })
-      .catch((err) => {
-        console.log(err);
-        setMenteeRow([...fakeRowMenteeData]);
+      .catch((error) => {
+        console.error(error);
       })
       .finally(() => {
         seIsLoading(false);
@@ -134,9 +152,9 @@ const ManageMentee = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.name}</h4>
+              <h4>{row.username}</h4>
             </div>
           </div>
         );
@@ -149,8 +167,12 @@ const ManageMentee = () => {
       flex: 0.3,
       align: "left",
       headerAlign: "left",
-      valueGetter: ({ value }) => {
-        return new Date(value);
+      renderCell: ({ row }) => {
+        return (
+          <div className={styles.infoLeft}>
+              <h4>{row.created_date}</h4>
+            </div>
+        );
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>
@@ -163,6 +185,13 @@ const ManageMentee = () => {
       flex: 0.2,
       align: "center",
       headerAlign: "center",
+      renderCell: ({ row }) => {
+        return (
+          <div className={styles.infoLeft}>
+              <h4>{row.numberOfBooking}</h4>
+            </div>
+        );
+      },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Numbers of Booking"}</strong>
       ),
@@ -180,15 +209,15 @@ const ManageMentee = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate(`/profile/${row.id}`)}
+              onClick={() => navigate(`/profile/${row.account_id}`)}
             >
               View
             </Button>
             <Button
               variant="contained"
               color="warning"
-              onClick={() => handleClickDelete(row.id)}
-              disabled={listIdLoading.includes(row.id)}
+              onClick={() => handleClickDelete(row.account_id)}
+              disabled={listIdLoading.includes(row.account_id)}
             >
               Delete
             </Button>

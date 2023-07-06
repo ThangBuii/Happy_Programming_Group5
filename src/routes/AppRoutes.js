@@ -28,7 +28,7 @@ import EditProfile from "../pages/profile-edit";
 import React, { useState } from "react";
 import AdminDashboard from "../pages/admin/dashboard";
 import ManageMentee from "../pages/admin/manage-mentee";
-import Footer from "../component/Footer";
+import Footer from "../component/footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";

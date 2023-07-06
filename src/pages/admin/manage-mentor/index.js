@@ -5,6 +5,7 @@ import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router";
+import { request } from '../../../axios_helper'
 
 // Mentor Name,Member Since,Numbers of Booking,Earned, Action : delete(pop up co muon delete ko),View ấn vào để xem thông tin chi tiết mentee
 
@@ -57,14 +58,16 @@ const ManageMentor = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setMentorRow(data);
+    request("GET", "/api/admin/mentor-list")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.account_id,
+          ...row,
+        }));
+        setMentorRow(rowsWithIds);
       })
-      .catch((err) => {
-        console.log(err);
-        setMentorRow([...fakeRowMentorData]);
+      .catch((error) => {
+        console.error(error);
       })
       .finally(() => {
         seIsLoading(false);
@@ -126,20 +129,20 @@ const ManageMentor = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Mentor Name",
+      headerName: "Mentee Name",
       type: "string",
-      flex: 0.25,
+      flex: 0.3,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Mentor Name"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Mentee Name"}</strong>
       ),
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.name}</h4>
+              <h4>{row.username}</h4>
             </div>
           </div>
         );
@@ -149,11 +152,15 @@ const ManageMentor = () => {
       field: "memberSince",
       headerName: "Member Since",
       type: "date",
-      flex: 0.25,
+      flex: 0.3,
       align: "left",
       headerAlign: "left",
-      valueGetter: ({ value }) => {
-        return new Date(value);
+      renderCell: ({ row }) => {
+        return (
+          <div className={styles.infoLeft}>
+              <h4>{row.created_date}</h4>
+            </div>
+        );
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>
@@ -163,26 +170,19 @@ const ManageMentor = () => {
       field: "numOfBookings",
       headerName: "Numbers of Booking",
       type: "number",
-      flex: 0.15,
+      flex: 0.2,
       align: "center",
       headerAlign: "center",
+      renderCell: ({ row }) => {
+        return (
+          <div className={styles.infoLeft}>
+              <h4>{row.numberOfBooking}</h4>
+            </div>
+        );
+      },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Numbers of Booking"}</strong>
       ),
-    },
-    {
-      field: "earned",
-      headerName: "Earned",
-      type: "number",
-      flex: 0.15,
-      align: "center",
-      headerAlign: "center",
-      renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Earned"}</strong>
-      ),
-      valueFormatter: (params) => {
-        return `$${params.value.toFixed(2)}`;
-      },
     },
     {
       field: "actions",
@@ -197,15 +197,15 @@ const ManageMentor = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate(`/profile/${row.id}`)}
+              onClick={() => navigate(`/profile/${row.account_id}`)}
             >
               View
             </Button>
             <Button
               variant="contained"
               color="warning"
-              onClick={() => handleClickDelete(row.id)}
-              disabled={listIdLoading.includes(row.id)}
+              onClick={() => handleClickDelete(row.account_id)}
+              disabled={listIdLoading.includes(row.account_id)}
             >
               Delete
             </Button>
