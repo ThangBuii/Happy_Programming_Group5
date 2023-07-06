@@ -6,6 +6,7 @@ import Point from "../assets/point.png";
 import "../styles/Home.css";
 import {} from "react-icons";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const MainHeader = () => {
   return (
@@ -92,7 +93,7 @@ const MainHeader = () => {
               </div>
             </div>
           </div>
-          <button className="per_btn">Find my mentor</button>
+          <Link to="/findmentor"><button className="per_btn">Find my mentor</button></Link>
         </setion>
       </div>
     </header>
