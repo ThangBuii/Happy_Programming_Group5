@@ -15,7 +15,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ViewInvoiceDTO {
-    private int receipt_id;
+    private int booking_id;
     private String paymen_method;
     private Date created_Date;
+    private String mentee_name;
+    private String mentee_email;
+    private String mentee_avatar;
+    private String mentor_name;
+    private String mentor_email;
+    private String mentor_avatar;
+    private float price;
 }

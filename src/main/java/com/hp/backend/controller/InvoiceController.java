@@ -48,7 +48,7 @@ public class InvoiceController {
         return invoiceService.getInvoiceAdmin();
     }
 
-    @GetMapping("/admin/invoice/{id}")
+    @GetMapping("/invoice/{id}")
     ViewInvoiceDTO getInvoiceById(@PathVariable int id) throws CustomBadRequestException {
         return invoiceService.findInvoiceById(id);
     }

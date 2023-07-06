@@ -69,8 +69,17 @@ public class InvoiceMapper {
     }
 
     public ViewInvoiceDTO toViewInvoiceDTO(Receipt receipt) {
-        return ViewInvoiceDTO.builder().paymen_method(receipt.getPayment_method()).receipt_id(receipt.getReceipt_id())
-                .created_Date(receipt.getCreated_date()).build();
+        Booking booking = receipt.getBooking();
+        Account mentee = accountRepository.findById(booking.getMentee_id()).get();
+        Times time = booking.getTime();
+        Session session = time.getSession();
+        Account mentor = accountRepository.findById(session.getMentor_id()).get();
+        return ViewInvoiceDTO.builder().booking_id(receipt.getBooking().getBooking_id())
+                .paymen_method(receipt.getPayment_method())
+                .created_Date(receipt.getCreated_date()).mentee_name(mentee.getUsername())
+                .mentee_email(mentee.getEmail()).mentee_avatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
+                .mentor_name(mentor.getUsername()).mentor_email(mentor.getEmail())
+                .mentor_avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).price(session.getPrice()).build();
     }
 
 }
