@@ -20,45 +20,45 @@ const fakeSessionsDetail = {
     {
       day: "Mon",
       spots: [
-        { spotFrom: 8.3, spotTo: 11.0 },
-        { spotFrom: 12.3, spotTo: 13.0 },
+        { slotFrom: "8:30", slotTo: "11:00" },
+        { slotFrom: "12:30", slotTo: "13:00" },
       ],
     },
     {
       day: "Tue",
       spots: [
-        { spotFrom: 9.0, spotTo: 10.0 },
-        { spotFrom: 14.0, spotTo: 16.0 },
+        { slotFrom: "9:00", slotTo: "10:00" },
+        { slotFrom: "14:00", slotTo: "16:00" },
       ],
     },
     {
       day: "Wed",
       spots: [
-        { spotFrom: 11.0, spotTo: 12.0 },
-        { spotFrom: 13.0, spotTo: 14.0 },
-        { spotFrom: 15.0, spotTo: 16.0 },
+        { slotFrom: "11:00", slotTo: "12:00" },
+        { slotFrom: "13:00", slotTo: "14:00" },
+        { slotFrom: "15:00", slotTo: "16:00" },
       ],
     },
     {
       day: "Thu",
       spots: [
-        { spotFrom: 10.0, spotTo: 11.0 },
-        { spotFrom: 12.0, spotTo: 13.0 },
-        { spotFrom: 14.0, spotTo: 15.0 },
-        { spotFrom: 16.0, spotTo: 17.0 },
+        { slotFrom: "10:00", slotTo: "11:00" },
+        { slotFrom: "12:00", slotTo: "13:00" },
+        { slotFrom: "14:00", slotTo: "15:00" },
+        { slotFrom: "16:00", slotTo: "17:00" },
       ],
     },
     {
       day: "Fri",
-      spots: [{ spotFrom: 9.0, spotTo: 12.0 }],
+      spots: [{ slotFrom: "9:00", slotTo: "12:00" }],
     },
     {
       day: "Sat",
       spots: [
-        { spotFrom: 9.0, spotTo: 10.0 },
-        { spotFrom: 11.0, spotTo: 12.0 },
-        { spotFrom: 13.0, spotTo: 14.0 },
-        { spotFrom: 15.0, spotTo: 16.0 },
+        { slotFrom: "9:00", slotTo: "10:00" },
+        { slotFrom: "11:00", slotTo: "12:00" },
+        { slotFrom: "13:00", slotTo: "14:00" },
+        { slotFrom: "15:00", slotTo: "16:00" },
       ],
     },
     {
@@ -184,7 +184,7 @@ const SessionsDetail = () => {
                 getSpots(sessions, dayChoosed).length > 0 ? (
                   getSpots(sessions, dayChoosed).map((item, index) => (
                     <div key={index} className={styles.spotItem}>
-                      {item.spotFrom.toFixed(2)} - {item.spotTo.toFixed(2)}
+                      {item.slotFrom} - {item.slotTo}
                     </div>
                   ))
                 ) : (

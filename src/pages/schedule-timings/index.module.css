@@ -1,0 +1,231 @@
+.breadcumBarWrapper {
+  background-color: rgba(246, 246, 246, 0.525);
+  border-bottom: 1px solid #e3e8eb;
+  padding: 15px 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bcLeft {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .breadcumBarWrapper {
+    flex-direction: row;
+  }
+}
+
+.bcHome {
+  background-color: transparent;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.bcPersonProfile {
+  padding-left: 0.5rem;
+  color: #6c757d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bcPersonProfile::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+  font-size: 14px;
+}
+
+.breadcumBarWrapper h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.layoutWrapper {
+  border: 1px solid #e3e8eb;
+  margin-bottom: 1.875rem;
+  border-radius: 0;
+  padding: 24px;
+  min-height: 500px;
+}
+
+.loadingWrapper {
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardTitle {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.layoutWrapper label {
+  margin-bottom: 8px;
+}
+
+.scheduleWrapper {
+  border-radius: 4px;
+  min-height: 100px;
+  border: 1px solid #e3e8eb;
+  margin-top: 16px;
+}
+
+.scheduleHead {
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 4px 4px 0 0;
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dayWrapper {
+  margin: 5px 15px 5px 0;
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: center;
+  border: 1px solid #dcddea;
+  border-radius: 4px;
+  padding: 6px 15px;
+  text-transform: uppercase;
+  color: rgb(85, 85, 85);
+  font-size: 14px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.dayActiveWrapper {
+  margin: 5px 15px 5px 0;
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: center;
+  border-radius: 4px;
+  padding: 6px 15px;
+  text-transform: uppercase;
+  font-size: 14px;
+  transition: color 0.3s;
+  cursor: pointer;
+  background: #1e88e5;
+  border: 1px solid #1e88e5 !important;
+  color: #fff;
+}
+
+.dayWrapper:hover {
+  background-color: #eee;
+  border-color: transparent;
+  color: #26292c;
+  border-bottom-color: #ddd;
+}
+
+.slotWrapper {
+  padding: 20px;
+}
+
+.slotWrapper h4 {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slotWrapper h4 span {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.slotResult {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.slotItem {
+  background-color: #d9534f;
+  border: 1px solid #d43f3a;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  margin: 10px 10px 0 0;
+  padding: 6px 15px;
+}
+
+.customDeleteSkill {
+  margin-left: 5px;
+  height: 22px;
+  width: 22px;
+}
+
+.customDeleteSkill svg {
+  width: 14px;
+  height: 14px;
+}
+
+.slotResult span {
+  color: #757575 !important;
+  font-size: 14px;
+}
+
+.dialogHeadWrapper {
+  padding: 20px;
+  border-bottom: 1px solid #dee2e6 !important;
+  display: flex;
+  justify-content: space-between;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  align-items: center;
+}
+
+.dialogHeadWrapper span {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.customCloseDialog {
+  background-color: #a0a0a0 !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+  font-size: 17px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  padding: 0 !important;
+  width: 20px !important;
+  z-index: 99 !important;
+}
+
+.customCloseDialog svg {
+  width: 14px;
+  height: 14px;
+}
+
+.customCloseDialog:hover {
+  opacity: 0.75;
+}
+
+.dialogTimeWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dialogTimeWrapper input {
+  width: 70%;
+}
+
+.dialogTimeWrapper input:focus {
+  margin: 0;
+  border: none;
+}
+
+.dialogActionWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

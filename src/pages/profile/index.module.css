@@ -114,3 +114,47 @@
   justify-content: center;
   align-items: center;
 }
+
+.containerWrapper {
+  min-height: 600px;
+}
+
+.loadingWrapper {
+  width: 100%;
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.skillItem {
+  padding: 6px 16px;
+  background-color: rgb(243, 244, 246);
+  border-radius: 9999px;
+  color: rgb(55, 65, 81);
+  margin: 0 4px 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.skillItem:hover {
+  background-color: rgb(229, 231, 235);
+}
+
+.skillList a {
+  color: rgb(51, 65, 85);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  position: relative;
+  top: 7px;
+}

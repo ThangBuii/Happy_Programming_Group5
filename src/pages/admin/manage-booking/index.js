@@ -30,8 +30,8 @@ const fakeRowBookingData = [
     },
     sessionId: "session1",
     bookingDate: "October 13, 2014",
-    bookFrom: 20.0,
-    bookTo: 21.15,
+    bookFrom: "20:00",
+    bookTo: "21:15",
     status: 0,
     amount: 1000.2,
   },
@@ -51,8 +51,8 @@ const fakeRowBookingData = [
     },
     sessionId: "session3",
     bookingDate: "October 13, 2015",
-    bookFrom: 11.0,
-    bookTo: 12.15,
+    bookFrom: "11:00",
+    bookTo: "12:15",
     status: 2,
     amount: 2000.2,
   },
@@ -72,8 +72,8 @@ const fakeRowBookingData = [
     },
     sessionId: "session2",
     bookingDate: "October 13, 2012",
-    bookFrom: 18.0,
-    bookTo: 20.15,
+    bookFrom: "18:00",
+    bookTo: "20:15",
     status: 1,
     amount: 1050.2,
   },
@@ -90,7 +90,7 @@ const ManageBooking = () => {
     fetch("http://localhost:9999/all-bookings")
       .then((resp) => resp.json())
       .then((data) => {
-        setBookingRow(data);
+        setBookingRow([...data]);
       })
       .catch((err) => {
         console.log(err);
@@ -190,7 +190,7 @@ const ManageBooking = () => {
           <div className={styles.dateWrapper}>
             {row.bookingDate}
             <span style={{ display: "block", color: "#1e88e5" }}>
-              {row.bookFrom.toFixed(2)} - {row.bookTo.toFixed(2)}
+              {row.bookFrom} - {row.bookTo}
             </span>
           </div>
         );

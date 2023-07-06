@@ -3,6 +3,15 @@
   margin-bottom: 1.875rem;
   border-radius: 0;
   padding: 24px;
+  min-height: 500px;
+}
+
+.loadingWrapper {
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .changeAvatar {
@@ -65,4 +74,99 @@
   font-weight: 600;
   font-size: 16px;
   min-width: 120px;
+}
+
+.skillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.skillItem {
+  padding: 6px 20px 6px 16px;
+  background-color: rgb(243, 244, 246);
+  border-radius: 9999px;
+  color: rgb(55, 65, 81);
+  margin: 0 4px 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  position: relative;
+}
+
+.skillList a {
+  color: rgb(51, 65, 85);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  position: relative;
+  top: 7px;
+}
+
+.skillWrapper {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.inputFilter {
+  font-size: 14px;
+  line-height: 20px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid rgb(209, 213, 219);
+  width: 100%;
+  margin: 8px 0;
+}
+
+.inputFilter:focus {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100% !important;
+  border: 1px solid rgb(209, 213, 219) !important;
+  margin: 8px 0 !important;
+}
+
+.searchList {
+  padding: 8px 0;
+}
+
+.searchItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.filterName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 8px;
+  color: rgb(17, 24, 39);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.filterRemain {
+  padding: 8px;
+}
+
+.customDeleteSkill {
+  position: absolute !important;
+  top: -7px;
+  right: -3px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.customDeleteSkill svg {
+  width: 18px;
+  height: 18px;
+}
+
+.customDeleteSkill:hover {
+  background-color: rgb(229, 231, 235);
 }

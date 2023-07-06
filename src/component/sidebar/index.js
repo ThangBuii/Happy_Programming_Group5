@@ -19,6 +19,10 @@ export const linkObjList = [
     represent: "Feedback",
   },
   {
+    to: "/schedule-timings",
+    represent: "Schedule Timings",
+  },
+  {
     to: "/report",
     represent: "Report",
   },
