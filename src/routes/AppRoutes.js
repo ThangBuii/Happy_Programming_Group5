@@ -38,6 +38,7 @@ import ManageInvoice from "../pages/admin/manage-invoice";
 import ManageReport from "../pages/admin/manage-report";
 import ManageSkill from "../pages/admin/manage-skill";
 import Checkout from "../pages/checkout";
+import ScheduleTimings from "../pages/schedule-timings";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -76,6 +77,8 @@ const AppRoutes = () => {
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+
+          <Route path="/schedule-timings" element={<ScheduleTimings />} />
 
           <Route path="/feedback" element={<Feedback />} />
 
