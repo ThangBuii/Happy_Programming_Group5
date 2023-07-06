@@ -2,11 +2,29 @@ import { Button, Container, TextField } from "@mui/material";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { request } from "../../axios_helper";
 
 const ReportAdd = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({ title: "", content: "" });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+
+    request("POST", "/api/men/report", inputValue)
+      .then((response) => {
+        navigate("/report")
+        
+      })
+      .catch((error) => {
+        // Handle the error here (e.g., show an error message)
+       
+      
+        console.error(error);
+      });
+
+  };
   return (
     <div className={styles.layoutWrapper}>
       <div className={styles.breadcumBarWrapper}>
@@ -56,7 +74,7 @@ const ReportAdd = () => {
             rows={3}
           />
           <div className={styles.reportAction}>
-            <Button variant="contained" sx={{ width: "200px" }}>
+            <Button onClick={handleSubmit} variant="contained" sx={{ width: "200px" }}>
               Add
             </Button>
           </div>

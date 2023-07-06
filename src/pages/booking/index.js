@@ -13,98 +13,22 @@ import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { EyeFill } from "react-bootstrap-icons";
 import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
-
-function createData(accountId, name, imageUrl, email, date) {
-  return { accountId, name, imageUrl, email, date, timings: date };
-}
-
-const fakeData = [
-  createData(
-    "mentor1",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor2",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor3",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor4",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor5",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor6",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor7",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor8",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor9",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-  createData(
-    "mentor10",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023"
-  ),
-];
+import { request } from "../../axios_helper";
 
 const Booking = () => {
   const location = useLocation();
   console.log(location.pathname, linkObjList);
-  const [bookings, setBookings] = useState([...fakeData]);
+  const [bookings, setBookings] = useState([]);
   //call API
   useEffect(() => {
-    fetch("http://localhost:9999/Booking")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setBookings(data);
+   request("GET","/api/mentee/bookings")
+      
+      .then((response) => {
+        setBookings(response.data);
       })
       .catch((err) => {
         console.log(err);
-        setBookings(fakeData);
+    
       });
   }, []);
 
@@ -143,28 +67,28 @@ const Booking = () => {
                 <TableBody>
                   {bookings.map((item) => (
                     <TableRow
-                      key={item.accountId}
+                      key={item.bookingID}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       hover={true}
                     >
                       <TableCell align="left">
                         <div className={styles.mentorInfoWrapper}>
                           <img
-                            src={item.imageUrl || AvatarDefault}
+                            src={item.avatar || AvatarDefault}
                             alt="avatar"
                           />
                           <div className={styles.infoLeft}>
-                            <h4>{item.name}</h4>
+                            <h4>{item.username}</h4>
                             <p>{item.email}</p>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell align="left">{item.date}</TableCell>
-                      <TableCell align="center">{item.timings}</TableCell>
+                      <TableCell align="left">{item.scheduleDate}</TableCell>
+                      <TableCell align="center">{item.scheduleTime}</TableCell>
                       <TableCell align="center">
                         <Link
                           className={styles.customAction}
-                          to={`/bookings/${item.accountId}`}
+                          to={`/bookings/${item.bookingID}`}
                           state={{
                             prevPath: {
                               to: location.pathname,

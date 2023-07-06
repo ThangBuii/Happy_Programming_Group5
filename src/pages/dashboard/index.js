@@ -13,125 +13,25 @@ import { EyeFill } from "react-bootstrap-icons";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
+import {request} from '../../axios_helper'
 
-function createData(
-  accountId,
-  username,
-  imageUrl,
-  email,
-  created_Date,
-  status
-) {
-  return { accountId, username, imageUrl, email, created_Date, status };
-}
-
-const fakeData = [
-  createData(
-    "mentor1",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    0
-  ),
-  createData(
-    "mentor2",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    1
-  ),
-  createData(
-    "mentor3",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    2
-  ),
-  createData(
-    "mentor4",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    2
-  ),
-  createData(
-    "mentor5",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    1
-  ),
-  createData(
-    "mentor6",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    0
-  ),
-  createData(
-    "mentor7",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    1
-  ),
-  createData(
-    "mentor8",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    2
-  ),
-  createData(
-    "mentor9",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    2
-  ),
-  createData(
-    "mentor10",
-    "nguyen trong tai",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    "email@gmail.com",
-    "08, August, 2023",
-    2
-  ),
-];
 
 const Dashboard = () => {
   const location = useLocation();
-  const [bookings, setBookings] = useState([...fakeData]);
+  const [dashboards, setDashboard] = useState([]);
   const postData = {
     id: 3,
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/list-mentee", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
+    request("GET", "/api/mentee/dashboard")
+    .then((response) => {
+      setDashboard(response.data);
     })
-      .then((res) => res.json())
-      .then((result) => {
-        setBookings(result);
-      })
-      .catch((err) => {
-        setBookings([...fakeData]);
-      });
-  }, []);
-
+    .catch((error) => {
+      console.error(error);
+    });
+}, []);
   return (
     <MainLayout
       pageTitle="Dashboard"
@@ -172,12 +72,12 @@ const Dashboard = () => {
                 </TableHead>
 
                 <TableBody>
-                  {bookings.map((item) => (
-                    <TableRow key={item.accountId} hover={true}>
+                  {dashboards.map((item) => (
+                    <TableRow key={item.bookingID} hover={true}>
                       <TableCell align="left">
                         <div className={styles.mentorInfoWrapper}>
                           <img
-                            src={item.imageUrl || AvatarDefault}
+                            src={item.avatar || AvatarDefault}
                             alt="avatar"
                           />
                           <div className={styles.infoLeft}>
@@ -212,7 +112,7 @@ const Dashboard = () => {
                       <TableCell align="center">
                         <Link
                           className={styles.customAction}
-                          to={`/bookings/${item.menteeId}`}
+                          to={`/bookings/${item.bookingID}`}
                           state={{
                             prevPath: {
                               to: location.pathname,

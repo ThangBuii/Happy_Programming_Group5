@@ -31,6 +31,20 @@ const Feedback = () => {
         console.error(error);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    if (window.confirm("Muon xoa-id: " + id + "?")) {
+      request("DELETE",`/api/feedback/${id}`)
+        .then(() => {
+          alert("Delete success");
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  };
+
   // useEffect(() => {
   //   fetch("http://localhost:9999/report-list/mentorId")
   //     .then((resp) => resp.json())
@@ -118,7 +132,8 @@ const Feedback = () => {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" color="warning">
+                      <Button onClick={() => handleDelete(item.feedback_id)} 
+                      variant="contained" color="warning">
                         Delete
                       </Button>
                     </TableCell>

@@ -52,13 +52,12 @@ const Profile = () => {
 
   useEffect(() => {
     seIsLoading(true);
-    request("GET", `/api/profile/${"userId"}`)
+    request("GET", `/api/mentor/profile`)
       .then((response) => {
         setMyProfile(response.data);
       })
       .catch((error) => {
         console.error(error);
-        setMyProfile({ ...fakeProfile });
       })
       .finally(() => {
         seIsLoading(false);
@@ -104,16 +103,16 @@ const Profile = () => {
             }}
           >
             <div className={styles.personProfileWrapper}>
-              <img src={myProfile.imageUrl} alt="avatar" />
-              <h2>{myProfile.name}</h2>
-              <p>{myProfile.expert}</p>
+              <img src={myProfile.avatar} alt="avatar" />
+              <h2>{myProfile.username}</h2>
+              <p>{myProfile.short_description}</p>
             </div>
 
             <ProfileHelper
               title={"About Me"}
               content={
                 <div className={styles.aboutMe}>
-                  <p>{myProfile.aboutMe}</p>
+                  <p>{myProfile.description}</p>
                 </div>
               }
             />
@@ -124,7 +123,7 @@ const Profile = () => {
                   title={"Short Description"}
                   content={
                     <div className={styles.aboutMe}>
-                      <p>{myProfile.shortDescription}</p>
+                      <p>{myProfile.short_description}</p>
                     </div>
                   }
                 />
@@ -134,7 +133,7 @@ const Profile = () => {
                     <div className={styles.profileDetailWrapper}>
                       <div className={styles.profileDetailItem}>
                         <p>University</p>
-                        <p>{myProfile.country}</p>
+                        <p>{myProfile.university}</p>
                       </div>
                       <div className={styles.profileDetailItem}>
                         <p>Major</p>
@@ -151,9 +150,9 @@ const Profile = () => {
                   title={"Skills"}
                   content={
                     <div className={styles.skillList}>
-                      {myProfile.skillList.map((skill, index) => (
+                      {myProfile.skills.map((skill, index) => (
                         <div key={index} className={styles.skillItem}>
-                          {skill}
+                          {skill.skill_name}
                         </div>
                       ))}
                     </div>
