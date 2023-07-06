@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ViewSessionDTO {
+public class ViewSessionDTO { 
+    private String email;
+    private String avatar;
     private String mentor_name;
     private String skill_name;
     private String session_name;

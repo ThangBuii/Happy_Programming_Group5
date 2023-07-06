@@ -10,6 +10,7 @@ import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Session.dto.ViewSessionDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.SkillsRepository;
+import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,8 @@ public class SessionMapper {
     private final AccountRepository accountRepository;
 
     private final SkillsRepository skillsRepository;
+
+    private final CommonUtils commonUtils;
 
     public SessionDTO toSessionDTO(Session session) {
         Account account = accountRepository.findById(session.getMentor_id()).get();
@@ -35,7 +38,8 @@ public class SessionMapper {
 
         return ViewSessionDTO.builder().session_name(session.getName()).mentor_name(account.getUsername())
                 .duration(session.getDuration()).description(session.getDescription()).price(session.getPrice())
-                .skill_name(skills.getSkill_name()).status(session.getStatus()).build();
+                .skill_name(skills.getSkill_name()).status(session.getStatus()).email(account.getEmail())
+                .avatar(commonUtils.imageToFrontEnd(account.getAvatar())).build();
 
     }
 
