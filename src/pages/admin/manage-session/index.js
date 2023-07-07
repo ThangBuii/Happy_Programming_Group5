@@ -202,7 +202,7 @@ const ManageSession = () => {
               variant="contained"
               color="primary"
               onClick={() =>
-                navigate(`/sessions/${row.id}`, {
+                navigate(`/sessions/${row.session_id}`, {
                   state: {
                     prevPath: {
                       to: location.pathname,

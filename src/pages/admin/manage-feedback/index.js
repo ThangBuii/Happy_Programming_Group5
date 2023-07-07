@@ -167,17 +167,17 @@ const ManageFeedback = () => {
       },
     },
     {
-      field: "createdDate",
+      field: "created_date",
       headerName: "Created Date",
-      type: "string",
+      type: "date",
       flex: 0.25,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Created Date"}</strong>
       ),
-      valueGetter: ({ row }) => {
-        return row.created_date;
+      valueGetter: ({ value }) => {
+        return new Date(value);
       },
     },
     {

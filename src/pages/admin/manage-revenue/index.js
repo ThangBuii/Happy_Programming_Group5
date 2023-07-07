@@ -4,33 +4,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
-
+import { request } from '../../../axios_helper'
 // Có một bảng ở dưới gồm có: Amount, Date, Receipt ID
 
 const breadcrumbArr = [
   { to: "/admin/dashboard", represent: "Dashboard" },
   { to: "/admin/revenue", represent: "Revenue" },
-];
-
-const fakeRowRevenueData = [
-  {
-    id: "Receipt1",
-    amount: 2000.3,
-    date: "October 13, 2014",
-    receiptId: "Receipt1",
-  },
-  {
-    id: "Receipt2",
-    amount: 1500,
-    date: "October 14, 2014",
-    receiptId: "Receipt2",
-  },
-  {
-    id: "Receipt3",
-    amount: 1800.0,
-    date: "October 12, 2014",
-    receiptId: "Receipt3",
-  },
 ];
 
 const ManageRevenue = () => {
@@ -39,14 +18,16 @@ const ManageRevenue = () => {
   const [revenueRow, setRevenueRow] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setRevenueRow(data);
+    request("GET", "/api/admin/revenue")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.revenue_id,
+          ...row,
+        }));
+        setRevenueRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setRevenueRow([...fakeRowRevenueData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -65,11 +46,12 @@ const ManageRevenue = () => {
         <strong style={{ fontSize: "16px" }}>{"Amount"}</strong>
       ),
       valueFormatter: (params) => {
-        return `$${params.value.toFixed(2)}`;
+        const value = Number(params.value);
+        return isNaN(value) ? "" : `$${value.toFixed(2)}`;
       },
     },
     {
-      field: "date",
+      field: "created_Date",
       headerName: "Date",
       type: "date",
       flex: 0.4,
@@ -83,7 +65,7 @@ const ManageRevenue = () => {
       },
     },
     {
-      field: "receiptId",
+      field: "receipt_id",
       headerName: "Receipt Id",
       type: "string",
       flex: 0.3,

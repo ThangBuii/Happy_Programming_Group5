@@ -139,7 +139,7 @@ const ManageSkill = () => {
       field: "skill_name",
       headerName: "Skill Name",
       type: "string",
-      flex: 0.4,
+      flex: 0.3,
       align: "left",
       headerAlign: "left",
       renderCell: ({ row }) => {

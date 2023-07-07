@@ -5,33 +5,12 @@ import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
 import { Link, useLocation } from "react-router-dom";
-
+import { request } from '../../../axios_helper'
 // Booking ID, Created Date, Payment Method
 
 const breadcrumbArr = [
   { to: "/admin/dashboard", represent: "Dashboard" },
   { to: "/admin/invoice", represent: "Invoice" },
-];
-
-const fakeRowInvoiceData = [
-  {
-    id: "Booking1",
-    paymentMethod: "ATM",
-    createdDate: "October 13, 2014",
-    bookingId: "Booking1",
-  },
-  {
-    id: "Booking2",
-    paymentMethod: "ATM",
-    createdDate: "October 14, 2014",
-    bookingId: "Booking2",
-  },
-  {
-    id: "Booking3",
-    paymentMethod: "ATM",
-    createdDate: "October 12, 2014",
-    bookingId: "Booking3",
-  },
 ];
 
 const ManageInvoice = () => {
@@ -41,14 +20,17 @@ const ManageInvoice = () => {
   const [invoiceRow, setInvoiceRow] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setInvoiceRow(data);
+    request("GET", "/api/admin/invoice")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.receipt_id,
+          ...row,
+        }));
+        setInvoiceRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setInvoiceRow([...fakeRowInvoiceData]);
+
       })
       .finally(() => {
         seIsLoading(false);
@@ -57,14 +39,14 @@ const ManageInvoice = () => {
 
   const columns = [
     {
-      field: "bookingId",
-      headerName: "Booking Id",
+      field: "booking_id",
+      headerName: "Booking No",
       type: "string",
       flex: 0.3,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Booking Id"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Booking No"}</strong>
       ),
       renderCell: ({ value }) => {
         return (
@@ -84,7 +66,7 @@ const ManageInvoice = () => {
     },
 
     {
-      field: "createdDate",
+      field: "created_Date",
       headerName: "Created Date",
       type: "date",
       flex: 0.4,
@@ -98,7 +80,7 @@ const ManageInvoice = () => {
       },
     },
     {
-      field: "paymentMethod",
+      field: "payment_method",
       headerName: "Payment Method",
       type: "string",
       flex: 0.3,
@@ -112,7 +94,7 @@ const ManageInvoice = () => {
 
   return (
     <MainAdminLayout
-      title="List of Revenue"
+      title="List of Invoice"
       breadCum={[...breadcrumbArr]}
       content={
         <>

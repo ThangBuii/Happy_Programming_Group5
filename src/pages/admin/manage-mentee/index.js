@@ -14,33 +14,6 @@ const breadcrumbArr = [
   { to: "/admin/mentee", represent: "Mentee" },
 ];
 
-const fakeRowMenteeData = [
-  {
-    id: "user1",
-    name: "Le Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 6,
-    memberSince: "October 13, 2014",
-  },
-  {
-    id: "user2",
-    name: "Hasagiiiii",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 7,
-    memberSince: "October 13, 2014",
-  },
-  {
-    id: "user3",
-    name: "Pzzanggg",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 5,
-    memberSince: "October 13, 2015",
-  },
-];
-
 const ManageMentee = () => {
   const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
@@ -161,18 +134,14 @@ const ManageMentee = () => {
       },
     },
     {
-      field: "memberSince",
+      field: "created_date",
       headerName: "Member Since",
       type: "date",
       flex: 0.2,
       align: "left",
       headerAlign: "left",
-      renderCell: ({ row }) => {
-        return (
-          <div className={styles.infoLeft}>
-              <h4>{row.created_date}</h4>
-            </div>
-        );
+      valueGetter: ({ value }) => {
+        return new Date(value);
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>

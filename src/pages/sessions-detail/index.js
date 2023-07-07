@@ -6,36 +6,6 @@ import { useParams } from "react-router-dom";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import styles from "./index.module.css";
 
-const fakeSessionsDetail = {
-  sessionId: "session1",
-  sessionName: "Lam ngheo khong kho",
-  mentor: {
-    id: "user1",
-    name: "A Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  created_date: "October 13, 2014",
-  duration: "30",
-  price: 200,
-  description: "Nice session to become billion",
-  skillList: [
-    "NestJS",
-    "React",
-    "Typescript",
-    "Ionic",
-    "Framework",
-    "NodeJS",
-    "UX",
-    "Design",
-    "Node",
-    "Angular",
-    "C#",
-    "AWS",
-    "JavaScript",
-    "Coding",
-  ],
-};
 
 const SessionsDetail = () => {
   const location = useLocation();
@@ -47,13 +17,12 @@ const SessionsDetail = () => {
 
   useEffect(() => {
     seIsLoading(true);
-    request("GET", `/api/sessions/${sessions_id}`)
+    request("GET", `/api/session/${sessions_id}`)
       .then((response) => {
         setSessions(response.data);
       })
       .catch((error) => {
         console.error(error);
-        setSessions({ ...fakeSessionsDetail });
       })
       .finally(() => {
         seIsLoading(false);
@@ -96,18 +65,17 @@ const SessionsDetail = () => {
             <div className={styles.topWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={sessions.mentor.imageUrl || AvatarDefault}
+                  src={sessions.avatar || AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
-                  <h4>{sessions.mentor.name}</h4>
+                  <h4>{sessions.mentor_name}</h4>
                 </div>
               </div>
-              <span>{sessions.created_date}</span>
             </div>
             <div className={styles.contentWrapper}>
               <h4>Session Name</h4>
-              <div className={styles.sessionDetail}>{sessions.sessionName}</div>
+              <div className={styles.sessionDetail}>{sessions.session_name}</div>
               <h4>Session Duration</h4>
               <div className={styles.sessionDetail}>{sessions.duration}</div>
               <h4>Session Price</h4>
@@ -116,11 +84,11 @@ const SessionsDetail = () => {
               <div className={styles.sessionDetail}>{sessions.description}</div>
               <h4>Session Skills</h4>
               <div className={styles.skillList}>
-                {sessions.skillList.map((skill, index) => (
-                  <div key={index} className={styles.skillItem}>
-                    {skill}
+                
+                  <div className={styles.skillItem}>
+                    {sessions.skill_name}
                   </div>
-                ))}
+                
               </div>
             </div>
           </Container>

@@ -120,18 +120,14 @@ const ManageMentor = () => {
       },
     },
     {
-      field: "memberSince",
+      field: "created_date",
       headerName: "Member Since",
       type: "date",
       flex: 0.2,
       align: "left",
       headerAlign: "left",
-      renderCell: ({ row }) => {
-        return (
-          <div className={styles.infoLeft}>
-            <h4>{row.created_date}</h4>
-          </div>
-        );
+      valueGetter: ({ value }) => {
+        return new Date(value);
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Member Since"}</strong>
