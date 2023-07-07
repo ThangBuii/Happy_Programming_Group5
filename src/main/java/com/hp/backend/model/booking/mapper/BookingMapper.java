@@ -52,7 +52,7 @@ public class BookingMapper {
         Account account = accountRepository.findById(session.getMentor_id()).get();
         return BookingListMenteeDTO.builder().username(account.getUsername()).email(account.getEmail())
                 .scheduleDate(time.getStart_date())
-                .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString())
+                .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString()).bookingID(id)
                 .build();
 
     }

@@ -24,6 +24,8 @@ public interface FeedbackService {
 
     public void addFeedback(FeedbackAddRequestDTO feedback, int account_id);
 
+    public FeedbackListAdminResponseDTO getFeedbackByID(int id) throws CustomBadRequestException, CustomInternalServerException;
+
     
 
     

@@ -39,6 +39,11 @@ public class FeedbackController {
         return feedbackService.getFeedbacks();
     }
 
+    @GetMapping("admin/feedback/{id}")
+    public FeedbackListAdminResponseDTO getFeedbackByID(@PathVariable int id) throws CustomBadRequestException, CustomInternalServerException{
+        return feedbackService.getFeedbackByID(id);
+    }
+    
     @DeleteMapping("/feedback/{id}")
     public void deleteFeedback(@PathVariable int id) throws CustomBadRequestException{
         feedbackService.deleteFeedback(id);
@@ -69,6 +74,8 @@ public class FeedbackController {
     public List<FeedbackListMentorResponseDTO> getFeedbacksFindMentor(@PathVariable int id) throws CustomInternalServerException{
         return feedbackService.getFeedbacksMentor(id);
     }
+
+    
 
     
 

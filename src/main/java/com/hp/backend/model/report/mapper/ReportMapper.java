@@ -36,7 +36,7 @@ public class ReportMapper {
         return ReportListResponseDTO.builder().username(account.getUsername()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .email(account.getEmail())
                 .title(report.getTitle()).report_id(report.getReport_id())
-                .created_date(report.getDate())
+                .created_date(report.getDate()).content(report.getContent())
                 .role(account.getRole()).status(report.getStatus()).build();
     }
 
