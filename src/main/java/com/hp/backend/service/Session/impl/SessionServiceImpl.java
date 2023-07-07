@@ -82,4 +82,9 @@ public class SessionServiceImpl implements SessionService {
                 .build());
     }
 
+    @Override
+    public void saveSesison(Session session) {
+        sessionRepository.save(session);
+    }
+
 }

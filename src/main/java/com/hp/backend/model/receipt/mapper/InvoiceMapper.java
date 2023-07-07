@@ -11,6 +11,7 @@ import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
 import com.hp.backend.model.receipt.dto.InvoiceAdminDTO;
 import com.hp.backend.model.receipt.dto.InvoiceDTO;
+import com.hp.backend.model.receipt.dto.ViewInvoiceDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.utils.CommonUtils;
 
@@ -59,11 +60,26 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceAdminDTO.builder().receipt_id(receipt.getReceipt_id()).menteeUsername(mentee.getUsername())
-                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).mentorUsername(mentor.getUsername())
+                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
+                .mentorUsername(mentor.getUsername())
                 .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .amount(formattedValue).created_Date(receipt.getCreated_date())
                 .build();
 
+    }
+
+    public ViewInvoiceDTO toViewInvoiceDTO(Receipt receipt) {
+        Booking booking = receipt.getBooking();
+        Account mentee = accountRepository.findById(booking.getMentee_id()).get();
+        Times time = booking.getTime();
+        Session session = time.getSession();
+        Account mentor = accountRepository.findById(session.getMentor_id()).get();
+        return ViewInvoiceDTO.builder().booking_id(receipt.getBooking().getBooking_id())
+                .paymen_method(receipt.getPayment_method())
+                .created_Date(receipt.getCreated_date()).mentee_name(mentee.getUsername())
+                .mentee_email(mentee.getEmail()).mentee_avatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
+                .mentor_name(mentor.getUsername()).mentor_email(mentor.getEmail())
+                .mentor_avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).price(session.getPrice()).build();
     }
 
 }
