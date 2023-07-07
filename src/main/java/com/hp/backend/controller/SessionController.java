@@ -46,7 +46,7 @@ public class SessionController {
         return sessionService.getAllSession();
     }
 
-    @GetMapping("/admin/session/{id}")
+    @GetMapping("/session/{id}")
     ViewSessionDTO getSessionById(@PathVariable int id) throws CustomBadRequestException {
         return sessionService.findSessionByID(id);
     }

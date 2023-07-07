@@ -72,4 +72,9 @@ public class SkillsServiceImpl implements SkillsService {
     public void addSkills(SkillsRequestDTO skillsRequestDTO) {
         skillsRepository.save(Skills.builder().skill_name(skillsRequestDTO.getSkill_name()).build());
     }
+
+    @Override
+    public List<Skills> getAllSkills() {
+        return skillsRepository.findAll();
+    }
 }

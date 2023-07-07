@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
     public MentorDTODetailResponse findMentorByID(int id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(id);
 
-        if(account.isPresent() && account.get().getRole() == 1){
+        if(account.isPresent()){
             return accountMapper.toMentorDTODetailResponse(account.get());
         }else{
             throw new CustomBadRequestException(

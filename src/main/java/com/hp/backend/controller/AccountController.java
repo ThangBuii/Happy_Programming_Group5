@@ -79,7 +79,7 @@ public class AccountController {
         accountService.deleteById(id);
     }
 
-    @GetMapping("/mentor/profile")
+    @GetMapping("/men/profile")
     public MentorDTODetailResponse getMentorProfile(HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);

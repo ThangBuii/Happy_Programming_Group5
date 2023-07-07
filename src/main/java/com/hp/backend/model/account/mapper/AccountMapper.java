@@ -98,7 +98,7 @@ public class AccountMapper {
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
                 .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription())
-                .short_description(account.getShort_description()).skills(skills).build();
+                .short_description(account.getShort_description()).role(account.getRole()).skills(skills).build();
     }
 
     public MenteeDTODetailResponse toMenteeDTODetailResponse(Account account) {

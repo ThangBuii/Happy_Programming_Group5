@@ -19,4 +19,6 @@ public interface SkillsService {
     public void saveSkills(Skills skills);
 
     public void addSkills(SkillsRequestDTO skillsRequestDTO);
+
+    public List<Skills> getAllSkills();
 }

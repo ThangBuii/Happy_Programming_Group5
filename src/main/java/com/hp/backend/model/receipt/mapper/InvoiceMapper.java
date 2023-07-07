@@ -61,7 +61,7 @@ public class InvoiceMapper {
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceAdminDTO.builder().receipt_id(receipt.getReceipt_id()).menteeUsername(mentee.getUsername())
                 .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
-                .mentorUsername(mentor.getUsername())
+                .mentorUsername(mentor.getUsername()).booking_id(booking.getBooking_id()).payment_method(receipt.getPayment_method())
                 .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .amount(formattedValue).created_Date(receipt.getCreated_date())
                 .build();
@@ -75,10 +75,10 @@ public class InvoiceMapper {
         Session session = time.getSession();
         Account mentor = accountRepository.findById(session.getMentor_id()).get();
         return ViewInvoiceDTO.builder().booking_id(receipt.getBooking().getBooking_id())
-                .paymen_method(receipt.getPayment_method())
+                .payment_method(receipt.getPayment_method()).receipt_id(receipt.getReceipt_id())
                 .created_Date(receipt.getCreated_date()).mentee_name(mentee.getUsername())
                 .mentee_email(mentee.getEmail()).mentee_avatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
-                .mentor_name(mentor.getUsername()).mentor_email(mentor.getEmail())
+                .mentor_name(mentor.getUsername()).mentor_email(mentor.getEmail()).session_name(session.getName())
                 .mentor_avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).price(session.getPrice()).build();
     }
 

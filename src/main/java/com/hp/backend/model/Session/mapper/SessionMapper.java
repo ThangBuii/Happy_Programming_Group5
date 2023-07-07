@@ -28,7 +28,7 @@ public class SessionMapper {
         Skills skills = skillsRepository.findById(session.getSkill_id()).get();
 
         return SessionDTO.builder().username(account.getUsername()).skill_name(skills.getSkill_name())
-                .duration(session.getDuration()).session_Name(session.getName())
+                .duration(session.getDuration()).session_Name(session.getName()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .status(session.getStatus()).session_id(session.getSession_id()).build();
     }
 

@@ -16,7 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ViewInvoiceDTO {
     private int booking_id;
-    private String paymen_method;
+    private int receipt_id;
+    private String payment_method;
     private Date created_Date;
     private String mentee_name;
     private String mentee_email;
@@ -25,4 +26,5 @@ public class ViewInvoiceDTO {
     private String mentor_email;
     private String mentor_avatar;
     private float price;
+    private String session_name;
 }

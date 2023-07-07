@@ -49,4 +49,9 @@ public class SkillController {
     void addSkills(@RequestBody SkillsRequestDTO skillsRequestDTO) {
         skillsService.addSkills(skillsRequestDTO);
     }
+
+    @GetMapping("/men/skills")
+    List<Skills> getAllSkills(){
+        return skillsService.getAllSkills();
+    }
 }
