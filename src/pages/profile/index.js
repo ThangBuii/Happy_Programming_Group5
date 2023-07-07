@@ -52,7 +52,7 @@ const Profile = () => {
 
   useEffect(() => {
     seIsLoading(true);
-    request("GET", `/api/mentor/profile`)
+    request("GET", `/api/men/profile`)
       .then((response) => {
         setMyProfile(response.data);
       })
