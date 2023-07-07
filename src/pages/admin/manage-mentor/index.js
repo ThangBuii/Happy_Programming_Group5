@@ -14,35 +14,6 @@ const breadcrumbArr = [
   { to: "/admin/mentor", represent: "Mentor" },
 ];
 
-const fakeRowMentorData = [
-  {
-    id: "user1",
-    name: "Le Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 6,
-    earned: 3000,
-    memberSince: "October 13, 2014",
-  },
-  {
-    id: "user2",
-    name: "Hasagiiiii",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 7,
-    earned: 4000,
-    memberSince: "October 23, 2014",
-  },
-  {
-    id: "user3",
-    name: "Pzzanggg",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    numOfBookings: 5,
-    earned: 2000,
-    memberSince: "October 12, 2015",
-  },
-];
 
 const ManageMentor = () => {
   const navigate = useNavigate();
@@ -129,13 +100,13 @@ const ManageMentor = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Mentee Name",
+      headerName: "Mentor Name",
       type: "string",
       flex: 0.3,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Mentee Name"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Mentor Name"}</strong>
       ),
       renderCell: ({ row }) => {
         return (

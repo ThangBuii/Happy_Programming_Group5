@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
-
+import { request } from '../../../axios_helper'
 // Mentor Name, Mentee Name, Created Date, Action: View xem thong tin chi tiet feedback, Action: delete có pop up ban có chắc ko
 
 const breadcrumbArr = [
@@ -14,76 +14,6 @@ const breadcrumbArr = [
   { to: "/admin/feedback", represent: "Feedback" },
 ];
 
-const fakeRowFeedbackData = [
-  {
-    id: "feedback1",
-    mentor: {
-      id: "user1",
-      name: "A Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user2",
-      name: "B Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    createdDate: "October 13, 2014",
-  },
-  {
-    id: "feedback2",
-    mentor: {
-      id: "user3",
-      name: "D Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user4",
-      name: "G Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    createdDate: "October 13, 2015",
-  },
-  {
-    id: "feedback3",
-    mentor: {
-      id: "user5",
-      name: "B Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user6",
-      name: "Q Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    createdDate: "October 13, 2012",
-  },
-];
-
-const fakeFeedbackDetail = {
-  feebackId: "feedback1",
-  mentor: {
-    id: "user1",
-    name: "A Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  mentee: {
-    id: "user2",
-    name: "B Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  createdDate: "October 13, 2012",
-  rating: 4.5,
-  content:
-    "Nhóm học tập rất cần thiết trong dạy học theo định hướng phát triển năng lực người học. Khi học theo nhóm các em được chia sẻ ý kiến cho nhau, được hỗ trợ giúp đỡ nhau để cùng tiến bộ nhằm phát triển năng lực và phẩm chất, hoàn thiện bản thân trong quá trình học tập.",
-};
 
 const ManageFeedback = () => {
   // const navigate = useNavigate();
@@ -102,14 +32,16 @@ const ManageFeedback = () => {
   const [chooseId, setChooseId] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setFeedbackRow(data);
+    request("GET", "/api/admin/feedbacks")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.feedback_id,
+          ...row,
+        }));
+        setFeedbackRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setFeedbackRow([...fakeRowFeedbackData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -118,14 +50,12 @@ const ManageFeedback = () => {
 
   useEffect(() => {
     if (chooseId !== "" && isLoadingDetail)
-      fetch("http://localhost:9999/feedback/id")
-        .then((resp) => resp.json())
-        .then((data) => {
-          setFeedbackDetail(data);
+      request("GET", `/api/admin/feedback/${chooseId}`)
+        .then((response) => {
+          setFeedbackDetail(response.data);
         })
         .catch((err) => {
           console.log(err);
-          setFeedbackDetail({ ...fakeFeedbackDetail });
         })
         .finally(() => {
           setIsLoadingDetail(false);
@@ -157,10 +87,9 @@ const ManageFeedback = () => {
     handleCloseConfirmDialog(id);
     setListIdLoading((pre) => [...pre, id]);
 
-    await fetch(`http://localhost:9999/feedback/delete/${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.isSuccess === 0)
+    request("DELETE", `/api/feedback/${id}`)
+      .then((response) => {
+        if (response.status === 200)
           setFeedbackRow((pre) => pre.filter((item) => item.id !== id));
       })
       .catch((err) => {
@@ -199,15 +128,15 @@ const ManageFeedback = () => {
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Mentor Name"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return value.name;
+      valueGetter: ({ row }) => {
+        return row.mentor_username;
       },
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentor.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.mentor_avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.mentor.name}</h4>
+              <h4>{row.mentor_username}</h4>
             </div>
           </div>
         );
@@ -223,15 +152,15 @@ const ManageFeedback = () => {
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Mentee Name"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return value.name;
+      valueGetter: ({ row }) => {
+        return row.mentee_username;
       },
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentee.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.mentee_avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.mentee.name}</h4>
+              <h4>{row.mentee_username}</h4>
             </div>
           </div>
         );
@@ -240,15 +169,15 @@ const ManageFeedback = () => {
     {
       field: "createdDate",
       headerName: "Created Date",
-      type: "date",
+      type: "string",
       flex: 0.25,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Created Date"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return new Date(value);
+      valueGetter: ({ row }) => {
+        return row.created_date;
       },
     },
     {
@@ -264,15 +193,15 @@ const ManageFeedback = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleClickView(row.id)}
+              onClick={() => handleClickView(row.feedback_id)}
             >
               View
             </Button>
             <Button
               variant="contained"
               color="warning"
-              onClick={() => handleClickDelete(row.id)}
-              disabled={listIdLoading.includes(row.id)}
+              onClick={() => handleClickDelete(row.feedback_id)}
+              disabled={listIdLoading.includes(row.feedback_id)}
             >
               Delete
             </Button>
@@ -337,11 +266,11 @@ const ManageFeedback = () => {
             <div className={styles.titleWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={feedbackDetail.mentee.imageUrl || AvatarDefault}
+                  src={feedbackDetail.mentee_avatar || AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
-                  <h4>{feedbackDetail.mentee.name}</h4>
+                  <h4>{feedbackDetail.mentee_username}</h4>
                   <div className={styles.ratingWrapper}>
                     <Rating
                       defaultValue={feedbackDetail.rating}
@@ -349,7 +278,7 @@ const ManageFeedback = () => {
                       readOnly
                     />
                     <div className={styles.createdDate}>
-                      <b>{feedbackDetail.createdDate}</b>
+                      <b>{feedbackDetail.created_date}</b>
                     </div>
                   </div>
                 </div>
@@ -357,11 +286,11 @@ const ManageFeedback = () => {
               <NavigateNextIcon />
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={feedbackDetail.mentor.imageUrl || AvatarDefault}
+                  src={feedbackDetail.mentor_avatar || AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
-                  <h4>{feedbackDetail.mentor.name}</h4>
+                  <h4>{feedbackDetail.mentor_username}</h4>
                 </div>
               </div>
             </div>
