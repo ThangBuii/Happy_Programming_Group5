@@ -5,7 +5,7 @@ import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
-
+import { request } from '../../../axios_helper'
 // Mentee Name,Mentor Name,SessionID, Booking Time(Hiển thị tương tự trong sample), Status(Pending, Accepted, Rejected), Amount, Action: View -> Ấn vào hiện Booking Details
 
 const breadcrumbArr = [
@@ -13,71 +13,7 @@ const breadcrumbArr = [
   { to: "/admin/bookings", represent: "Booking" },
 ];
 
-const fakeRowBookingData = [
-  {
-    id: "feedback1",
-    mentor: {
-      id: "user1",
-      name: "A Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user2",
-      name: "B Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    sessionId: "session1",
-    bookingDate: "October 13, 2014",
-    bookFrom: "20:00",
-    bookTo: "21:15",
-    status: 0,
-    amount: 1000.2,
-  },
-  {
-    id: "feedback2",
-    mentor: {
-      id: "user3",
-      name: "D Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user4",
-      name: "G Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    sessionId: "session3",
-    bookingDate: "October 13, 2015",
-    bookFrom: "11:00",
-    bookTo: "12:15",
-    status: 2,
-    amount: 2000.2,
-  },
-  {
-    id: "feedback3",
-    mentor: {
-      id: "user5",
-      name: "B Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    mentee: {
-      id: "user6",
-      name: "Q Minh Quan",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    sessionId: "session2",
-    bookingDate: "October 13, 2012",
-    bookFrom: "18:00",
-    bookTo: "20:15",
-    status: 1,
-    amount: 1050.2,
-  },
-];
+
 
 const ManageBooking = () => {
   const navigate = useNavigate();
@@ -87,14 +23,16 @@ const ManageBooking = () => {
   // const [chooseId, setChooseId] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-bookings")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setBookingRow([...data]);
+    request("GET", "/api/admin/bookings")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.bookingID,
+          ...row,
+        }));
+        setBookingRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setBookingRow([...fakeRowBookingData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -123,15 +61,15 @@ const ManageBooking = () => {
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Mentor Name"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return value.name;
+      valueGetter: ({ row }) => {
+        return row.mentorUsername;
       },
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentor.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatarMentor || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.mentor.name}</h4>
+              <h4>{row.mentorUsername}</h4>
             </div>
           </div>
         );
@@ -147,22 +85,22 @@ const ManageBooking = () => {
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Mentee Name"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return value.name;
+      valueGetter: ({ row }) => {
+        return row.menteeUsername;
       },
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentee.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatarMentor || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.mentee.name}</h4>
+              <h4>{row.menteeUsername}</h4>
             </div>
           </div>
         );
       },
     },
     {
-      field: "sessionId",
+      field: "session_id",
       headerName: "Session Id",
       type: "string",
       flex: 0.1,
@@ -173,25 +111,22 @@ const ManageBooking = () => {
       ),
     },
     {
-      field: "bookingDate",
+      field: "created_date",
       headerName: "Created Date",
-      type: "date",
+      type: "string",
       flex: 0.2,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Created Date"}</strong>
       ),
-      valueGetter: ({ value }) => {
-        return new Date(value);
+      valueGetter: ({ row }) => {
+        return row.created_date;
       },
       renderCell: ({ row }) => {
         return (
           <div className={styles.dateWrapper}>
-            {row.bookingDate}
-            <span style={{ display: "block", color: "#1e88e5" }}>
-              {row.bookFrom} - {row.bookTo}
-            </span>
+            {row.created_date}
           </div>
         );
       },
@@ -203,6 +138,9 @@ const ManageBooking = () => {
       flex: 0.1,
       align: "center",
       headerAlign: "center",
+      renderHeader: (params) => (
+        <strong style={{ fontSize: "16px" }}>{"Status"}</strong>
+      ),
       renderCell: ({ value }) => {
         return (
           <span
@@ -225,20 +163,6 @@ const ManageBooking = () => {
               : ""}
           </span>
         );
-      },
-    },
-    {
-      field: "amount",
-      headerName: "Amount",
-      type: "string",
-      flex: 0.1,
-      align: "left",
-      headerAlign: "left",
-      renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Amount"}</strong>
-      ),
-      valueFormatter: (params) => {
-        return `$${params.value.toFixed(2)}`;
       },
     },
     {

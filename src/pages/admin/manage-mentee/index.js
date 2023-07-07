@@ -143,7 +143,7 @@ const ManageMentee = () => {
       field: "name",
       headerName: "Mentee Name",
       type: "string",
-      flex: 0.3,
+      flex: 0.2,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -164,7 +164,7 @@ const ManageMentee = () => {
       field: "memberSince",
       headerName: "Member Since",
       type: "date",
-      flex: 0.3,
+      flex: 0.2,
       align: "left",
       headerAlign: "left",
       renderCell: ({ row }) => {

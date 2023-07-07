@@ -102,7 +102,7 @@ const ManageMentor = () => {
       field: "name",
       headerName: "Mentor Name",
       type: "string",
-      flex: 0.3,
+      flex: 0.2,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -123,14 +123,14 @@ const ManageMentor = () => {
       field: "memberSince",
       headerName: "Member Since",
       type: "date",
-      flex: 0.3,
+      flex: 0.2,
       align: "left",
       headerAlign: "left",
       renderCell: ({ row }) => {
         return (
           <div className={styles.infoLeft}>
-              <h4>{row.created_date}</h4>
-            </div>
+            <h4>{row.created_date}</h4>
+          </div>
         );
       },
       renderHeader: (params) => (
@@ -147,12 +147,34 @@ const ManageMentor = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.infoLeft}>
-              <h4>{row.numberOfBooking}</h4>
-            </div>
+            <h4>{row.numberOfBooking}</h4>
+          </div>
         );
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Numbers of Booking"}</strong>
+      ),
+    },
+    {
+      field: "earned",
+      headerName: "Earned",
+      type: "number",
+      flex: 0.2,
+      align: "center",
+      headerAlign: "center",
+      renderCell: ({ row }) => {
+        return (
+          <div className={styles.infoLeft}>
+            {row.earned === "0" ? (
+              <h4>None</h4>
+            ) : (
+              <h4>${row.earned}</h4>
+            )}
+          </div>
+        );
+      },
+      renderHeader: (params) => (
+        <strong style={{ fontSize: "16px" }}>{"Earned"}</strong>
       ),
     },
     {

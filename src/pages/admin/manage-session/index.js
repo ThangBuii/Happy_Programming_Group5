@@ -5,7 +5,7 @@ import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
-
+import { request } from '../../../axios_helper'
 // Mentor Name, Skill Name, Duration,Session Name,Status, Action: View
 
 const breadcrumbArr = [
@@ -13,38 +13,6 @@ const breadcrumbArr = [
   { to: "/admin/sessions", represent: "Sessions" },
 ];
 
-const fakeRowSessionData = [
-  {
-    id: "user1",
-    name: "Le Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["Javascript", "CSS"],
-    duration: 6.5,
-    sessionName: "Toi la ai",
-    status: 0,
-  },
-  {
-    id: "user2",
-    name: "Hasagiiiii",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["C#", "C", "C++", "Python", "Java", "React"],
-    duration: 8,
-    sessionName: "Bi kip 10 diem dai hoc",
-    status: 1,
-  },
-  {
-    id: "user3",
-    name: "Pzzanggg",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    skillList: ["Chem gio"],
-    duration: 2.6,
-    sessionName: "It vua moi nghe",
-    status: 2,
-  },
-];
 
 const ManageSession = () => {
   const location = useLocation();
@@ -59,14 +27,16 @@ const ManageSession = () => {
   const [sessionRow, setSessionRow] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setSessionRow(data);
+    request("GET", "/api/admin/session")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.session_id,
+          ...row,
+        }));
+        setSessionRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setSessionRow([...fakeRowSessionData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -74,31 +44,23 @@ const ManageSession = () => {
   }, []);
 
   const handleClickAccept = async (id) => {
-    await processStatus(id, "ACCECPT");
+    await processStatus(id, 1);
   };
   const handleClickReject = async (id) => {
-    await processStatus(id, "REJECT");
+    await processStatus(id, 2);
   };
 
   const processStatus = async (id, action) => {
     setListIdLoading((pre) => [...pre, id]);
 
+    const requestBody = {
+      status: action
+    };
     // may cai nay nen dung post, sau co the sua lai nha
-    await fetch(`http://localhost:9999/session/${action}/${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.isSuccess === 0)
-          setSessionRow((pre) =>
-            pre.map((item) => {
-              if (item.id === id) {
-                return {
-                  ...item,
-                  status: data.status || action === "ACCECPT" ? 1 : 2,
-                };
-              }
-              return item;
-            })
-          );
+    request("PUT", `/api/admin/session/${id}`,requestBody)
+      .then((response) => {
+        if (response.status === 200)
+          window.location.reload()
       })
       .catch((err) => {
         console.log(err);
@@ -127,10 +89,10 @@ const ManageSession = () => {
 
   const columns = [
     {
-      field: "name",
+      field: "username",
       headerName: "Mentor Name",
       type: "string",
-      flex: 0.2,
+      flex: 0.15,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
@@ -139,40 +101,32 @@ const ManageSession = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.name}</h4>
+              <h4>{row.username}</h4>
             </div>
           </div>
         );
       },
     },
     {
-      field: "skillList",
+      field: "skill_name",
       headerName: "Skill List",
       type: "string",
-      flex: 0.2,
-      minWidth: 270,
+      flex: 0.1,
       align: "left",
       headerAlign: "left",
-      renderCell: ({ value }) => {
+      renderCell: ({ row }) => {
         return (
           <div className={styles.skillList}>
-            {value.map((skill, index) => {
-              if (index <= 0)
-                return (
-                  <div key={index} className={styles.skillItem}>
-                    {skill}
-                  </div>
-                );
-              else return null;
-            })}
-            {value.length > 1 && <span>+ {value.length - 1} more</span>}
+            <div key={row.session_id} className={styles.skillItem}>
+              {row.skill_name}
+            </div>
           </div>
         );
       },
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Skill List"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Skill"}</strong>
       ),
     },
     {
@@ -186,11 +140,11 @@ const ManageSession = () => {
         <strong style={{ fontSize: "16px" }}>{"Duration"}</strong>
       ),
       valueFormatter: (params) => {
-        return `${params.value} h`;
+        return `${params.value} min`;
       },
     },
     {
-      field: "sessionName",
+      field: "session_Name",
       headerName: "Session Name",
       type: "number",
       flex: 0.15,
@@ -214,19 +168,19 @@ const ManageSession = () => {
               value === 0
                 ? styles.pendindStatus
                 : value === 1
-                ? styles.acceptStatus
-                : value === 2
-                ? styles.rejectStatus
-                : ""
+                  ? styles.acceptStatus
+                  : value === 2
+                    ? styles.rejectStatus
+                    : ""
             }
           >
             {value === 0
               ? "Pending"
               : value === 1
-              ? "Accepted"
-              : value === 2
-              ? "Rejected"
-              : ""}
+                ? "Accepted"
+                : value === 2
+                  ? "Rejected"
+                  : ""}
           </span>
         );
       },
@@ -265,16 +219,16 @@ const ManageSession = () => {
                 <Button
                   variant="contained"
                   color="success"
-                  onClick={() => handleClickAccept(row.id)}
-                  disabled={listIdLoading.includes(row.id)}
+                  onClick={() => handleClickAccept(row.session_id)}
+                  disabled={listIdLoading.includes(row.session_id)}
                 >
                   Accept
                 </Button>
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={() => handleClickReject(row.id)}
-                  disabled={listIdLoading.includes(row.id)}
+                  onClick={() => handleClickReject(row.session_id)}
+                  disabled={listIdLoading.includes(row.session_id)}
                 >
                   Reject
                 </Button>
