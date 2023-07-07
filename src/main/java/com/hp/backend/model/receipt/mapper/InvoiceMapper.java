@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class InvoiceMapper {
     private final AccountRepository accountRepository;
     private final CommonUtils commonUtils;
-    private final CommonUtils commonUtils;
 
     public InvoiceDTO toMenteeInvoiceDTO(Receipt receipt) {
         Booking booking = receipt.getBooking();
@@ -31,7 +30,7 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceDTO.builder().receipt_id(receipt.getReceipt_id()).username(mentor.getUsername())
-                .email(mentor.getEmail()).avatar(commonUtils.imageToFrontEnd(commonUtils.imageToFrontEnd(mentor.getAvatar()))).amount(formattedValue)
+                .email(mentor.getEmail()).avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).amount(formattedValue)
                 .created_Date(receipt.getCreated_date())
                 .build();
 
@@ -41,7 +40,7 @@ public class InvoiceMapper {
         Booking booking = receipt.getBooking();
         Times time = booking.getTime();
         Session session = time.getSession();
-        Account mentee = accountRepository.findById(booking.getMentee_id()).get();
+        Account mentor = accountRepository.findById(booking.getMentee_id()).get();
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceDTO.builder().receipt_id(receipt.getReceipt_id()).username(mentor.getUsername())
@@ -60,8 +59,6 @@ public class InvoiceMapper {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(session.getPrice());
         return InvoiceAdminDTO.builder().receipt_id(receipt.getReceipt_id()).menteeUsername(mentee.getUsername())
-                .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).mentorUsername(mentor.getUsername())
-                .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .menteeEmail(mentee.getEmail()).menteeAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).mentorUsername(mentor.getUsername())
                 .mentorEmail(mentor.getEmail()).mentorAvatar(commonUtils.imageToFrontEnd(mentor.getAvatar()))
                 .amount(formattedValue).created_Date(receipt.getCreated_date())
