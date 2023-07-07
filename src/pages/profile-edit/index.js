@@ -5,67 +5,19 @@ import { useEffect, useState } from "react";
 import CustomInputFilter from "../../component/custom-input-filter";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.css";
+import { request } from "../../axios_helper";
+// 2-mentee, 1-mentor
 
-// 0-mentee, 1-mentor
-
-const fakeProfileData = {
-  accountId: "user1",
-  username: "John",
-  avatar:
-    "https://mentoring.dreamguystech.com/reactjs/template/5cf07dabbcf2db6a07ca8336a3538cf5.jpg",
-  dob: "1997-02-27",
-  gender: "Male",
-  major: "abc@gmail.com",
-  degree: "012345678",
-  shortDescription: "806 Twin Willow Lane",
-  city: "Old Forge",
-  university: "Newyork",
-  description: "13420",
-  country: "United States",
-  role: 1,
-  skillList: ["Product Strategy", "Angular"],
-};
-
-const fakeSkillSearch = [
-  "Leadership",
-  "Project Management",
-  "Sales",
-  "Startup",
-  "Career",
-  "Product Designer",
-  "UX Design",
-  "Interviews",
-  "Product Designer1",
-  "Software Engineer",
-  "Javascript Developer",
-  "Python Developer",
-  "Product Strategy",
-  "UX",
-  "Design",
-  "Node",
-  "Angular",
-  "C#",
-  "AWS",
-  "JavaScript",
-  "Coding",
-  "NestJS",
-  "React",
-  "Typescript",
-  "Ionic",
-  "Framework",
-  "NodeJS",
-];
-
-const handleBuildFilterSkills = (skillList, mySkill) => {
-  return skillList.map((skill) => {
-    if (mySkill.includes(skill))
+const handleBuildFilterSkills = (skills, mySkill) => {
+  return skills.map((skill) => {
+    if (mySkill.some((item) => item.skill_name === skill.skill_name))
       return {
-        skillName: skill,
+        skill_name: skill.skill_name,
         isChoosed: true,
       };
     else
       return {
-        skillName: skill,
+        skill_name: skill.skill_name,
         isChoosed: false,
       };
   });
@@ -81,47 +33,45 @@ const EditProfile = () => {
   useEffect(() => {
     seIsLoading(true);
     Promise.all([
-      fetch("http://localhost:9999/my-profile"),
-      fetch("http://localhost:9999/all-skills"),
+      request("GET", "/api/men/profile"),
+      request("GET", "/api/men/skills"),
     ])
       .then((responses) => {
-        return Promise.all(responses.map((response) => response.json()));
+        return Promise.all(responses.map((response) => response.data));
       })
       .then(([data1, data2]) => {
         setProfile(data1);
         setOriginFilterListSkill(
-          handleBuildFilterSkills(data2, data1.skillList)
+          handleBuildFilterSkills(data2, data1.skills)
         );
       })
       .catch((err) => {
         console.log(err);
-        setProfile({ ...fakeProfileData });
-        setOriginFilterListSkill(
-          handleBuildFilterSkills(fakeSkillSearch, fakeProfileData.skillList)
-        );
       })
       .finally(() => {
         seIsLoading(false);
       });
   }, []);
 
+
   useEffect(() => {
     if (originFilterListSkill.length > 0) {
       const newFilterListSkill = originFilterListSkill.filter((skill) =>
-        skill.skillName.toLowerCase().includes(filterSearch.toLowerCase())
+        skill.skill_name.toLowerCase().includes(filterSearch.toLowerCase())
       );
       setFilterListSkill(newFilterListSkill);
     }
   }, [originFilterListSkill, filterSearch]);
+  
 
   const handleClickFilterItem = (filterName) => {
     let nameState = false;
     const newFilterSkill = originFilterListSkill.map((item) => {
-      if (item.skillName !== filterName) return item;
+      if (item.skill_name !== filterName) return item;
       else {
         nameState = !item.isChoosed;
         return {
-          skillName: item.skillName,
+          skill_name: item.skill_name,
           isChoosed: nameState,
         };
       }
@@ -130,12 +80,12 @@ const EditProfile = () => {
     if (nameState)
       setProfile((pre) => ({
         ...pre,
-        skillList: [...pre.skillList, filterName],
+        skills: [...pre.skills, filterName],
       }));
     else
       setProfile((pre) => ({
         ...pre,
-        skillList: [...pre.skillList].filter((item) => item !== filterName),
+        skills: [...pre.skills].filter((item) => item !== filterName),
       }));
     setOriginFilterListSkill(newFilterSkill);
   };
@@ -220,11 +170,11 @@ const EditProfile = () => {
                     <label className="mb-2">Gender</label>
                     <select
                       className="form-control select"
-                      value={profile.gender}
+                      value={profile.gender === 0 ? 'Female' : 'Male'}
                       onChange={(e) =>
                         setProfile((pre) => ({
                           ...pre,
-                          gender: e.target.value,
+                          gender: e.target.value === 'Female' ? 0 : 1,
                         }))
                       }
                     >
@@ -263,7 +213,10 @@ const EditProfile = () => {
                     />
                   </div>
                 </div>
-                <div className="col-12 col-md-6 mb-3">
+                
+                {profile.role === 1 && (
+                  <>
+                  <div className="col-12 col-md-6 mb-3">
                   <div className="form-group">
                     <label className="mb-2">University</label>
                     <input
@@ -279,8 +232,6 @@ const EditProfile = () => {
                     />
                   </div>
                 </div>
-                {profile.role === 1 && (
-                  <>
                     <div className="col-12 col-md-6 mb-3">
                       <div className="form-group">
                         <label className="mb-2">Major</label>
@@ -333,10 +284,10 @@ const EditProfile = () => {
                               <div className={styles.searchList}>
                                 {filterListSkill.map((item) => (
                                   <div
-                                    key={item.skillName}
+                                    key={item.skill_name}
                                     className={styles.searchItem}
                                     onClick={() =>
-                                      handleClickFilterItem(item.skillName)
+                                      handleClickFilterItem(item.skill_name)
                                     }
                                   >
                                     <Checkbox
@@ -349,7 +300,7 @@ const EditProfile = () => {
                                       readOnly
                                     />
                                     <span className={styles.filterName}>
-                                      {item.skillName}
+                                      {item.skill_name}
                                     </span>
                                     {/* <span className={styles.filterRemain}>441</span> */}
                                   </div>
@@ -358,10 +309,10 @@ const EditProfile = () => {
                             </>
                           }
                         />
-                        <div className={styles.skillList}>
-                          {profile.skillList.map((skill, index) => (
+                        <div className={styles.skills}>
+                          {profile.skills.map((skill, index) => (
                             <div key={index} className={styles.skillItem}>
-                              {skill}
+                              {skill.skill_name}
                               <IconButton
                                 color="secondary"
                                 className={styles.customDeleteSkill}
@@ -380,7 +331,7 @@ const EditProfile = () => {
                         <textarea
                           type="text"
                           className="form-control"
-                          value={profile.shortDescription}
+                          value={profile.short_description}
                           onChange={(e) =>
                             setProfile((pre) => ({
                               ...pre,
