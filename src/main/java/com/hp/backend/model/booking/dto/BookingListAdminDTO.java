@@ -16,7 +16,8 @@ import lombok.Setter;
 
 public class BookingListAdminDTO {
     private int bookingID;
-    private String avatar;
+    private String avatarMentee;
+    private String avatarMentor;
     private String email;
     private String scheduleDate;
     private String scheduleTime;

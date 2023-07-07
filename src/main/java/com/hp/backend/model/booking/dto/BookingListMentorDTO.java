@@ -19,6 +19,7 @@ import lombok.Setter;
 public class BookingListMentorDTO {
     private int bookingID;
     private int menteeID;
+    private String avatar;
     private String username;
     private String email;
     private Date scheduleDate;
