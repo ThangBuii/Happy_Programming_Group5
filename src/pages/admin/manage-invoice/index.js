@@ -1,10 +1,11 @@
-import { CircularProgress } from "@mui/material";
+import {Button, CircularProgress } from "@mui/material";
 import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { request } from '../../../axios_helper'
 // Booking ID, Created Date, Payment Method
 
@@ -18,6 +19,7 @@ const ManageInvoice = () => {
   const location = useLocation();
   const [isLoading, seIsLoading] = useState(true);
   const [invoiceRow, setInvoiceRow] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     request("GET", "/api/admin/invoice")
@@ -90,6 +92,36 @@ const ManageInvoice = () => {
         <strong style={{ fontSize: "16px" }}>{"Payment Method"}</strong>
       ),
     },
+    {
+      field: "actions",
+      headerName: "Actions",
+      type: "string",
+      flex: 0.25,
+      align: "center",
+      headerAlign: "center",
+      renderCell: ({ value, row }) => {
+        return (
+          <div className={styles.actionWrapper}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                navigate(`/invoice/${row.receipt_id}`, {
+                  state: {
+                    prevPath: {
+                      to: location.pathname,
+                      represent: "Manage Sessions",
+                    },
+                  },
+                })
+              }
+            >
+              View
+            </Button>
+          </div>
+        );
+      },
+    }
   ];
 
   return (

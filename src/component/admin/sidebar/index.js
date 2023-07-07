@@ -7,10 +7,7 @@ export const linkAdminList = [
     to: "/admin/dashboard",
     represent: "Dashboard",
   },
-  {
-    to: "/admin/bookings",
-    represent: "Bookings",
-  },
+  
   {
     to: "/admin/mentor",
     represent: "Mentor",
@@ -18,6 +15,18 @@ export const linkAdminList = [
   {
     to: "/admin/mentee",
     represent: "Mentee",
+  },
+  {
+    to: "/admin/revenue",
+    represent: "Revenue",
+  },
+  {
+    to: "/admin/invoice",
+    represent: "Invoice",
+  },
+  {
+    to: "/admin/bookings",
+    represent: "Bookings",
   },
   {
     to: "/admin/sessions",
@@ -28,21 +37,15 @@ export const linkAdminList = [
     represent: "Feedback",
   },
   {
-    to: "/admin/skill",
-    represent: "Skill",
-  },
-  {
     to: "/admin/report",
     represent: "Report",
   },
   {
-    to: "/admin/revenue",
-    represent: "Revenue",
+    to: "/admin/skill",
+    represent: "Skill",
   },
-  {
-    to: "/admin/invoice",
-    represent: "Invoice",
-  },
+  
+  
 ];
 
 const AdminSidebar = () => {

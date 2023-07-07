@@ -107,7 +107,7 @@ const ManageBooking = () => {
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Session Id"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Session No"}</strong>
       ),
     },
     {

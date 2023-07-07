@@ -72,7 +72,7 @@ const ManageRevenue = () => {
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Receipt Id"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Invoice No"}</strong>
       ),
     },
   ];
