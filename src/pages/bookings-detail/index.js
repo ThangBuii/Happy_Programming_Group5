@@ -58,7 +58,7 @@ const BookingsDetail = () => {
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { prevPath } = location.state;
+  const prevPath = location.state?.prevPath || null;
   const [booking, setBooking] = useState(null);
   const [isLoading, seIsLoading] = useState(true);
 
@@ -86,12 +86,14 @@ const BookingsDetail = () => {
             <span className={styles.bcHome} onClick={() => navigate("/")}>
               Home
             </span>
-            <span
-              className={styles.bcPersonProfile}
-              onClick={() => navigate(prevPath.to)}
-            >
-              {prevPath.represent}
-            </span>
+            {prevPath && (
+              <span
+                className={styles.bcPersonProfile}
+                onClick={() => navigate(prevPath.to)}
+              >
+                {prevPath.represent}
+              </span>
+            )}
             <span className={styles.bcPersonProfile}>Booking Detail</span>
           </div>
           <h2>Booking Detail</h2>

@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
+import { Link, useLocation } from "react-router-dom";
 
 // Booking ID, Created Date, Payment Method
 
@@ -35,6 +36,7 @@ const fakeRowInvoiceData = [
 
 const ManageInvoice = () => {
   // const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, seIsLoading] = useState(true);
   const [invoiceRow, setInvoiceRow] = useState([]);
 
@@ -64,6 +66,21 @@ const ManageInvoice = () => {
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Booking Id"}</strong>
       ),
+      renderCell: ({ value }) => {
+        return (
+          <Link
+            to={`/bookings/${value}`}
+            state={{
+              prevPath: {
+                to: location.pathname,
+                represent: "Manage Invoice",
+              },
+            }}
+          >
+            {value}
+          </Link>
+        );
+      },
     },
 
     {

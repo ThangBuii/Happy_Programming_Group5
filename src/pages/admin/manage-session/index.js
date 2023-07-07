@@ -159,7 +159,7 @@ const ManageSession = () => {
         return (
           <div className={styles.skillList}>
             {value.map((skill, index) => {
-              if (index <= 2)
+              if (index <= 0)
                 return (
                   <div key={index} className={styles.skillItem}>
                     {skill}
@@ -167,7 +167,7 @@ const ManageSession = () => {
                 );
               else return null;
             })}
-            {value.length > 3 && <span>+ {value.length - 3} more</span>}
+            {value.length > 1 && <span>+ {value.length - 1} more</span>}
           </div>
         );
       },
