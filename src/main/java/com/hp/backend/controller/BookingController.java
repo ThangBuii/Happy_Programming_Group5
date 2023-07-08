@@ -77,7 +77,7 @@ public class BookingController {
         return bookingListMentorService.getAllMentorBooking(tokenPayload.getAccount_id());
     }
 
-    @GetMapping("/mentor/booking/{id}")
+    @GetMapping("/booking/{id}")
     ViewBookingDTO getBookingById(@PathVariable int id) throws CustomBadRequestException {
         return bookingListMentorService.findBookingDetailByID(id);
     }

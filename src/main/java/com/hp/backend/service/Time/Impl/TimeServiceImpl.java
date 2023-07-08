@@ -15,6 +15,7 @@ import com.hp.backend.model.CustomError;
 import com.hp.backend.model.time.dto.AddTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
+import com.hp.backend.model.time.dto.GetListTimeResponseFindMentorDTO;
 import com.hp.backend.model.time.mapper.TimeMapper;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
@@ -99,6 +100,20 @@ public class TimeServiceImpl implements TimeService {
                 .start_date(date)
                 .build();
         timeRepository.save(time);
+    }
+
+    @Override
+    public List<GetListTimeResponseFindMentorDTO> getListTimeResponseFindMentorDTOs(int session_id) {
+        List<Date> dates = timeRepository.getListTimesBySession(session_id);
+        List<GetListTimeResponseFindMentorDTO> timeList = new ArrayList<>();
+
+        for(Date date : dates){
+            List<GetListTimeResponseDTO> getListTimeResponseDTOs = getAllTime(
+                GetListTimeRequestDTO.builder().session_id(session_id).start_date(date).build());
+            timeList.add(timeMapper.toGetListTimeResponseFindMentorDTO(date,getListTimeResponseDTOs));
+        }
+
+        return timeList;
     }
 
 }

@@ -22,4 +22,7 @@ public interface TimeRepository extends JpaRepository<Times, Integer> {
     @Query("SELECT COUNT(t) > 0 FROM Times t WHERE t.end_time = :endTime AND t.start_date = :date")
     boolean existsByEndTime(@Param("endTime") Time endTime, @Param("date") Date date);
 
+    @Query("SELECT DISTINCT  t.start_date FROM Times t WHERE t.session.session_id = :sessionId")
+    List<Date> getListTimesBySession(@Param("sessionId") int session_id);
+
 }
