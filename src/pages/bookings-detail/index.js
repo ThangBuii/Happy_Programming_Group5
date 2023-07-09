@@ -1,14 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router";
-import {
-  CircularProgress,
-  Container,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import styles from "./index.module.css";
@@ -99,121 +90,79 @@ const BookingsDetail = () => {
           <h2>Booking Detail</h2>
         </div>
       </div>
-      <div className={styles.bookingWrapper}>
-        <Container
-          maxWidth="xl"
-          sx={{
-            padding: "30px 0 0",
-          }}
-        >
-          <TableContainer
+      <div className={styles.containerWrapper}>
+        {isLoading ? (
+          <div className={styles.loadingWrapper}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Container
+            maxWidth="xl"
             sx={{
-              background: "#E7E7D7",
-
-              border: "5px solid #B5C49C",
-              borderRadius: "10px",
+              padding: "30px 0 0",
             }}
           >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell className={styles.tableCellHead} align="left">
-                    MENTOR INFO
-                  </TableCell>
-                  <TableCell className={styles.tableCellHead} align="left">
-                    MENTEE INFO
-                  </TableCell>
-                  <TableCell className={styles.tableCellHead} align="left">
-                    SCHEDULED DATE
-                  </TableCell>
-                  <TableCell className={styles.tableCellHead} align="left">
-                    SCHEDULED TIMINGS
-                  </TableCell>
-                  <TableCell className={styles.tableCellHead} align="center">
-                    STATUS
-                  </TableCell>
-                  <TableCell className={styles.tableCellHead} align="left">
-                    CREATED DATE
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={6}>
-                      <div className={styles.customLoading}>
-                        <CircularProgress />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : booking ? (
-                  <TableRow
-                    key={`${booking.mentorInfo.accountId}-${booking.menteeInfo.accountId}`}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    hover={true}
-                  >
-                    <TableCell align="left">
-                      <div className={styles.mentorInfoWrapper}>
-                        <img
-                          src={booking.mentorInfo.imageUrl || AvatarDefault}
-                          alt="avatar"
-                        />
-                        <div className={styles.infoLeft}>
-                          <h4>{booking.mentorInfo.name}</h4>
-                          <p>{booking.mentorInfo.email}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left">
-                      <div className={styles.mentorInfoWrapper}>
-                        <img
-                          src={booking.menteeInfo.imageUrl || AvatarDefault}
-                          alt="avatar"
-                        />
-                        <div className={styles.infoLeft}>
-                          <h4>{booking.menteeInfo.name}</h4>
-                          <p>{booking.menteeInfo.email}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left">{booking.scheduledDate}</TableCell>
-                    <TableCell align="left">{booking.scheduledTime}</TableCell>
-                    <TableCell align="center">
-                      <span
-                        className={
-                          booking.status === 0
-                            ? styles.pendindStatus
-                            : booking.status === 1
-                            ? styles.acceptStatus
-                            : booking.status === 2
-                            ? styles.rejectStatus
-                            : ""
-                        }
-                      >
-                        {booking.status === 0
-                          ? "Pending"
-                          : booking.status === 1
-                          ? "Accepted"
-                          : booking.status === 2
-                          ? "Rejected"
-                          : ""}
-                      </span>
-                    </TableCell>
-                    <TableCell align="left">{booking.createdDate}</TableCell>
-                  </TableRow>
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6}>
-                      <h3 style={{ fontSize: "20px", textAlign: "center" }}>
-                        No Booking Detail Found!
-                      </h3>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Container>
+            <h4 className={styles.menteeInfo}>Mentor Info</h4>
+            <div className={styles.topWrapper}>
+              <div className={styles.mentorInfoWrapper}>
+                <img
+                  src={booking.mentorInfo.imageUrl || AvatarDefault}
+                  alt="avatar"
+                />
+                <div className={styles.infoLeft}>
+                  <h4>{booking.mentorInfo.name}</h4>
+                  <p>{booking.mentorInfo.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.contentWrapper}>
+              <h4>Mentee Info</h4>
+              <div className={styles.mentorInfoWrapper}>
+                <img
+                  src={booking.menteeInfo.imageUrl || AvatarDefault}
+                  alt="avatar"
+                />
+                <div className={styles.infoLeft}>
+                  <h4>{booking.menteeInfo.name}</h4>
+                  <p>{booking.menteeInfo.email}</p>
+                </div>
+              </div>
+              <h4>Bookings Scheduled Date</h4>
+              <div className={styles.bookingDetail}>
+                {booking.scheduledDate}
+              </div>
+              <h4>Bookings Scheduled T ime</h4>
+              <div className={styles.bookingDetail}>
+                {booking.scheduledTime}
+              </div>
+              <h4>Create Date</h4>
+              <div className={styles.bookingDetail}>{booking.createdDate}</div>
+              <h4>Bookings Status</h4>
+              <div className={styles.bookingDetail}>
+                <span
+                  className={
+                    booking.status === 0
+                      ? styles.pendindStatus
+                      : booking.status === 1
+                      ? styles.acceptStatus
+                      : booking.status === 2
+                      ? styles.rejectStatus
+                      : ""
+                  }
+                >
+                  {booking.status === 0
+                    ? "Pending"
+                    : booking.status === 1
+                    ? "Accepted"
+                    : booking.status === 2
+                    ? "Rejected"
+                    : ""}
+                </span>
+              </div>
+            </div>
+          </Container>
+        )}
       </div>
     </div>
   );

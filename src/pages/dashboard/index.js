@@ -5,6 +5,7 @@ import {
   TableHead,
   Table,
   TableBody,
+  Button,
 } from "@mui/material";
 import MainLayout from "../../component/main-layout";
 import { useState, useEffect } from "react";
@@ -13,10 +14,10 @@ import { EyeFill } from "react-bootstrap-icons";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
-import {request} from '../../axios_helper'
-
+import { request } from "../../axios_helper";
 
 const Dashboard = () => {
+  const role = 1; // authen => context => role
   const location = useLocation();
   const [dashboards, setDashboard] = useState([]);
   const postData = {
@@ -25,13 +26,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     request("GET", "/api/mentee/dashboard")
-    .then((response) => {
-      setDashboard(response.data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}, []);
+      .then((response) => {
+        setDashboard(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleClickUpdate = (id, type) => {
+    console.log(id, type);
+  };
+
   return (
     <MainLayout
       pageTitle="Dashboard"
@@ -110,21 +116,45 @@ const Dashboard = () => {
                         </span>
                       </TableCell>
                       <TableCell align="center">
-                        <Link
-                          className={styles.customAction}
-                          to={`/bookings/${item.bookingID}`}
-                          state={{
-                            prevPath: {
-                              to: location.pathname,
-                              represent: linkObjList.find(
-                                (cur) => cur.to === location.pathname
-                              ).represent,
-                            },
-                          }}
-                        >
-                          <EyeFill />
-                          <span>View</span>
-                        </Link>
+                        <div className={styles.centerWrapper}>
+                          <Link
+                            className={styles.customAction}
+                            to={`/bookings/${item.bookingID}`}
+                            state={{
+                              prevPath: {
+                                to: location.pathname,
+                                represent: linkObjList.find(
+                                  (cur) => cur.to === location.pathname
+                                ).represent,
+                              },
+                            }}
+                          >
+                            <EyeFill />
+                            <span>View</span>
+                          </Link>
+                          {role === 1 && (
+                            <>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  handleClickUpdate(item.bookingID, "UPDATE")
+                                }
+                              >
+                                Accept
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                onClick={() =>
+                                  handleClickUpdate(item.bookingID, "DELETE")
+                                }
+                              >
+                                Delete
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

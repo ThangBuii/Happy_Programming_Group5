@@ -144,3 +144,10 @@
 .pendindStatus {
   background-color: #fba20a;
 }
+
+.centerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

@@ -3,6 +3,8 @@ import MainAdminLayout from "../../../component/admin/main-layout";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router";
+import Statistic from "../../../component/admin/statistic";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import styles from "./index.module.css";
 
 // Có một bảng ở dưới gồm có: Amount, Date, Receipt ID
@@ -37,16 +39,25 @@ const ManageRevenue = () => {
   // const navigate = useNavigate();
   const [isLoading, seIsLoading] = useState(true);
   const [revenueRow, setRevenueRow] = useState([]);
+  const [totalRevenue, setTotalRevenue] = useState();
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setRevenueRow(data);
+    seIsLoading(true);
+    Promise.all([
+      fetch("http://localhost:9999/revenue-row"),
+      fetch("http://localhost:9999/total-revenue"),
+    ])
+      .then((responses) => {
+        return Promise.all(responses.map((response) => response.json()));
+      })
+      .then(([data1, data2]) => {
+        setRevenueRow(data1);
+        setTotalRevenue(data2);
       })
       .catch((err) => {
         console.log(err);
         setRevenueRow([...fakeRowRevenueData]);
+        setTotalRevenue(50);
       })
       .finally(() => {
         seIsLoading(false);
@@ -110,6 +121,17 @@ const ManageRevenue = () => {
               className={styles.layoutWrapper}
               style={{ height: 400, width: "100%" }}
             >
+              <div className="row">
+                <div className="col-sm-6 col-12 mx-auto">
+                  <Statistic
+                    icon={<FolderOutlinedIcon sx={{ color: "#ffbc34" }} />}
+                    about={"Revenue"}
+                    percent={totalRevenue}
+                    quantity={"$62523"}
+                    color={"#ffbc34"}
+                  />
+                </div>
+              </div>
               <DataGrid
                 sx={{
                   backgroundColor: "#fff",

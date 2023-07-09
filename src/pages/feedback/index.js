@@ -12,15 +12,13 @@ import {
 } from "@mui/material";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import styles from "./index.module.css";
-import {request} from '../../axios_helper'
+import { request } from "../../axios_helper";
 
 // Mentor Info, Created Date, Content, Rating
 
-
-
-
 const Feedback = () => {
   const [reportList, setReportList] = useState([]);
+  const role = 1; // authen => context => role
 
   useEffect(() => {
     request("GET", "/api/mentee/feedbacks")
@@ -34,7 +32,7 @@ const Feedback = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Muon xoa-id: " + id + "?")) {
-      request("DELETE",`/api/feedback/${id}`)
+      request("DELETE", `/api/feedback/${id}`)
         .then(() => {
           alert("Delete success");
           window.location.reload();
@@ -110,10 +108,7 @@ const Feedback = () => {
                   >
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
-                        <img
-                          src={item.avatar || AvatarDefault}
-                          alt="avatar"
-                        />
+                        <img src={item.avatar || AvatarDefault} alt="avatar" />
                         <div className={styles.infoLeft}>
                           <h4>{item.username}</h4>
                           <p>{item.email}</p>
@@ -132,10 +127,15 @@ const Feedback = () => {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <Button onClick={() => handleDelete(item.feedback_id)} 
-                      variant="contained" color="warning">
-                        Delete
-                      </Button>
+                      {role === 1 && (
+                        <Button
+                          onClick={() => handleDelete(item.feedback_id)}
+                          variant="contained"
+                          color="warning"
+                        >
+                          Delete
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

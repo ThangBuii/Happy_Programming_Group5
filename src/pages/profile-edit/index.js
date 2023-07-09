@@ -120,6 +120,10 @@ const EditProfile = () => {
       if (item.skillName !== filterName) return item;
       else {
         nameState = !item.isChoosed;
+
+        // call api add || delete skill db
+        console.log(profile.accountId, filterName, nameState);
+
         return {
           skillName: item.skillName,
           isChoosed: nameState,
