@@ -1,20 +1,18 @@
-import { useNavigate } from 'react-router-dom';
-import '../styles/SignIn.css';
-import { } from 'react-bootstrap';
-import { useState } from 'react';
-import { request, setAuthToken } from '../axios_helper'
- 
-
+import { useNavigate } from "react-router-dom";
+import "../styles/SignIn.css";
+import {} from "react-bootstrap";
+import { useState } from "react";
+import { request, setAuthToken } from "../axios_helper";
 
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [role, setRole] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,8 +21,8 @@ const SignUp = () => {
         username: username,
         email: email,
         password: password,
-        role: role
-      }
+        role: role === "" ? "" : role === "mentor" ? "2" : "1",
+      },
     };
 
     request("POST", "/api/register", payload)
@@ -36,29 +34,29 @@ const SignUp = () => {
       .catch((error) => {
         // Handle the error here (e.g., show an error message)
         setIsValid(false);
-        if (error.response && error.response.data && error.response.data.errors) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
           setErrorMessage(error.response.data.errors.message);
         } else {
           setErrorMessage("An error occurred. Please try again.");
         }
-      
+
         console.error(error);
       });
-
   };
 
   return (
     <div className="login-bg">
-
       <section class="background-radial-gradient overflow-hidden">
-
-
         <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
           <div class="row gx-lg-5 align-items-center mb-5">
-            <div class="col-lg-6 mb-5 mb-lg-0" >
+            <div class="col-lg-6 mb-5 mb-lg-0">
               <h1 class="my-5 display-5 fw-bold ls-tight">
                 The best offer <br />
-                <span >for your business</span>
+                <span>for your business</span>
               </h1>
               <p class="mb-4 opacity-70">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -69,39 +67,60 @@ const SignUp = () => {
             </div>
 
             <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-              <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
-              <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+              <div
+                id="radius-shape-1"
+                class="position-absolute rounded-circle shadow-5-strong"
+              ></div>
+              <div
+                id="radius-shape-2"
+                class="position-absolute shadow-5-strong"
+              ></div>
 
               <div class="card bg-glass">
                 <div class="card-body px-4 py-5 px-md-5">
                   <form>
                     <div class="form-outline mb-4">
-                      <label class="form-label" for="form3Example3">Username</label>
+                      <label class="form-label" for="form3Example3">
+                        Username
+                      </label>
                       <input
                         type="text"
-                        value={username} onChange={(e) => { setUsername(e.target.value) }}
-                        class="form-control" />
+                        value={username}
+                        onChange={(e) => {
+                          setUsername(e.target.value);
+                        }}
+                        class="form-control"
+                      />
                     </div>
 
-
                     <div class="form-outline mb-4">
-                      <label class="form-label" for="form3Example3">Email address</label>
+                      <label class="form-label" for="form3Example3">
+                        Email address
+                      </label>
                       <input
                         type="email"
-                        value={email} onChange={(e) => { setEmail(e.target.value) }}
-                        class="form-control" />
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                        }}
+                        class="form-control"
+                      />
                     </div>
                     <div class="form-outline mb-4">
-
-
-                      <label class="form-label" for="form3Example4">Password</label>
+                      <label class="form-label" for="form3Example4">
+                        Password
+                      </label>
                       <input
                         type="password"
-                        value={password} onChange={(e) => { setPassword(e.target.value) }}
-                        class="form-control" />
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                        }}
+                        class="form-control"
+                      />
                     </div>
 
-                    <div class="form-check">
+                    <div class="form-check sign-up-input">
                       <input
                         type="radio"
                         className="form-check-input"
@@ -109,12 +128,16 @@ const SignUp = () => {
                         name="role"
                         value="mentee"
                         checked={role === "mentee"}
-                        onChange={(e) => { setRole(e.target.value === "mentee" ? "1" : "") }}
+                        onChange={(e) => {
+                          setRole(e.target.value);
+                        }}
                       />
-                      <label class="form-check-label" for="menteeRadio">Mentee</label>
+                      <label class="form-check-label" for="menteeRadio">
+                        Mentee
+                      </label>
                     </div>
 
-                    <div class="form-check">
+                    <div class="form-check sign-up-input">
                       <input
                         type="radio"
                         className="form-check-input"
@@ -122,30 +145,50 @@ const SignUp = () => {
                         name="role"
                         value="mentor"
                         checked={role === "mentor"}
-                        onChange={(e) => { setRole(e.target.value === "mentor" ? "2" : "") }}
+                        onChange={(e) => {
+                          setRole(e.target.value);
+                        }}
                       />
-                      <label class="form-check-label" for="mentorRadio">Mentor</label>
+                      <label class="form-check-label" for="mentorRadio">
+                        Mentor
+                      </label>
                     </div>
-                    <button onClick={handleSubmit} type="submit" class="btn btn-primary btn-block mb-4">
+                    <button
+                      onClick={handleSubmit}
+                      type="submit"
+                      class="btn btn-primary btn-block mb-4"
+                    >
                       Sign up
                     </button>
                     {!isValid && <p class="error-message">{errorMessage}</p>}
 
                     <div class="text-center">
                       <p>or sign up with:</p>
-                      <button type="button" class="btn btn-link btn-floating mx-1">
+                      <button
+                        type="button"
+                        class="btn btn-link btn-floating mx-1"
+                      >
                         <i class="fab fa-facebook-f"></i>
                       </button>
 
-                      <button type="button" class="btn btn-link btn-floating mx-1">
+                      <button
+                        type="button"
+                        class="btn btn-link btn-floating mx-1"
+                      >
                         <i class="fab fa-google"></i>
                       </button>
 
-                      <button type="button" class="btn btn-link btn-floating mx-1">
+                      <button
+                        type="button"
+                        class="btn btn-link btn-floating mx-1"
+                      >
                         <i class="fab fa-twitter"></i>
                       </button>
 
-                      <button type="button" class="btn btn-link btn-floating mx-1">
+                      <button
+                        type="button"
+                        class="btn btn-link btn-floating mx-1"
+                      >
                         <i class="fab fa-github"></i>
                       </button>
                     </div>
@@ -156,9 +199,8 @@ const SignUp = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
-}
+};
 
 export default SignUp;
