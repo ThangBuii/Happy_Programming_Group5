@@ -3,30 +3,13 @@ import MainAdminLayout from "../../../component/admin/main-layout";
 import { Button, CircularProgress, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import styles from "./index.module.css";
+import { request } from '../../../axios_helper'
 
 // Manage Skill : Có add, delete, edit Skill Name, Numbers of Mentor
 
 const breadcrumbArr = [
   { to: "/admin/dashboard", represent: "Dashboard" },
   { to: "/admin/skill", represent: "Skill" },
-];
-
-const fakeRowSkillData = [
-  {
-    id: "skill1",
-    skillName: "Python",
-    numberOfMentor: 8,
-  },
-  {
-    id: "skill2",
-    skillName: "Java",
-    numberOfMentor: 18,
-  },
-  {
-    id: "skill3",
-    skillName: "React",
-    numberOfMentor: 9,
-  },
 ];
 
 const ManageSkill = () => {
@@ -44,14 +27,16 @@ const ManageSkill = () => {
   const [skillRow, setSkillRow] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setSkillRow(data);
+    request("GET", "/api/admin/skills")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.skill_id,
+          ...row,
+        }));
+        setSkillRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setSkillRow([...fakeRowSkillData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -89,10 +74,9 @@ const ManageSkill = () => {
     handleCloseConfirmDialog(id);
     setListIdLoading((pre) => [...pre, id]);
 
-    await fetch(`http://localhost:9999/skill/delete/${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.isSuccess === 0)
+    request("DELETE", `/api/admin/skills/${id}`)
+      .then((response) => {
+        if (response.status === 200)
           setSkillRow((pre) => pre.filter((item) => item.id !== id));
       })
       .catch((err) => {
@@ -119,20 +103,14 @@ const ManageSkill = () => {
     setListIdLoading((pre) => [...pre, id]);
 
     console.log("check data: >> ", inputRef.current.value, id);
-
+    const requestBody = {
+      skill_name: inputRef.current.value,
+    };
     // post ma gui data len voi inputRef.current.value ******
-    await fetch(`http://localhost:9999/skill/${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.isSuccess === 0) {
-          setSkillRow((pre) => [
-            ...pre,
-            {
-              id: data.id,
-              skillName: inputRef.current.value,
-              numberOfMentor: 0,
-            },
-          ]);
+    request("POST", `/api/admin/skills/`,requestBody)
+      .then((response) => {
+        if (response.status === 200) {
+          window.location.reload();
           handleCloseShowDialog(id);
         } else {
           // handle loi bi trung o day
@@ -158,21 +136,21 @@ const ManageSkill = () => {
 
   const columns = [
     {
-      field: "skillName",
+      field: "skill_name",
       headerName: "Skill Name",
       type: "string",
-      flex: 0.4,
+      flex: 0.3,
       align: "left",
       headerAlign: "left",
-      renderCell: ({ value }) => {
-        return <div className={styles.skillItem}>{value}</div>;
+      renderCell: ({ row }) => {
+        return <div className={styles.skillItem}>{row.skill_name}</div>;
       },
       renderHeader: (params) => (
         <strong style={{ fontSize: "16px" }}>{"Skill Name"}</strong>
       ),
     },
     {
-      field: "numberOfMentor",
+      field: "count",
       headerName: "Number Of Mentors",
       type: "number",
       flex: 0.4,
@@ -195,8 +173,8 @@ const ManageSkill = () => {
             <Button
               variant="contained"
               color="warning"
-              onClick={() => handleClickDelete(row.id)}
-              disabled={listIdLoading.includes(row.id)}
+              onClick={() => handleClickDelete(row.skill_id)}
+              disabled={listIdLoading.includes(row.skill_id)}
             >
               Delete
             </Button>

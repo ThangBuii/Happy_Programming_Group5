@@ -3,47 +3,7 @@ import { CircularProgress, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import styles from "./index.module.css";
-
-// Mentor Info(Ava,Usernam,Email), Mentee info(Ava,Username,Email), Scheduled date,Scheduled time, Status, Created Date
-
-function createData(
-  mentorInfo,
-  menteeInfo,
-  scheduledDate,
-  scheduledTime,
-  status,
-  createdDate
-) {
-  return {
-    mentorInfo,
-    menteeInfo,
-    scheduledDate,
-    scheduledTime,
-    status,
-    createdDate,
-  };
-}
-
-const fakeBookingDetailData = createData(
-  {
-    accountId: "user1",
-    name: "Le Van Luyen",
-    email: "luyen@xxvideo.com",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  {
-    accountId: "user2",
-    name: "Ngo Ba Kha",
-    email: "kha@gmail.com",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  "08, August, 2023",
-  "08, August, 2023",
-  0,
-  "08, August, 2023"
-);
+import { request } from "../../axios_helper";
 
 const BookingsDetail = () => {
   const params = useParams();
@@ -52,22 +12,22 @@ const BookingsDetail = () => {
   const prevPath = location.state?.prevPath || null;
   const [booking, setBooking] = useState(null);
   const [isLoading, seIsLoading] = useState(true);
+  const { booking_id } = useParams();
 
   //call API
   useEffect(() => {
-    fetch(`http://localhost:9999/booking-details/${params.id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setBooking(data);
+    seIsLoading(true);
+    request("GET", `/api/booking/${booking_id}`)
+      .then((response) => {
+        setBooking(response.data);
       })
       .catch((err) => {
         console.log(err);
-        setBooking({ ...fakeBookingDetailData });
       })
       .finally(() => {
         seIsLoading(false);
       });
-  }, [params.id]);
+  }, [booking_id]);
 
   return (
     <div className={styles.layoutWrapper}>

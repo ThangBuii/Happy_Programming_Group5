@@ -196,6 +196,14 @@
 .pendindStatus {
   background-color: #fba20a;
 }
+.bookingDetail {
+  font-size: 16px;
+  padding: 16px;
+  background-color: antiquewhite;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
 
 .bookingWrapper {
   min-height: 580px;

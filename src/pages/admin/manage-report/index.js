@@ -5,7 +5,7 @@ import AvatarDefault from "../../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useEffect, useRef, useState } from "react";
 // import { useNavigate } from "react-router";
 import styles from "./index.module.css";
-
+import { request } from '../../../axios_helper'
 // Account Name, Title, Content, Create-date, Role(Mentee(1), Mentor(2)), Status(Reviewed(1), Pending(0)) Action: Update -> Với status đang Pending thì hiện nút update, Reviewed thì không
 
 const breadcrumbArr = [
@@ -13,55 +13,7 @@ const breadcrumbArr = [
   { to: "/admin/report", represent: "Report" },
 ];
 
-const fakeRowReportData = [
-  {
-    id: "user1",
-    name: "Le Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    title: "chat luong bai viet kem",
-    content:
-      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết. Đó là các bài viết kém chất lượng xuất hiện ngày càng nhiều hơn. Thậm chí còn có những bài tôi không cho đó là bài viết. Những bài chỉ có 1 dòng, những bài chỉ có 5 cái gạch đầu dòng với mỗi dòng một từ, những bài đếm đi đếm lại chưa đến được 20 từ... Chuyện gì đã xảy ra vậy? Tôi sẽ không chỉ cụ thể bài viết nào ra đây, nhưng các bạn có thể dễ dàng tìm thấy chúng thôi.",
-    createdDate: "October 13, 2014",
-    role: 1,
-    status: 0,
-  },
-  {
-    id: "user2",
-    name: "Pzzang",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    title: "chat luong bai viet kem",
-    content: "Có một điều mà tôi nghĩ những người thường xuyên theo dõi.",
-    createdDate: "October 13, 2014",
-    role: 2,
-    status: 1,
-  },
-  {
-    id: "user3",
-    name: "Zed99",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    title: "chat luong bai viet kem",
-    content:
-      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết.",
-    createdDate: "October 13, 2014",
-    role: 1,
-    status: 0,
-  },
-  {
-    id: "user4",
-    name: "Zed99",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    title: "chat luong bai viet kem",
-    content:
-      "Có một điều mà tôi nghĩ những người thường xuyên theo dõi và đọc các bài viết trên Spiderum đều biết.",
-    createdDate: "October 13, 2014",
-    role: 1,
-    status: 0,
-  },
-];
+
 
 const ManageReport = () => {
   // const navigate = useNavigate();
@@ -96,14 +48,17 @@ const ManageReport = () => {
 
     console.log("check data: >> ", inputRef.current.value, id);
 
+    const requestBody = {
+      answer: inputRef.current.value,
+      report_id: id
+    };
     // post ma gui data len voi inputRef.current.value ******
-    await fetch(`http://localhost:9999/report/review/${id}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.isSuccess === 0) {
+    request("PUT", "/api/admin/report",requestBody)
+      .then((response) => {
+        if (response.status === 200) {
           setReportRow((pre) =>
             pre.map((item) => {
-              if (item.id === id) {
+              if (item.report_id === id) {
                 return {
                   ...item,
                   status: 1,
@@ -141,14 +96,16 @@ const ManageReport = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:9999/all-mentor")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setReportRow(data);
+    request("GET", "/api/admin/reports")
+      .then((response) => {
+        const rowsWithIds = response.data.map((row) => ({
+          id: row.report_id,
+          ...row,
+        }));
+        setReportRow(rowsWithIds);
       })
       .catch((err) => {
         console.log(err);
-        setReportRow([...fakeRowReportData]);
       })
       .finally(() => {
         seIsLoading(false);
@@ -169,9 +126,9 @@ const ManageReport = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.imageUrl || AvatarDefault} alt="avatar" />
+            <img src={row.avatar || AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
-              <h4>{row.name}</h4>
+              <h4>{row.username}</h4>
             </div>
           </div>
         );
@@ -222,7 +179,7 @@ const ManageReport = () => {
                 : ""
             }
           >
-            {value === 1 ? "Mentee" : value === 2 ? "Mentor" : ""}
+            {value === 1 ? "Mentor" : value === 2 ? "Mentee" : ""}
           </span>
         );
       },
@@ -246,17 +203,13 @@ const ManageReport = () => {
                 ? styles.pendindStatus
                 : value === 1
                 ? styles.acceptStatus
-                : value === 2
-                ? styles.rejectStatus
                 : ""
             }
           >
             {value === 0
               ? "Pending"
               : value === 1
-              ? "Accepted"
-              : value === 2
-              ? "Rejected"
+              ? "Reviewed"
               : ""}
           </span>
         );
@@ -279,8 +232,8 @@ const ManageReport = () => {
               <Button
                 variant="contained"
                 color="success"
-                onClick={() => handleClickUpdate(row.id)}
-                disabled={listIdLoading.includes(row.id)}
+                onClick={() => handleClickUpdate(row.report_id)}
+                disabled={listIdLoading.includes(row.report_id)}
               >
                 Update
               </Button>

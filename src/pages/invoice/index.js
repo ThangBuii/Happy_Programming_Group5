@@ -12,51 +12,8 @@ import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { Link } from "react-router-dom";
 import { EyeFill } from "react-bootstrap-icons";
 import styles from "./index.module.css";
-
+import {request} from '../../axios_helper'
 // Invoice No, Mentor, Amount, Paid on
-
-function createData(invoiceId, mentorInfo, amount, paidOn) {
-  return { invoiceId, mentorInfo, amount, paidOn };
-}
-
-const fakeInvoiceListData = [
-  createData(
-    1,
-    {
-      accountId: "user1",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    200,
-    "	14 Nov 2019"
-  ),
-  createData(
-    11,
-    {
-      accountId: "user1",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    300,
-    "	14 Nov 2019"
-  ),
-  createData(
-    11111,
-    {
-      accountId: "user1",
-      name: "Le Van Luyen",
-      email: "luyen@xxvideo.com",
-      imageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-    },
-    230,
-    "	14 Nov 2019"
-  ),
-];
 
 export function convertNumberToString(number, numOfString) {
   let str = number.toString();
@@ -69,17 +26,16 @@ export function convertNumberToString(number, numOfString) {
 }
 
 const Invoice = () => {
-  const [invoiceList, setInvoiceList] = useState([...fakeInvoiceListData]);
+  const [invoiceList, setInvoiceList] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9999/report-list/mentorId")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setInvoiceList(data);
+    request("GET", "/api/mentee/invoice")
+      .then((response) => {
+        setInvoiceList(response.data);
       })
       .catch((err) => {
         console.log(err);
-        setInvoiceList([...fakeInvoiceListData]);
+        
       });
   }, []);
 
@@ -131,28 +87,27 @@ const Invoice = () => {
               <TableBody>
                 {invoiceList.map((item) => (
                   <TableRow
-                    key={item.invoiceId}
+                    key={item.receipt_id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     hover={true}
                   >
                     <TableCell align="left">
                       <Link
-                        to={`/invoice/${item.invoiceId}`}
+                        to={`/invoice/${item.receipt_id}`}
                         className={styles.customIdLink}
                       >{`#INV-${convertNumberToString(
-                        item.invoiceId,
-                        4
+                        item.receipt_id
                       )}`}</Link>
                     </TableCell>
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
                         <img
-                          src={item.mentorInfo.imageUrl || AvatarDefault}
+                          src={item.avatar || AvatarDefault}
                           alt="avatar"
                         />
                         <div className={styles.infoLeft}>
-                          <h4>{item.mentorInfo.name}</h4>
-                          <p>{item.mentorInfo.email}</p>
+                          <h4>{item.username}</h4>
+                          <p>{item.email}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -161,11 +116,11 @@ const Invoice = () => {
                         className={styles.reportDetail}
                       >{`$${item.amount}`}</div>
                     </TableCell>
-                    <TableCell align="left">{item.paidOn}</TableCell>
+                    <TableCell align="left">{item.created_Date}</TableCell>
                     <TableCell align="center">
                       <Link
                         className={styles.customAction}
-                        to={`/invoice/${item.invoiceId}`}
+                        to={`/invoice/${item.receipt_id}`}
                       >
                         <EyeFill />
                         <span>View</span>

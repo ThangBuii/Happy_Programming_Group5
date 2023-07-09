@@ -73,7 +73,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
 
-          <Route path="/bookings/:id" element={<BookingsDetail />} />
+          <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
           <Route path="/bookings" element={<Booking />} />
           <Route path="/dashboard" element={<Dashboard />} />
 
@@ -83,7 +83,7 @@ const AppRoutes = () => {
 
           <Route path="/feedback" element={<Feedback />} />
 
-          <Route path="/invoice/:id" element={<InvoiceView />} />
+          <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
           <Route path="/invoice" element={<Invoice />} />
 
           <Route path="/report/add" element={<ReportAdd />} />

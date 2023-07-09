@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Statistic from "../../../component/admin/statistic";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import styles from "./index.module.css";
-
+import { request } from "../../../axios_helper";
 // Có một bảng ở dưới gồm có: Amount, Date, Receipt ID
 
 const breadcrumbArr = [
@@ -40,6 +40,23 @@ const ManageRevenue = () => {
   const [isLoading, seIsLoading] = useState(true);
   const [revenueRow, setRevenueRow] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState();
+
+  // useEffect(() => {
+  //   request("GET", "/api/admin/revenue")
+  //     .then((response) => {
+  //       const rowsWithIds = response.data.map((row) => ({
+  //         id: row.revenue_id,
+  //         ...row,
+  //       }));
+  //       setRevenueRow(rowsWithIds);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       seIsLoading(false);
+  //     });
+  // }, []);
 
   useEffect(() => {
     seIsLoading(true);
@@ -76,11 +93,12 @@ const ManageRevenue = () => {
         <strong style={{ fontSize: "16px" }}>{"Amount"}</strong>
       ),
       valueFormatter: (params) => {
-        return `$${params.value.toFixed(2)}`;
+        const value = Number(params.value);
+        return isNaN(value) ? "" : `$${value.toFixed(2)}`;
       },
     },
     {
-      field: "date",
+      field: "created_Date",
       headerName: "Date",
       type: "date",
       flex: 0.4,
@@ -94,14 +112,14 @@ const ManageRevenue = () => {
       },
     },
     {
-      field: "receiptId",
+      field: "receipt_id",
       headerName: "Receipt Id",
       type: "string",
       flex: 0.3,
       align: "left",
       headerAlign: "left",
       renderHeader: (params) => (
-        <strong style={{ fontSize: "16px" }}>{"Receipt Id"}</strong>
+        <strong style={{ fontSize: "16px" }}>{"Invoice No"}</strong>
       ),
     },
   ];

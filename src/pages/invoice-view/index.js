@@ -3,34 +3,23 @@ import { Container } from "@mui/material";
 import LogoImage from "../../assets/logo.png";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
-import { convertNumberToString } from "../invoice";
-
-function createData(invoiceId, invoiceFrom, invoiceTo, issuedDate) {
-  return { invoiceId, invoiceFrom, invoiceTo, issuedDate };
-}
-
-const fakeInvoiceViewData = createData(
-  "1",
-  "Newyork, USA",
-  "Florida, 32405, USA",
-  "20/07/2019"
-);
+import { useParams } from "react-router-dom";
+import {request} from '../../axios_helper'
 
 const InvoiceView = () => {
-  const [invoiceView, setInvoiceView] = useState({ ...fakeInvoiceViewData });
+  const [invoiceView, setInvoiceView] = useState({});
   const navigate = useNavigate();
+  const { receipt_id } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:9999/report-list/mentorId")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setInvoiceView(data);
+    request("GET", `/api/invoice/${receipt_id}`)
+      .then((response) => {
+        setInvoiceView(response.data);
       })
       .catch((err) => {
         console.log(err);
-        setInvoiceView({ ...fakeInvoiceViewData });
       });
-  }, []);
+  }, [receipt_id]);
 
   return (
     <div className={styles.layoutWrapper}>
@@ -69,9 +58,9 @@ const InvoiceView = () => {
                 <div className="col-md-6">
                   <p className={styles.invoiceDetails}>
                     <strong className={styles.customText}>Order:</strong> #
-                    {convertNumberToString(invoiceView.invoiceId, 5)} <br />
+                    {invoiceView.receipt_id} <br />
                     <strong className={styles.customText}>Issued:</strong>{" "}
-                    {invoiceView.issuedDate}
+                    {invoiceView.created_Date}
                   </p>
                 </div>
               </div>
@@ -82,7 +71,8 @@ const InvoiceView = () => {
                   <div className={styles.invoiceInfo}>
                     <strong className={styles.customText}>Invoice From</strong>
                     <p className={styles.invoiceAddress}>
-                      {invoiceView.invoiceFrom} <br />
+                      {invoiceView.mentor_name} <br />
+                      {invoiceView.mentor_email}<br />
                     </p>
                   </div>
                 </div>
@@ -90,7 +80,8 @@ const InvoiceView = () => {
                   <div className={styles.invoiceDetails}>
                     <strong className={styles.customText}>Invoice To</strong>
                     <p className={styles.invoiceAddress}>
-                      {invoiceView.invoiceTo} <br />
+                      {invoiceView.mentee_name} <br />
+                      {invoiceView.mentee_email}<br />
                     </p>
                   </div>
                 </div>
@@ -104,10 +95,7 @@ const InvoiceView = () => {
                       Payment Method
                     </strong>
                     <p className="invoice-details invoice-details-two">
-                      Debit Card <br />
-                      XXXXXXXXXXXX-2541 <br />
-                      HDFC Bank
-                      <br />
+                     {invoiceView.payment_method}
                     </p>
                   </div>
                 </div>
@@ -122,23 +110,17 @@ const InvoiceView = () => {
                         <tr>
                           <th>Description</th>
                           <th className="text-center">Quantity</th>
-                          <th className="text-center">VAT</th>
                           <th className="text-right">Total</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>General Consultation</td>
+                          <td>{invoiceView.session_name}</td>
                           <td className="text-center">1</td>
-                          <td className="text-center">$0</td>
-                          <td className="text-right">$100</td>
+                          
+                          <td className="text-right">${invoiceView.price}</td>
                         </tr>
-                        <tr>
-                          <td>Video Call Booking</td>
-                          <td className="text-center">1</td>
-                          <td className="text-center">$0</td>
-                          <td className="text-right">$250</td>
-                        </tr>
+                      
                       </tbody>
                     </table>
                   </div>
@@ -153,19 +135,14 @@ const InvoiceView = () => {
                         <tr>
                           <th>Subtotal:</th>
                           <td>
-                            <span>$350</span>
+                            <span>${invoiceView.price}</span>
                           </td>
                         </tr>
-                        <tr>
-                          <th>Discount:</th>
-                          <td>
-                            <span>-10%</span>
-                          </td>
-                        </tr>
+                      
                         <tr>
                           <th>Total Amount:</th>
                           <td>
-                            <span>$315</span>
+                            <span>${invoiceView.price}</span>
                           </td>
                         </tr>
                       </tbody>
