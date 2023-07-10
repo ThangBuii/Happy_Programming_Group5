@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,18 @@ public class TimeServiceImpl implements TimeService {
         }
 
         return timeList;
+    }
+
+    @Override
+    public void deleteTimeByID(int timeID) throws CustomBadRequestException {
+        Optional<Times> time = timeRepository.findById(timeID);
+
+        if(!time.isPresent()){
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Bad request").code("400").build());
+        }
+
+        timeRepository.deleteById(timeID);
     }
 
 }

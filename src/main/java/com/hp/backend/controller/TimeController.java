@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +32,7 @@ public class TimeController {
     private final TimeService timeService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/time")
+    @GetMapping("/mentor/time")
     List<GetListTimeResponseDTO> getListTime(@RequestBody GetListTimeRequestDTO getListTimeRequestDTO) {
         return timeService.getAllTime(getListTimeRequestDTO);
     }
@@ -46,8 +47,13 @@ public class TimeController {
         timeService.addTime(tokenPayload.getAccount_id(), addTimeRequestDTO);
     }
 
-    @GetMapping("/times")
+    @GetMapping("/public/times")
     public List<GetListTimeResponseFindMentorDTO> getListTimeResponseFindMentorDTOs(@RequestParam int sessionId) {
         return timeService.getListTimeResponseFindMentorDTOs(sessionId);
+    }
+
+    @DeleteMapping("/mentor/time")
+    public void deleteTime(@RequestParam int timeID) throws CustomBadRequestException{
+        timeService.deleteTimeByID(timeID);
     }
 }

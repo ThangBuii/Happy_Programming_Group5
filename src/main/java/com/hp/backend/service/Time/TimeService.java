@@ -16,4 +16,6 @@ public interface TimeService {
 
     List<GetListTimeResponseFindMentorDTO> getListTimeResponseFindMentorDTOs(int session_id);
 
+    void deleteTimeByID(int timeID) throws CustomBadRequestException;
+
 }

@@ -83,7 +83,7 @@ public class JwtTokenUtil {
 
     public String getRequestToken(HttpServletRequest request) {
         final String requestTokenHeader = request.getHeader("Authorization");
-        String token = null;
+        String token = "";
 
         if(requestTokenHeader != null && requestTokenHeader.startsWith("Token ")){
             token = requestTokenHeader.substring(6).trim();
