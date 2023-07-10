@@ -8,31 +8,38 @@ import {
   Button,
 } from "@mui/material";
 import MainLayout from "../../component/main-layout";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { EyeFill } from "react-bootstrap-icons";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const Dashboard = () => {
-  const role = 1; // authen => context => role
+  const { user } = useContext(ApplicationContext);
+  const role = user.role; // authen => context => role
   const location = useLocation();
   const [dashboards, setDashboard] = useState([]);
   const postData = {
     id: 3,
   };
 
+  useEffect(() => { console.log(role) }, [user]);
+
   useEffect(() => {
-    request("GET", "/api/mentee/dashboard")
+    if (role === -1) return;
+    const url = role === 1 ? "/api/mentor/dashboard" : "/api/mentee/dashboard"
+    console.log("check>>", role)
+    request("GET", url)
       .then((response) => {
         setDashboard(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [role]);
 
   const handleClickUpdate = (id, type) => {
     console.log(id, type);
@@ -100,19 +107,19 @@ const Dashboard = () => {
                             item.status === 0
                               ? styles.pendindStatus
                               : item.status === 1
-                              ? styles.acceptStatus
-                              : item.status === 2
-                              ? styles.rejectStatus
-                              : ""
+                                ? styles.acceptStatus
+                                : item.status === 2
+                                  ? styles.rejectStatus
+                                  : ""
                           }
                         >
                           {item.status === 0
                             ? "Pending"
                             : item.status === 1
-                            ? "Accepted"
-                            : item.status === 2
-                            ? "Rejected"
-                            : ""}
+                              ? "Accepted"
+                              : item.status === 2
+                                ? "Rejected"
+                                : ""}
                         </span>
                       </TableCell>
                       <TableCell align="center">
@@ -132,28 +139,39 @@ const Dashboard = () => {
                             <EyeFill />
                             <span>View</span>
                           </Link>
-                          {role === 1 && (
-                            <>
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() =>
-                                  handleClickUpdate(item.bookingID, "UPDATE")
-                                }
-                              >
-                                Accept
-                              </Button>
-                              <Button
-                                variant="contained"
-                                color="warning"
-                                onClick={() =>
-                                  handleClickUpdate(item.bookingID, "DELETE")
-                                }
-                              >
-                                Delete
-                              </Button>
-                            </>
-                          )}
+                          {item.status === 0 && <><Button
+                            variant="contained"
+                            color="warning"
+                            onClick={() =>
+                              handleClickUpdate(item.bookingID, "DELETE")
+                            }
+                          >
+                            Delete
+                          </Button>
+                            {role === 1 && (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() =>
+                                    handleClickUpdate(item.bookingID, "ACCEPT")
+                                  }
+                                >
+                                  Accept
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  color="warning"
+                                  onClick={() =>
+                                    handleClickUpdate(item.bookingID, "REJECT")
+                                  }
+                                >
+                                  Reject
+                                </Button>
+                              </>
+                            )}
+                          </>}
+
                         </div>
                       </TableCell>
                     </TableRow>

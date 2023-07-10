@@ -25,10 +25,10 @@ import Invoice from "../pages/invoice";
 import Profile from "../pages/profile";
 import EditProfile from "../pages/profile-edit";
 
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import AdminDashboard from "../pages/admin/dashboard";
 import ManageMentee from "../pages/admin/manage-mentee";
-import Footer from "../component/Footer";
+import Footer from "../component/footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";
@@ -40,74 +40,90 @@ import ManageSkill from "../pages/admin/manage-skill";
 import Checkout from "../pages/checkout";
 import ScheduleTimings from "../pages/schedule-timings";
 import SessionsDetail from "../pages/sessions-detail";
+import { getDataFromLocal } from "../axios_helper";
+import PrivateRoute from "./PrivateRoute";
+import PrivateAdminRoute from "./PrivateAdminRoute";
 
 export const ApplicationContext = React.createContext([]);
 
 const AppRoutes = () => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({ isAuthenticated: false, token: "", role: -1 });
 
   const makeSignIn = (user) => {
     setUser(user);
   };
   const makeSignOut = (user) => {
-    setUser([]);
+    setUser({ isAuthenticated: false, token: "", role: -1 });
   };
+
+  useLayoutEffect(() => {
+    const tmpUser = getDataFromLocal("user") ? getDataFromLocal("user") : { isAuthenticated: false, token: "", role: -1 };
+    setUser(tmpUser);
+  }, []);
+
   return (
     <ApplicationContext.Provider
       value={{ user, setUser, makeSignIn, makeSignOut }}
     >
       <Router>
-        <Header />
+        <Header user={user} makeSignOut={makeSignOut} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/findmentor" element={<FindMentor />} />
           {/* <Route path="/person/:id" element={<PersonProfile />} /> */}
-          <Route
-            path="/mentor/:id/checkout/:sessionId"
-            element={<Checkout />}
-          />
-          <Route path="/mentor/:id" element={<MentorProfile />} />
 
-          <Route path="history" element={<History />} />
+          <Route path="/mentor/:id" element={<MentorProfile />} />
 
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
 
-          <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
-          <Route path="/bookings" element={<Booking />} />
-          <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+          <Route element={<PrivateRoute />}>
+            <Route
+              path="/mentor/:id/checkout/:sessionId"
+              element={<Checkout />}
+            />
 
-          <Route path="/schedule-timings" element={<ScheduleTimings />} />
+            <Route path="history" element={<History />} />
 
-          <Route path="/feedback" element={<Feedback />} />
+            <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
+            <Route path="/bookings" element={<Booking />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
-          <Route path="/invoice" element={<Invoice />} />
+            <Route path="/favorite-mentor" element={<FavouriteMentor />} />
 
-          <Route path="/report/add" element={<ReportAdd />} />
-          <Route path="/report/:report_id" element={<ReportDetail />} />
-          <Route path="/report" element={<Report />} />
+            <Route path="/schedule-timings" element={<ScheduleTimings />} />
 
-          <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
+            <Route path="/feedback" element={<Feedback />} />
 
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
+            <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
+            <Route path="/invoice" element={<Invoice />} />
 
-          {/*Call Dashboard Admin */}
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/mentor" element={<ManageMentor />} />
-          <Route path="/admin/mentee" element={<ManageMentee />} />
-          <Route path="/admin/sessions" element={<ManageSession />} />
-          <Route path="/admin/feedback" element={<ManageFeedback />} />
-          <Route path="/admin/revenue" element={<ManageRevenue />} />
-          <Route path="/admin/bookings" element={<ManageBooking />} />
-          <Route path="/admin/invoice" element={<ManageInvoice />} />
-          <Route path="/admin/report" element={<ManageReport />} />
-          <Route path="/admin/skill" element={<ManageSkill />} />
-          <Route path="/admin" element={<Navigate to={"dashboard"} />} />
+            <Route path="/report/add" element={<ReportAdd />} />
+            <Route path="/report/:report_id" element={<ReportDetail />} />
+            <Route path="/report" element={<Report />} />
+
+            <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
+
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+
+          <Route element={<PrivateAdminRoute />}>
+            {/*Call Dashboard Admin */}
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/mentor" element={<ManageMentor />} />
+            <Route path="/admin/mentee" element={<ManageMentee />} />
+            <Route path="/admin/sessions" element={<ManageSession />} />
+            <Route path="/admin/feedback" element={<ManageFeedback />} />
+            <Route path="/admin/revenue" element={<ManageRevenue />} />
+            <Route path="/admin/bookings" element={<ManageBooking />} />
+            <Route path="/admin/invoice" element={<ManageInvoice />} />
+            <Route path="/admin/report" element={<ManageReport />} />
+            <Route path="/admin/skill" element={<ManageSkill />} />
+            <Route path="/admin" element={<Navigate to={"dashboard"} />} />
+          </Route>
         </Routes>
 
         <Footer />

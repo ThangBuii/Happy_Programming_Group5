@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/SignIn.css";
 import {} from "react-bootstrap";
-import { useState } from "react";
-import { request, setAuthToken } from "../axios_helper";
+import { useContext, useState } from "react";
+import { request, setDataToLocal } from "../axios_helper";
+import { ApplicationContext } from "../routes/AppRoutes";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const SignUp = () => {
   const [role, setRole] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { makeSignIn } = useContext(ApplicationContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +30,10 @@ const SignUp = () => {
 
     request("POST", "/api/register", payload)
       .then((response) => {
-        setAuthToken(response.data.token);
+        const user = {isAuthenticated: true, token: response.data.account.token, role: response.data.account.role}
+        setDataToLocal("token", user.token);
+        setDataToLocal("user", user);
+        makeSignIn({...user});
         // Handle the response here (e.g., navigate to a new page)
         navigate("/");
       })

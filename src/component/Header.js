@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/Header.css";
 import {
   FaSearch,
@@ -10,8 +10,16 @@ import {
   FaUser,
 } from "react-icons/fa";
 
-function Header() {
+function Header({user, makeSignOut}) {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    makeSignOut();
+    localStorage.clear();
+    navigate('/login');
+  }
 
   return (
     <div
@@ -34,13 +42,24 @@ function Header() {
               <Nav.Link as={Link} to="/history">
                 <FaHistory /> History
               </Nav.Link>
+              {(user.role===1 || user.role===2) && <Nav.Link as={Link} to="/dashboard">
+                <FaHistory /> Dashboard
+              </Nav.Link>}
+              {user.role===0 && <Nav.Link as={Link} to="/admin">
+                <FaHistory /> Admin
+              </Nav.Link>}
             </Nav>
-            <Nav className="ms-auto">
+            <Nav className={`ms-auto ${user.isAuthenticated? 'd-none' : ''}`}>
               <Nav.Link as={Link} to="/login">
                 <FaFingerprint /> Sign In
               </Nav.Link>
               <Nav.Link as={Link} to="resgiter">
                 <FaUser /> Sign Up
+              </Nav.Link>
+            </Nav>
+            <Nav className={`ms-auto ${!user.isAuthenticated? 'd-none' : ''}`}>
+            <Nav.Link as={Link} onClick={(e)=>handleSignOut(e)}>
+                <FaUser /> Sign Out
               </Nav.Link>
             </Nav>
           </NavbarCollapse>

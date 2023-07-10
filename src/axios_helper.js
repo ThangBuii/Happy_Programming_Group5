@@ -3,19 +3,30 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.headers.post["Content-Type"] = 'application/json'
 
-export const getAuthToken = () => {
-    return localStorage.getItem("token");
-}
+export const getDataFromLocal = (field) => {
+    const data = localStorage.getItem(field);
+  
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return null; // or handle the error in an appropriate way
+      }
+    }
+  
+    return null; // or handle the empty data case in an appropriate way
+  };
 
-export const setAuthToken = (token) => {
-    localStorage.setItem("token", token);
+export const setDataToLocal = (field, data) => {
+    localStorage.setItem([field], JSON.stringify(data));
 }
 
 
 export const request = (method,url,data) => {
     let headers = {};
-    const authToken = getAuthToken();
-    if(getAuthToken() != null && getAuthToken()!= "null") { 
+    const authToken = getDataFromLocal("token");
+    if(getDataFromLocal("token") != null && getDataFromLocal("token")!= "null") { 
         headers = {"Authorization": `Token ${authToken}`};
     }
     return axios({

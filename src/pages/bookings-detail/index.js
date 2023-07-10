@@ -66,12 +66,12 @@ const BookingsDetail = () => {
             <div className={styles.topWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={booking.mentorInfo.imageUrl || AvatarDefault}
+                  src={booking.mentorAvatar || AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
-                  <h4>{booking.mentorInfo.name}</h4>
-                  <p>{booking.mentorInfo.email}</p>
+                  <h4>{booking.mentorUsername}</h4>
+                  <p>{booking.mentorEmail}</p>
                 </div>
               </div>
             </div>
@@ -80,21 +80,21 @@ const BookingsDetail = () => {
               <h4>Mentee Info</h4>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={booking.menteeInfo.imageUrl || AvatarDefault}
+                  src={booking.menteeAvatar || AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
-                  <h4>{booking.menteeInfo.name}</h4>
-                  <p>{booking.menteeInfo.email}</p>
+                  <h4>{booking.menteeUsername}</h4>
+                  <p>{booking.menteeEmail}</p>
                 </div>
               </div>
               <h4>Bookings Scheduled Date</h4>
               <div className={styles.bookingDetail}>
-                {booking.scheduledDate}
+                {booking.scheduleDate}
               </div>
               <h4>Bookings Scheduled T ime</h4>
               <div className={styles.bookingDetail}>
-                {booking.scheduledTime}
+                {booking.scheduleTime}
               </div>
               <h4>Create Date</h4>
               <div className={styles.bookingDetail}>{booking.createdDate}</div>

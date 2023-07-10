@@ -2,10 +2,9 @@ import { useContext, useState, useEffect } from "react";
 
 import "../styles/SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
-import { request, setAuthToken } from "../axios_helper";
+import { request, setDataToLocal } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
 import { Alert, Snackbar ,Slide} from "@mui/material"; // Assuming you are using Material-UI
-import CustomSnackbar from "../component/CustomSnackBar";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -27,7 +26,10 @@ const SignIn = () => {
 
     request("POST", "/api/login", payload)
       .then((response) => {
-        setAuthToken(response.data.account.token);
+        const user = {isAuthenticated: true, token: response.data.account.token, role: response.data.account.role}
+        setDataToLocal("token", user.token);
+        setDataToLocal("user", user);
+        makeSignIn({...user});
         // Handle the response here (e.g., navigate to a new page)
         navigate("/");
       })
