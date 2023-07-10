@@ -1,9 +1,11 @@
 import { useContext, useState, useEffect } from "react";
+
 import "../styles/SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
 import { request, setAuthToken } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
-import { Alert } from "@mui/material"; // Assuming you are using Material-UI
+import { Alert, Snackbar ,Slide} from "@mui/material"; // Assuming you are using Material-UI
+import CustomSnackbar from "../component/CustomSnackBar";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,19 +13,9 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { makeSignIn } = useContext(ApplicationContext);
-
-  useEffect(() => {
-    if (!isValid && errorMessage) {
-      const timeout = setTimeout(() => {
-        setIsValid(true);
-        setErrorMessage("");
-      }, 2000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [isValid, errorMessage]);
 
   const handleSignIn = () => {
     const payload = {
@@ -41,7 +33,7 @@ const SignIn = () => {
       })
       .catch((error) => {
         // Handle the error here (e.g., show an error message)
-        setIsValid(false);
+        setSnackbarOpen(true);
         if (
           error.response &&
           error.response.data &&
@@ -92,7 +84,7 @@ const SignIn = () => {
             </button>
           </div>
 
-          
+
 
           <div className="auth-links">
             <Link to="/forgotpassword" className="forgot-pwd">
@@ -107,11 +99,23 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-      {!isValid && errorMessage && (
-            <Alert variant="filled" severity="error">
-              {errorMessage}
-            </Alert>
-          )}
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+              {/* <CustomSnackbar message={errorMessage} /> */}
     </div>
   );
 };
