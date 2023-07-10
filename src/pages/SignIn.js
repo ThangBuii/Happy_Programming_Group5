@@ -1,12 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import "../styles/SignIn.css";
-import {} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { request, setAuthToken } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
-import "../auth/utils";
+import { Alert } from "@mui/material"; // Assuming you are using Material-UI
 
-const SigIn = () => {
+const SignIn = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +13,17 @@ const SigIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const { makeSignIn } = useContext(ApplicationContext);
+
+  useEffect(() => {
+    if (!isValid && errorMessage) {
+      const timeout = setTimeout(() => {
+        setIsValid(true);
+        setErrorMessage("");
+      }, 2000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isValid, errorMessage]);
 
   const handleSignIn = () => {
     const payload = {
@@ -44,7 +54,6 @@ const SigIn = () => {
         console.error(error);
       });
   };
-  // makeSignIn(user);
 
   return (
     <div className="login-bg">
@@ -82,7 +91,8 @@ const SigIn = () => {
               Login
             </button>
           </div>
-          {!isValid && <p class="error-message">{errorMessage}</p>}
+
+          
 
           <div className="auth-links">
             <Link to="/forgotpassword" className="forgot-pwd">
@@ -90,15 +100,20 @@ const SigIn = () => {
             </Link>
             <p>
               Don't have an account?
-              <Link to="/resgiter" className="signup-link">
+              <Link to="/register" className="signup-link">
                 Sign Up
               </Link>
             </p>
           </div>
         </div>
       </div>
+      {!isValid && errorMessage && (
+            <Alert variant="filled" severity="error">
+              {errorMessage}
+            </Alert>
+          )}
     </div>
   );
 };
 
-export default SigIn;
+export default SignIn;
