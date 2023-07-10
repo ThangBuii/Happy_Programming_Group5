@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
   Button,
@@ -19,7 +19,7 @@ import {request} from '../../axios_helper'
 
 const Report = () => {
   const [reportList, setReportList] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     request("GET", "/api/men/reports")

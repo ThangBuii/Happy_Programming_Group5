@@ -4,7 +4,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import History from "../pages/History";
 import SigIn from "../pages/SignIn";
 import SigUp from "../pages/SignUp";
 import Home from "../pages/Home";
@@ -43,6 +42,8 @@ import SessionsDetail from "../pages/sessions-detail";
 import { getDataFromLocal } from "../axios_helper";
 import PrivateRoute from "./PrivateRoute";
 import PrivateAdminRoute from "./PrivateAdminRoute";
+import PrivateMenteeRoute from "./PrivateMenteeRoute";
+import PrivateMentorRoute from "./PrivateMentorRoute";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -84,15 +85,20 @@ const AppRoutes = () => {
               element={<Checkout />}
             />
 
-            <Route path="history" element={<History />} />
-
             <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
             <Route path="/bookings" element={<Booking />} />
             <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+            
 
+            <Route element={<PrivateMenteeRoute />}>
+            <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+            </Route>
+
+            <Route element={<PrivateMentorRoute />}>
             <Route path="/schedule-timings" element={<ScheduleTimings />} />
+            </Route>
+            
 
             <Route path="/feedback" element={<Feedback />} />
 

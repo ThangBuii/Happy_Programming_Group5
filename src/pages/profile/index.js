@@ -1,58 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import FeMaleOutlinedIcon from "@mui/icons-material/FemaleOutlined";
-// import FemaleOutlinedIcon from "@mui/icons-material/FemaleOutlined";
 import { Button, CircularProgress, Container } from "@mui/material";
 import ProfileHelper from "../../component/profile-helper";
 import { useNavigate } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { request } from "../../axios_helper";
 import styles from "./index.module.css";
-
-// 0-male, 1-female || 0-mentee, 1-mentor
-const fakeProfile = {
-  id: "user1",
-  name: "A Minh Quan",
-  imageUrl:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  expert: "English Literature (M.A)",
-  aboutMe:
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. \nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
-  gender: 0,
-  dob: "01-02-2000",
-  country: "India",
-  city: "Coimbatore",
-  role: 1,
-  shortDescription: "I'm superman",
-  university: "FPT",
-  major: "SE",
-  degree: "Great",
-  skillList: [
-    "NestJS",
-    "React",
-    "Typescript",
-    "Ionic",
-    "Framework",
-    "NodeJS",
-    "UX",
-    "Design",
-    "Node",
-    "Angular",
-    "C#",
-    "AWS",
-    "JavaScript",
-    "Coding",
-  ],
-};
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [myProfile, setMyProfile] = useState({});
   const [isLoading, seIsLoading] = useState(true);
+  const { user } = useContext(ApplicationContext);
+  const role = user.role; 
 
   useEffect(() => {
     seIsLoading(true);
-    request("GET", `/api/men/profile`)
+    if (role === -1) return;
+    const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile"
+    request("GET", url)
       .then((response) => {
         setMyProfile(response.data);
       })

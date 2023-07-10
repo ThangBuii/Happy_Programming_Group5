@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
   Table,
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { EyeFill } from "react-bootstrap-icons";
 import styles from "./index.module.css";
 import {request} from '../../axios_helper'
+import { ApplicationContext } from "../../routes/AppRoutes";
 // Invoice No, Mentor, Amount, Paid on
 
 export function convertNumberToString(number, numOfString) {
@@ -27,9 +28,13 @@ export function convertNumberToString(number, numOfString) {
 
 const Invoice = () => {
   const [invoiceList, setInvoiceList] = useState([]);
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
 
   useEffect(() => {
-    request("GET", "/api/mentee/invoice")
+    if (role === -1) return;
+    const url = role === 1 ? "/api/mentor/invoice" : "/api/mentee/invoice"
+    request("GET", url)
       .then((response) => {
         setInvoiceList(response.data);
       })

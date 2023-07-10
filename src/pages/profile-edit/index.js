@@ -1,11 +1,12 @@
 import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
 import MainLayout from "../../component/main-layout";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CustomInputFilter from "../../component/custom-input-filter";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 // 2-mentee, 1-mentor
 
 const handleBuildFilterSkills = (skills, mySkill) => {
@@ -26,14 +27,18 @@ const handleBuildFilterSkills = (skills, mySkill) => {
 const EditProfile = () => {
   const [isLoading, seIsLoading] = useState(true);
   const [profile, setProfile] = useState({});
+  const { user } = useContext(ApplicationContext);
+  const role = user.role; 
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
 
   useEffect(() => {
     seIsLoading(true);
+    if (role === -1) return;
+    const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile"
     Promise.all([
-      request("GET", "/api/men/profile"),
+      request("GET", url),
       request("GET", "/api/men/skills"),
     ])
       .then((responses) => {

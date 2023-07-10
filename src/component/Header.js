@@ -36,12 +36,9 @@ function Header({user, makeSignOut}) {
               <Nav.Link as={Link} to="/findmentor">
                 <FaSearch /> Find Mentor
               </Nav.Link>
-              <Nav.Link as={Link} to="/favorite">
+              {/* <Nav.Link as={Link} to="/favorite">
                 <FaHeart /> Favorite
-              </Nav.Link>
-              <Nav.Link as={Link} to="/history">
-                <FaHistory /> History
-              </Nav.Link>
+              </Nav.Link> */}
               {(user.role===1 || user.role===2) && <Nav.Link as={Link} to="/dashboard">
                 <FaHistory /> Dashboard
               </Nav.Link>}

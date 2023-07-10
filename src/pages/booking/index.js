@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
   Table,
@@ -14,14 +14,19 @@ import { EyeFill } from "react-bootstrap-icons";
 import { linkObjList } from "../../component/sidebar";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const Booking = () => {
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
   const location = useLocation();
   console.log(location.pathname, linkObjList);
   const [bookings, setBookings] = useState([]);
   //call API
   useEffect(() => {
-   request("GET","/api/mentee/bookings")
+    if (role === -1) return;
+    const url = role === 1 ? "/api/mentor/bookings" : "/api/mentee/bookings"
+   request("GET",url)
       
       .then((response) => {
         setBookings(response.data);

@@ -88,14 +88,19 @@ const BookingsDetail = () => {
                   <p>{booking.menteeEmail}</p>
                 </div>
               </div>
-              <h4>Bookings Scheduled Date</h4>
-              <div className={styles.bookingDetail}>
-                {booking.scheduleDate}
-              </div>
-              <h4>Bookings Scheduled T ime</h4>
-              <div className={styles.bookingDetail}>
-                {booking.scheduleTime}
-              </div>
+              {booking.status !== 0 && (
+                <>
+                  <h4>Bookings Scheduled Date</h4>
+                  <div className={styles.bookingDetail}>
+                    {booking.scheduleDate}
+                  </div>
+                  <h4>Bookings Scheduled T ime</h4>
+                  <div className={styles.bookingDetail}>
+                    {booking.scheduleTime}
+                  </div>
+                </>
+              )}
+
               <h4>Create Date</h4>
               <div className={styles.bookingDetail}>{booking.createdDate}</div>
               <h4>Bookings Status</h4>
@@ -105,19 +110,19 @@ const BookingsDetail = () => {
                     booking.status === 0
                       ? styles.pendindStatus
                       : booking.status === 1
-                      ? styles.acceptStatus
-                      : booking.status === 2
-                      ? styles.rejectStatus
-                      : ""
+                        ? styles.acceptStatus
+                        : booking.status === 2
+                          ? styles.rejectStatus
+                          : ""
                   }
                 >
                   {booking.status === 0
                     ? "Pending"
                     : booking.status === 1
-                    ? "Accepted"
-                    : booking.status === 2
-                    ? "Rejected"
-                    : ""}
+                      ? "Accepted"
+                      : booking.status === 2
+                        ? "Rejected"
+                        : ""}
                 </span>
               </div>
             </div>

@@ -22,16 +22,10 @@ const Dashboard = () => {
   const role = user.role; // authen => context => role
   const location = useLocation();
   const [dashboards, setDashboard] = useState([]);
-  const postData = {
-    id: 3,
-  };
-
-  useEffect(() => { console.log(role) }, [user]);
 
   useEffect(() => {
     if (role === -1) return;
     const url = role === 1 ? "/api/mentor/dashboard" : "/api/mentee/dashboard"
-    console.log("check>>", role)
     request("GET", url)
       .then((response) => {
         setDashboard(response.data);

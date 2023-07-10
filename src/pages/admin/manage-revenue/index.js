@@ -61,7 +61,7 @@ const ManageRevenue = () => {
   useEffect(() => {
     seIsLoading(true);
     Promise.all([
-      fetch("http://localhost:9999/revenue-row"),
+      request("GET", "/api/admin/revenue"),
       fetch("http://localhost:9999/total-revenue"),
     ])
       .then((responses) => {
