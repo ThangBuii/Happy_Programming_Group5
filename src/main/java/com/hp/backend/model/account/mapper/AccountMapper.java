@@ -169,7 +169,10 @@ public class AccountMapper {
 
     public FindMentorResponseDTO toFindMentorResponse(Account account, int account_id) {
         List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
-        boolean isFavorite = favoriteRepository.existsByMentorIdAndMenteeId(account.getAccount_id(), account_id);
+        boolean isFavorite = false;
+        if(account_id != 0){
+            isFavorite = favoriteRepository.existsByMentorIdAndMenteeId(account.getAccount_id(), account_id);
+        }
 
         return FindMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
             .username(account.getUsername()).short_description(account.getShort_description())
