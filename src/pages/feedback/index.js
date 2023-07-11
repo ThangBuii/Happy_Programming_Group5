@@ -115,7 +115,7 @@ const Feedback = () => {
                   >
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
-                        <img src={item.avatar || AvatarDefault} alt="avatar" />
+                        <img src={item.avatar ? `data:image/jpeg;base64, ${item.avatar}` : AvatarDefault} alt="avatar" />
                         <div className={styles.infoLeft}>
                           <h4>{item.username}</h4>
                           <p>{item.email}</p>

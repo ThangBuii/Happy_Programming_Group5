@@ -45,12 +45,12 @@ const Dashboard = () => {
       layoutContent={
         <>
           <div className={styles.dbWrapper}>
-            <div className={styles.dbHead}>
-              <div className={styles.itemWrapper}></div>
-              <div className={styles.itemWrapper}></div>
-              <div className={styles.itemWrapper}></div>
-            </div>
-            <h2>Mentor Lists</h2>
+
+            {role === 1 ? (
+              <h2>Mentee Lists</h2>
+            ) : (
+              <h2>Mentor Lists</h2>
+            )}
 
             <TableContainer
               sx={{
@@ -84,7 +84,7 @@ const Dashboard = () => {
                       <TableCell align="left">
                         <div className={styles.mentorInfoWrapper}>
                           <img
-                            src={item.avatar || AvatarDefault}
+                            src={item.avatar ? `data:image/jpeg;base64, ${item.avatar}` : AvatarDefault}
                             alt="avatar"
                           />
                           <div className={styles.infoLeft}>

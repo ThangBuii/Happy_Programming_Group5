@@ -7,6 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
 import { ApplicationContext } from "../../routes/AppRoutes";
+import { useNavigate } from "react-router";
 // 2-mentee, 1-mentor
 
 const handleBuildFilterSkills = (skills, mySkill) => {
@@ -32,6 +33,9 @@ const EditProfile = () => {
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const navigate = useNavigate();
+  const imageSource = profile.avatar ? `data:image/jpeg;base64, ${profile.avatar}` : AvatarDefault;
 
   useEffect(() => {
     seIsLoading(true);
@@ -99,9 +103,44 @@ const EditProfile = () => {
     setOriginFilterListSkill(newFilterSkill);
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+  
+    // Validate file type
+    if (file && file.type.startsWith("image/")) {
+      setSelectedPhoto(file);
+  
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; 
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          avatar: base64String,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Invalid file type, show error or reset the selected photo
+      setSelectedPhoto(null);
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        avatar: AvatarDefault,
+      }));
+      // Show an error message or handle the invalid file type here
+    }
+  };
+  
   const handleSaveChange = () => {
-    console.log(">>check data: ", profile);
-    // send post
+    const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile";
+    request("POST", url, profile)
+      .then((response) => {
+        navigate("/profile");
+        // Handle success or show a success message to the user
+      })
+      .catch((error) => {
+        console.log("API error:", error);
+        // Handle error or show an error message to the user
+      });
   };
 
   return (
@@ -121,7 +160,7 @@ const EditProfile = () => {
                     <div className={styles.changeAvatar}>
                       <div className={styles.profileImage}>
                         <img
-                          src={profile.avatar || AvatarDefault}
+                          src={imageSource}
                           alt="avatar"
                         />
                       </div>
@@ -131,7 +170,8 @@ const EditProfile = () => {
                             <i className="fa fa-upload"></i> Upload Photo
                           </span>
                           {/* onChange o input voi cai base64 de thay doi state cua avatar */}
-                          <input type="file" className={styles.upload} />
+                          <input type="file" className={styles.upload} 
+                          onChange={handlePhotoChange} />
                         </div>
                         <small
                           className="form-text text-muted"

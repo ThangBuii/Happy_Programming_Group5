@@ -79,7 +79,7 @@ const Booking = () => {
                       <TableCell align="left">
                         <div className={styles.mentorInfoWrapper}>
                           <img
-                            src={item.avatar || AvatarDefault}
+                            src={item.avatar ? `data:image/jpeg;base64, ${item.avatar}` : AvatarDefault}
                             alt="avatar"
                           />
                           <div className={styles.infoLeft}>

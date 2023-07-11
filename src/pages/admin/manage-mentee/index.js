@@ -27,21 +27,6 @@ const ManageMentee = () => {
     content: "",
   });
 
-  // useEffect(() => {
-  //   fetch("http://localhost:9999/all-mentee")
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       setMenteeRow(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setMenteeRow([...fakeRowMenteeData]);
-  //     })
-  //     .finally(() => {
-  //       seIsLoading(false);
-  //     });
-  // }, []);
-
   useEffect(() => {
     request("GET", "/api/admin/mentee-list")
       .then((response) => {
@@ -125,7 +110,7 @@ const ManageMentee = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.avatar || AvatarDefault} alt="avatar" />
+            <img src={row.avatar ? `data:image/jpeg;base64, ${row.avatar}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.username}</h4>
             </div>

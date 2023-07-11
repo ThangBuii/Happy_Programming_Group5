@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { request } from "../../axios_helper";
 import styles from "./index.module.css";
 import { ApplicationContext } from "../../routes/AppRoutes";
+import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Profile = () => {
   const [isLoading, seIsLoading] = useState(true);
   const { user } = useContext(ApplicationContext);
   const role = user.role; 
+  const imageSource = myProfile.avatar ? `data:image/jpeg;base64, ${myProfile.avatar}` : AvatarDefault;
 
   useEffect(() => {
     seIsLoading(true);
@@ -71,7 +73,7 @@ const Profile = () => {
             }}
           >
             <div className={styles.personProfileWrapper}>
-              <img src={myProfile.avatar} alt="avatar" />
+              <img src={imageSource} alt="avatar" />
               <h2>{myProfile.username}</h2>
               <p>{myProfile.short_description}</p>
             </div>
@@ -138,13 +140,14 @@ const Profile = () => {
                     <p>
                       {myProfile.gender === 0 ? (
                         <>
-                          <MaleOutlinedIcon />
-                          Male
+                        <FeMaleOutlinedIcon />
+                          Female
+                          
                         </>
                       ) : (
                         <>
-                          <FeMaleOutlinedIcon />
-                          Female
+                          <MaleOutlinedIcon />
+                          Male
                         </>
                       )}
                     </p>

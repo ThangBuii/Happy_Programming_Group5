@@ -13,7 +13,7 @@ const BookingsDetail = () => {
   const [booking, setBooking] = useState(null);
   const [isLoading, seIsLoading] = useState(true);
   const { booking_id } = useParams();
-
+  
   //call API
   useEffect(() => {
     seIsLoading(true);
@@ -66,7 +66,7 @@ const BookingsDetail = () => {
             <div className={styles.topWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={booking.mentorAvatar || AvatarDefault}
+                  src={booking.mentorAvatar ? `data:image/jpeg;base64, ${booking.mentorAvatar}` : AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
@@ -80,7 +80,7 @@ const BookingsDetail = () => {
               <h4>Mentee Info</h4>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={booking.menteeAvatar || AvatarDefault}
+                  src={booking.menteeAvatar ? `data:image/jpeg;base64, ${booking.menteeAvatar}` : AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>

@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./index.module.css";
+import { useContext } from "react";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 export const linkObjList = [
   {
@@ -38,6 +40,11 @@ export const linkObjList = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
+
+  const showFavoriteMentorLink = role === 2;
+  const showScheduleTimingsLink = role === 1;
 
   return (
     <div className={styles.sidebarWrapper}>
@@ -47,16 +54,21 @@ const Sidebar = () => {
       />
 
       {linkObjList.map((linkItem) => (
-        <div
-          key={linkItem.to}
-          className={
-            location.pathname === linkItem.to
-              ? `${styles.linkWrapper} ${styles.linkWrapperActive}`
-              : styles.linkWrapper
-          }
-        >
-          <Link to={linkItem.to}>{linkItem.represent}</Link>
-        </div>
+        // Only render the Favorite Mentor link if showFavoriteMentorLink is true
+        (linkItem.to === "/favorite-mentor" && !showFavoriteMentorLink) ||
+          // Only render the Schedule Timings link if showScheduleTimingsLink is true
+          (linkItem.to === "/schedule-timings" && !showScheduleTimingsLink) ? null : (
+          <div
+            key={linkItem.to}
+            className={
+              location.pathname === linkItem.to
+                ? `${styles.linkWrapper} ${styles.linkWrapperActive}`
+                : styles.linkWrapper
+            }
+          >
+            <Link to={linkItem.to}>{linkItem.represent}</Link>
+          </div>
+        )
       ))}
     </div>
   );

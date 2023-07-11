@@ -126,7 +126,7 @@ const ManageReport = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.avatar || AvatarDefault} alt="avatar" />
+            <img src={row.avatar ? `data:image/jpeg;base64, ${row.avatar}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.username}</h4>
             </div>
