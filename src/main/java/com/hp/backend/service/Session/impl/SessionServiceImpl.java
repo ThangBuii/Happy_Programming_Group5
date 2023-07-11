@@ -93,7 +93,8 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void saveSesison(Session session) {
         Account account = accountRepository.findById(session.getMentor_id()).get();
-        emailService.sendEmail(account.getEmail(), "Session Accepted", "Your session " + session.getName() + " has been accepted");
+        String status = session.getStatus() == 1 ? "accepted" : "rejected"; 
+        emailService.sendEmail(account.getEmail(), "Session Accepted", "Your session " + session.getName() + " has been " + status);
         sessionRepository.save(session);
     }
 
