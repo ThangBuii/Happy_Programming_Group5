@@ -36,7 +36,7 @@ public interface AccountService {
 
     public void deleteById(int id) throws CustomBadRequestException;
 
-    public void updateMenteeProfile(MenteeDTODetailUpdateRequest mentee, int account_id)
+    public void updateMenteeProfile(MentorDTODetailUpdateRequest mentee, int account_id)
             throws CustomBadRequestException;
 
     public void updateMentorProfile(MentorDTODetailUpdateRequest mentor, int account_id)

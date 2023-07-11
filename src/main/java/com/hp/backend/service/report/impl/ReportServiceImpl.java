@@ -42,7 +42,7 @@ public class ReportServiceImpl implements ReportService {
     public void updateReport(ReportUpdateRequestDTO reportUpdateRequestDTO) throws CustomBadRequestException {
         Optional<Report> report = reportRepository.findById(reportUpdateRequestDTO.getReport_id());
 
-        if(report == null){
+        if(!report.isPresent()){
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
         Report report1  = report.get();
@@ -54,13 +54,13 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportDetailResponseDTO getReportDetail(int id) throws CustomBadRequestException, CustomInternalServerException {
-        Report report = reportRepository.findById(id).get();
+        Optional<Report> report = reportRepository.findById(id);
 
-        if(report == null){
+        if(!report.isPresent()){
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
 
-        return reportMapper.toReportDetailResponseDTO(report);
+        return reportMapper.toReportDetailResponseDTO(report.get());
     }
 
     @Override
@@ -76,8 +76,15 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void addReport(int account_id, ReportAddRequestDTO reportAddRequestDTO) {
+    public void addReport(int account_id, ReportAddRequestDTO reportAddRequestDTO) throws CustomBadRequestException {
+        if(reportAddRequestDTO.getContent().isEmpty()){
+            throw new CustomBadRequestException(CustomError.builder().message("Content is mandatory").code("404").build());
+        }else if(reportAddRequestDTO.getTitle().isEmpty()){
+            throw new CustomBadRequestException(CustomError.builder().message("Title is mandatory").code("404").build());
+        }
         Report report = reportMapper.toReport(account_id, reportAddRequestDTO);
+
+
 
         reportRepository.save(report);
     }

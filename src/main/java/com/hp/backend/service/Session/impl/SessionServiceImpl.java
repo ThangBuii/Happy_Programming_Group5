@@ -18,6 +18,7 @@ import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Session.dto.ViewSessionDTO;
 import com.hp.backend.model.Session.mapper.SessionMapper;
 import com.hp.backend.repository.SessionRepository;
+import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Session.SessionService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class SessionServiceImpl implements SessionService {
     private final SessionMapper sessionMapper;
 
     private final SessionRepository sessionRepository;
+
+    private final EmailService emailService;
 
     @Override
     public ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException {

@@ -54,7 +54,7 @@ public class BookingMapper {
         Session session = time.getSession();
         Account account = accountRepository.findById(session.getMentor_id()).get();
         return BookingListMenteeDTO.builder().username(account.getUsername()).email(account.getEmail())
-                .scheduleDate(time.getStart_date())
+                .scheduleDate(time.getStart_date()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString()).bookingID(id)
                 .build();
 

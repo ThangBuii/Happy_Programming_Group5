@@ -64,12 +64,12 @@ public class AccountController {
         return accountService.getMentorList();
     }
 
-    @GetMapping("/admin/mentee/{id}")
-    public MenteeDTODetailResponse getMenteeByID(@PathVariable int id) throws CustomBadRequestException{
-        return accountService.findMenteeByID(id);
-    }
+    // @GetMapping("/admin/mentee/{id}")
+    // public MenteeDTODetailResponse getMenteeByID(@PathVariable int id) throws CustomBadRequestException{
+    //     return accountService.findMenteeByID(id);
+    // }
 
-    @GetMapping("/admin/mentor/{id}")
+    @GetMapping("/admin/men/{id}")
     public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException{
         return accountService.findMentorByID(id);
     }
@@ -79,7 +79,7 @@ public class AccountController {
         accountService.deleteById(id);
     }
 
-    @GetMapping("/men/profile")
+    @GetMapping("/mentor/profile")
     public MentorDTODetailResponse getMentorProfile(HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
@@ -94,7 +94,7 @@ public class AccountController {
     }
 
     @PostMapping("/mentee/profile")
-    public void updateMenteeProfile(@RequestBody MenteeDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
+    public void updateMenteeProfile(@RequestBody MentorDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         accountService.updateMenteeProfile(mentee,tokenPayload.getAccount_id());

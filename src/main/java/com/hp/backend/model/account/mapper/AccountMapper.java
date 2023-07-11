@@ -109,7 +109,7 @@ public class AccountMapper {
                 .country(account.getCountry()).city(account.getCity()).description(account.getDescription()).build();
     }
 
-    public Account toUpdatedMenteeAccount(MenteeDTODetailUpdateRequest mentee, int account_id)
+    public Account toUpdatedMenteeAccount(MentorDTODetailUpdateRequest mentee, int account_id)
             throws CustomBadRequestException {
         Account account = accountRepository.findById(account_id).get();
 

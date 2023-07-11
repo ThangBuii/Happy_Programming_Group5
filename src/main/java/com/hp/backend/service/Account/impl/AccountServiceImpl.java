@@ -29,6 +29,7 @@ import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
 import com.hp.backend.repository.Mentor_SkillsRepository;
+import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -42,6 +43,7 @@ public class AccountServiceImpl implements AccountService {
     private final JwtTokenUtil jwtTokenUtil;
     private final FavoriteRepository favoriteRepository;
     private final Mentor_SkillsRepository mentor_SkillsRepository;
+    private final EmailService emailService;
 
     @Override
     public Map<String, AccountDTOLoginResponse> authenticate(Map<String, AccountDTOLoginRequest> accountLoginRequestMap)
@@ -63,6 +65,8 @@ public class AccountServiceImpl implements AccountService {
                     CustomError.builder().code("400").message("Email or password incorrect").build());
         }
 
+        
+
         return buildDTOResponse(accountOptional.get());
     }
 
@@ -79,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = AccountMapper.toUser(accountDTOCreate);
 
         account = accountRepository.save(account);
+        emailService.sendEmail(account.getEmail(), "Register Account Successfully", "Welcome to happy programming. Contact us by this email!");
         return buildDTOResponse(account);
     }
 
@@ -149,7 +154,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateMenteeProfile(MenteeDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
+    public void updateMenteeProfile(MentorDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
         
         Account account = accountMapper.toUpdatedMenteeAccount(mentee,account_id);
         accountRepository.save(account);

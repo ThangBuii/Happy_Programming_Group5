@@ -22,7 +22,7 @@ public interface ReportService {
 
     public List<ReportListMentorMenteeResponseDTO> getReportsMentorMentee(int account_id);
 
-    public void addReport(int account_id, ReportAddRequestDTO reportAddRequestDTO);
+    public void addReport(int account_id, ReportAddRequestDTO reportAddRequestDTO) throws CustomBadRequestException;
 
     public void deleteReport(int id) throws CustomBadRequestException;
     

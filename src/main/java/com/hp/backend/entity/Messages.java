@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "account")
+@Table(name = "messages")
 public class Messages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

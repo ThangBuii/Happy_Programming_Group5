@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RevenueController {
     private final RevenueListService revenueListService;
-    @GetMapping("admin/revenue")
+    @GetMapping("/admin/revenue")
     public List<RevenueDTO> getListRevenue() {
         return revenueListService.getRevenueList();
     }
