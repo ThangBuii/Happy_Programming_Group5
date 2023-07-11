@@ -24,11 +24,11 @@ const SignUp = () => {
         username: username,
         email: email,
         password: password,
-        role: role === "" ? "" : role === "mentor" ? "2" : "1",
+        role: role === "" ? "" : role === "mentor" ? "1" : "2",
       },
     };
 
-    request("POST", "/api/register", payload)
+    request("POST", "/api/public/register", payload)
       .then((response) => {
         const user = {isAuthenticated: true, token: response.data.account.token, role: response.data.account.role}
         setDataToLocal("token", user.token);

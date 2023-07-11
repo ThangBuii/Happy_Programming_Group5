@@ -24,7 +24,7 @@ const SignIn = () => {
       },
     };
 
-    request("POST", "/api/login", payload)
+    request("POST", "/api/public/login", payload)
       .then((response) => {
         const user = {isAuthenticated: true, token: response.data.account.token, role: response.data.account.role}
         setDataToLocal("token", user.token);

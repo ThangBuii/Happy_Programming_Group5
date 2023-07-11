@@ -101,7 +101,7 @@ const BookingsDetail = () => {
                 </>
               )}
 
-              <h4>Create Date</h4>
+              <h4>Created Date</h4>
               <div className={styles.bookingDetail}>{booking.createdDate}</div>
               <h4>Bookings Status</h4>
               <div className={styles.bookingDetail}>

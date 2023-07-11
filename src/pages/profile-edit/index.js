@@ -384,7 +384,7 @@ const EditProfile = () => {
                           onChange={(e) =>
                             setProfile((pre) => ({
                               ...pre,
-                              shortDescription: e.target.value,
+                              short_description: e.target.value,
                             }))
                           }
                           rows={2}

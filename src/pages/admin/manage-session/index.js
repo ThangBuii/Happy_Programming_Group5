@@ -60,7 +60,7 @@ const ManageSession = () => {
     request("PUT", `/api/admin/session/${id}`,requestBody)
       .then((response) => {
         if (response.status === 200)
-          window.location.reload()
+          navigate("/admin/session");
       })
       .catch((err) => {
         console.log(err);

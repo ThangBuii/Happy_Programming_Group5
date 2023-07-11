@@ -3,25 +3,34 @@ import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
 import FeMaleOutlinedIcon from "@mui/icons-material/FemaleOutlined";
 import { Button, CircularProgress, Container } from "@mui/material";
 import ProfileHelper from "../../component/profile-helper";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { request } from "../../axios_helper";
 import styles from "./index.module.css";
 import { ApplicationContext } from "../../routes/AppRoutes";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 
+
 const Profile = () => {
   const navigate = useNavigate();
   const [myProfile, setMyProfile] = useState({});
   const [isLoading, seIsLoading] = useState(true);
   const { user } = useContext(ApplicationContext);
-  const role = user.role; 
+  const { id } = useParams();
+  const role = user.role;
   const imageSource = myProfile.avatar ? `data:image/jpeg;base64, ${myProfile.avatar}` : AvatarDefault;
 
   useEffect(() => {
     seIsLoading(true);
     if (role === -1) return;
-    const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile"
+    let url = "";
+    if (role === 0) {
+      url = `/api/admin/men/${id}`;
+    } else if (role === 2) {
+      url = "/api/mentee/profile";
+    } else if (role === 1) {
+      url = "/api/mentor/profile";
+    }
     request("GET", url)
       .then((response) => {
         setMyProfile(response.data);
@@ -49,6 +58,7 @@ const Profile = () => {
           <h2>{myProfile.role === 0 ? "Mentee" : "Mentor"} Profile</h2>
         </div>
         <div className={styles.bcRight}>
+        {role !== 0 && (
           <div className={styles.actionEdit}>
             <Button
               variant="contained"
@@ -58,6 +68,7 @@ const Profile = () => {
               Edit Profile
             </Button>
           </div>
+        )}
         </div>
       </div>
       <div className={styles.containerWrapper}>
@@ -140,9 +151,9 @@ const Profile = () => {
                     <p>
                       {myProfile.gender === 0 ? (
                         <>
-                        <FeMaleOutlinedIcon />
+                          <FeMaleOutlinedIcon />
                           Female
-                          
+
                         </>
                       ) : (
                         <>
