@@ -42,7 +42,7 @@ public class SessionController {
     private final SessionRepository sessionRepository;
 
     @GetMapping("/admin/session")
-    List<SessionDTO> getSessionList() throws CustomNotFoundException {
+    List<SessionDTO> getSessionList() throws CustomNotFoundException, CustomBadRequestException {
         return sessionService.getAllSession();
     }
 

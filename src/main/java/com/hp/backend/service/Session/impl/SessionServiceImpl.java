@@ -5,12 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hp.backend.entity.Account;
-import com.hp.backend.entity.Booking;
 import com.hp.backend.entity.Session;
-import com.hp.backend.entity.Times;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.Session.dto.AddSessionDTO;
 import com.hp.backend.model.Session.dto.MentorSessionDTO;
@@ -45,14 +41,12 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionDTO> getAllSession() throws CustomNotFoundException {
+    public List<SessionDTO> getAllSession() throws CustomBadRequestException {
         List<SessionDTO> sessionDTO = new ArrayList<>();
         List<Session> sessions = sessionRepository.findAll();
         if (sessions.isEmpty()) {
-            CustomError error = new CustomError("No session found",
-                    "There are no session",
-                    null);
-            throw new CustomNotFoundException(error);
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("There are no session").code("404").build());
         }
         for (Session session : sessions) {
 

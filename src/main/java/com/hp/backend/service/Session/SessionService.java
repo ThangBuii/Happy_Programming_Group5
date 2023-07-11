@@ -12,7 +12,7 @@ import com.hp.backend.model.Session.dto.ViewSessionDTO;
 
 public interface SessionService {
 
-    List<SessionDTO> getAllSession() throws CustomNotFoundException;
+    List<SessionDTO> getAllSession() throws CustomNotFoundException, CustomBadRequestException;
 
     ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException;
 

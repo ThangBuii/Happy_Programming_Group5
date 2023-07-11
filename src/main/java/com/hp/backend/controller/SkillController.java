@@ -2,6 +2,8 @@ package com.hp.backend.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
+import com.hp.backend.model.TokenPayload;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.model.Skills.dto.SkillsRequestDTO;
+import com.hp.backend.service.Mentor_Skills.Mentor_SkillsService;
 import com.hp.backend.service.Skills.SkillsService;
+import com.hp.backend.utils.JwtTokenUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +31,10 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin("http://localhost:3000")
 public class SkillController {
     private final SkillsService skillsService;
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final Mentor_SkillsService mentor_SkillsService;
 
     @GetMapping("/admin/skills")
     List<SkillsDTO> getSkills() throws CustomBadRequestException {
@@ -53,5 +62,12 @@ public class SkillController {
     @GetMapping("/men/skills")
     List<Skills> getAllSkills(){
         return skillsService.getAllSkills();
+    }
+
+    @PostMapping("/mentor/skills/{id}")
+    void addMentor_Skills(@PathVariable int id, HttpServletRequest request) {
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        mentor_SkillsService.addMentor_Skills(id, tokenPayload.getAccount_id());
     }
 }
