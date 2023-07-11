@@ -48,7 +48,7 @@ public class SkillsServiceImpl implements SkillsService {
             skillsRepository.deleteById(id);
         } else {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Skills not exist").build());
+                    CustomError.builder().code("400").message("Don't have skill with id: " + id).build());
         }
     }
 
