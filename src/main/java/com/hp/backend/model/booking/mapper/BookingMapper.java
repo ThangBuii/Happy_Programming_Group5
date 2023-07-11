@@ -1,15 +1,20 @@
 package com.hp.backend.model.booking.mapper;
 
+import java.sql.Date;
+
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Booking;
+import com.hp.backend.entity.Report;
 import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
+import com.hp.backend.model.booking.dto.AddBookingRequestDTO;
 import com.hp.backend.model.booking.dto.BookingListAdminDTO;
 import com.hp.backend.model.booking.dto.BookingListMenteeDTO;
 import com.hp.backend.model.booking.dto.BookingListMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
+import com.hp.backend.model.report.dto.ReportAddRequestDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.utils.CommonUtils;
@@ -88,8 +93,16 @@ public class BookingMapper {
                 .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString())
                 .menteeAvatar(commonUtils.imageToFrontEnd(account.getAvatar()))
                 .mentorAvatar(commonUtils.imageToFrontEnd(account2.getAvatar())).status(booking.getStatus())
+                .menteeAvatar(commonUtils.imageToFrontEnd(account.getAvatar()))
+                .mentorAvatar(commonUtils.imageToFrontEnd(account2.getAvatar())).status(booking.getStatus())
                 .createdDate(booking.getCreated_date())
                 .build();
+    }
+
+    public Booking toBooking(AddBookingRequestDTO addBookingRequestDTO, int mentee_id) {
+        Date currentDate = commonUtils.getCurrentDate();
+        return Booking.builder().mentee_id(mentee_id).time(Times.builder().time_id(addBookingRequestDTO.getTime_id()).build())
+                .created_date(currentDate).status(0).build();
     }
 
 }

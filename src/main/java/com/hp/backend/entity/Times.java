@@ -29,7 +29,7 @@ public class Times {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "time_id")
-    private int booking_id;
+    private int time_id;
 
     @Column(name = "start_time")
     private Time start_time;

@@ -26,7 +26,7 @@ public class TimeMapper {
     public GetListTimeResponseDTO toGetListTimeResponseDTO(Times time) {
         return GetListTimeResponseDTO.builder()
                 .start_time(time.getStart_time().toString() + "-" + time.getEnd_time().toString())
-                .time_id(time.getBooking_id())
+                .time_id(time.getTime_id())
                 .build();
     }
 
