@@ -34,6 +34,8 @@
 		Demo project for Spring Boot
 	</description>
 	<properties>
+		<sonar.organization>thangbuii</sonar.organization>
+  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<java.version>
 			11
 		</java.version>
@@ -189,6 +191,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		
 		
 	</dependencies>
 	<build>
