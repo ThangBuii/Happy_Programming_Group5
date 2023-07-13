@@ -176,6 +176,6 @@ public class AccountMapper {
 
         return FindMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
             .username(account.getUsername()).short_description(account.getShort_description())
-            .description(account.getDescription()).skills(skills).mentor_id(account_id).isFavorite(isFavorite).build();
+            .description(account.getDescription()).skills(skills).mentor_id(account.getAccount_id()).isFavorite(isFavorite).build();
     }
 }

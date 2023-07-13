@@ -54,4 +54,6 @@ public interface AccountService {
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id);
 
     public String getAccountName(int receiver_id) throws CustomBadRequestException;
+
+    public FindMentorResponseDTO findMentorProfile(int mentor_id, int account_id) throws CustomBadRequestException;
 }

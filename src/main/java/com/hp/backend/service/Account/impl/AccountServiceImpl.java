@@ -29,6 +29,7 @@ import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
 import com.hp.backend.repository.Mentor_SkillsRepository;
+import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
@@ -42,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final FavoriteRepository favoriteRepository;
-    private final Mentor_SkillsRepository mentor_SkillsRepository;
+    private final SessionRepository sessionRepository;
     private final EmailService emailService;
 
     @Override
@@ -233,10 +234,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id) {
         List<Account> accounts = new ArrayList<>();
+        List<Integer> mentor_ids = new ArrayList<>();
         if(skill_id != 0){
-            accounts = mentor_SkillsRepository.findBySkillId(skill_id);
+            mentor_ids = sessionRepository.findAllBySkill_ID(skill_id);
+            int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
+            for(int id : mentorIdsArray){
+                accounts.add(accountRepository.findById(id).get());
+            }
         }else{
-            accounts = accountRepository.findAllByRole(1);
+            mentor_ids = sessionRepository.findAllBySkill_ID();
+            int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
+            for(int id : mentorIdsArray){
+                accounts.add(accountRepository.findById(id).get());
+            }
         }
         List<FindMentorResponseDTO> results = new ArrayList<>();
         for(Account account : accounts){
@@ -255,6 +265,16 @@ public class AccountServiceImpl implements AccountService {
         }
 
         return account.get().getUsername();
+    }
+
+    @Override
+    public FindMentorResponseDTO findMentorProfile(int mentor_id,int account_id) throws CustomBadRequestException {
+        Optional<Account> account = accountRepository.findById(mentor_id);
+        if(!account.isPresent()){
+             throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Account not exists").build());
+        }
+        return accountMapper.toFindMentorResponse(account.get(),account_id);
     }
 
 }

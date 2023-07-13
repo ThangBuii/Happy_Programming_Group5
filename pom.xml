@@ -195,12 +195,22 @@
 		
 	</dependencies>
 	<build>
+		<defaultGoal>install</defaultGoal>
 		<plugins>
-		<plugin>
-      <groupId>org.sonarsource.scanner.maven</groupId>
-      <artifactId>sonar-maven-plugin</artifactId>
-      <version>3.9.1.2184</version>
-    </plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version> <!-- Replace with the desired version -->
+				<configuration>
+				  <sonarHostUrl>https://sonarcloud.io</sonarHostUrl>
+				  <properties>
+					<property>
+					  <key>sonar.projectKey</key>
+					  <value>happyprogramming_happy-programming</value> <!-- Replace with your desired project key -->
+					</property>
+				  </properties>
+				</configuration>
+			  </plugin>
 			<plugin>
 				<groupId>
 					org.springframework.boot
@@ -221,6 +231,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 </project>
