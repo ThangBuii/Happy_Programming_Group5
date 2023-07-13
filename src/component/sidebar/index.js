@@ -33,6 +33,10 @@ export const linkObjList = [
     represent: "Invoice",
   },
   {
+    to: "/sessions",
+    represent: "Sessions",
+  },
+  {
     to: "/profile",
     represent: "Profile",
   },
@@ -45,6 +49,7 @@ const Sidebar = () => {
 
   const showFavoriteMentorLink = role === 2;
   const showScheduleTimingsLink = role === 1;
+  const showSessionLink = role === 1;
 
   return (
     <div className={styles.sidebarWrapper}>
@@ -53,11 +58,13 @@ const Sidebar = () => {
         alt="avatar"
       />
 
-      {linkObjList.map((linkItem) => (
+      {linkObjList.map((linkItem) =>
         // Only render the Favorite Mentor link if showFavoriteMentorLink is true
         (linkItem.to === "/favorite-mentor" && !showFavoriteMentorLink) ||
-          // Only render the Schedule Timings link if showScheduleTimingsLink is true
-          (linkItem.to === "/schedule-timings" && !showScheduleTimingsLink) ? null : (
+        (linkItem.to === "/sessions" && !showSessionLink) ||
+        // Only render the Schedule Timings link if showScheduleTimingsLink is true
+        (linkItem.to === "/schedule-timings" &&
+          !showScheduleTimingsLink) ? null : (
           <div
             key={linkItem.to}
             className={
@@ -69,7 +76,7 @@ const Sidebar = () => {
             <Link to={linkItem.to}>{linkItem.represent}</Link>
           </div>
         )
-      ))}
+      )}
     </div>
   );
 };
