@@ -14,13 +14,13 @@ export const handleBuildFilterSkills = (skills, mySkill = []) => {
   return skills.map((skill) => {
     if (mySkill.some((item) => item.skill_name === skill.skill_name))
       return {
-        skillId: skill.skill_id,
+        skill_id: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: true,
       };
     else
       return {
-        skillId: skill.skill_id,
+        skill_id: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: false,
       };
@@ -70,15 +70,12 @@ const EditProfile = () => {
     }
   }, [originFilterListSkill, filterSearch]);
 
-  const handleClickFilterItem = (filterName) => {
+  const handleClickFilterItem = (skill) => {
     let nameState = false;
     const newFilterSkill = originFilterListSkill.map((item) => {
-      if (item.skill_name !== filterName) return item;
+      if (item.skill_name !== skill.skill_name) return item;
       else {
         nameState = !item.isChoosed;
-
-        // call api add || delete skill db
-        console.log(profile.accountId, filterName, nameState);
 
         return {
           skill_id: item.skill_id,
@@ -91,12 +88,17 @@ const EditProfile = () => {
     if (nameState)
       setProfile((pre) => ({
         ...pre,
-        skills: [...pre.skills, filterName],
+        skills: [
+          ...pre.skills,
+          { skill_id: skill.skill_id, skill_name: skill.skill_name },
+        ],
       }));
     else
       setProfile((pre) => ({
         ...pre,
-        skills: [...pre.skills].filter((item) => item !== filterName),
+        skills: [...pre.skills].filter(
+          (item) => item.skill_name !== skill.skill_name
+        ),
       }));
     setOriginFilterListSkill(newFilterSkill);
   };
@@ -333,9 +335,7 @@ const EditProfile = () => {
                                   <div
                                     key={item.skill_name}
                                     className={styles.searchItem}
-                                    onClick={() =>
-                                      handleClickFilterItem(item.skill_name)
-                                    }
+                                    onClick={() => handleClickFilterItem(item)}
                                   >
                                     <Checkbox
                                       sx={{
