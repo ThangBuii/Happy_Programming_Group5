@@ -3,7 +3,6 @@ package com.hp.backend.model.Skills.mapper;
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Skills;
-import com.hp.backend.model.Session.dto.MentorSessionDTO;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.repository.SkillsRepository;
 

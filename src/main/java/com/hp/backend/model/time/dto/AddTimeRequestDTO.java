@@ -1,8 +1,6 @@
 package com.hp.backend.model.time.dto;
 
 import java.sql.Date;
-import java.time.LocalTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

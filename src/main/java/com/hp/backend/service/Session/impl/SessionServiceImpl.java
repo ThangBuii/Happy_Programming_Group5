@@ -6,9 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Account;
-import com.hp.backend.entity.Booking;
 import com.hp.backend.entity.Session;
-import com.hp.backend.entity.Times;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;

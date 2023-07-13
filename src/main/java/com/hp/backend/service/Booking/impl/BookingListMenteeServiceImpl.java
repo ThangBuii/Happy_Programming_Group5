@@ -14,10 +14,7 @@ import com.hp.backend.model.booking.dto.DashboardMenteeDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.model.booking.mapper.DashboardMapper;
-import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
-import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Booking.BookingListMenteeService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,9 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class BookingListMenteeServiceImpl implements BookingListMenteeService {
 
    private final BookingRepository bookingRepository;
-   private final TimeRepository timeRepository;
-   private final AccountRepository accountRepository;
-   private final SessionRepository sessionRepository;
    private final BookingMapper bookingMapper;
    private final DashboardMapper dashboardMapper;
 

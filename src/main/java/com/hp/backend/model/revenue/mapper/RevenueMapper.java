@@ -8,7 +8,6 @@ import com.hp.backend.entity.Booking;
 import com.hp.backend.entity.Receipt;
 import com.hp.backend.entity.System_Revenue;
 import com.hp.backend.model.revenue.dto.RevenueDTO;
-import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.ReceiptRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class RevenueMapper {
-    private final BookingRepository bookingRepository;
     private final ReceiptRepository receiptRepository;
 
     public RevenueDTO toRevenueDTO(System_Revenue revenue) {

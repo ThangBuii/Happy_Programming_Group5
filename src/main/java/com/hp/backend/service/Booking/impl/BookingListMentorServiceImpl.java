@@ -17,8 +17,6 @@ import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
-import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Booking.BookingListMentorService;
 import com.hp.backend.utils.CommonUtils;
 
