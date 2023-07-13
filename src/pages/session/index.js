@@ -62,13 +62,13 @@ const Session = () => {
   useEffect(() => {
     seIsLoading(true);
     if (role === -1) return;
-    const url = role === 1 ? "/api/mentor/session" : "/api/mentee/session";
-    Promise.all([request("GET", url), request("GET", "/api/men/skills")])
+    Promise.all([request("GET", "/api/mentor/session"), request("GET", "/api/public/men/skills")])
       .then((responses) => {
         return Promise.all(responses.map((response) => response.data));
       })
       .then(([data1, data2]) => {
-        setSession(data1.data);
+        setSession(data1);
+        console.log(data1)
         setOriginFilterListSkill(handleBuildFilterSkills(data2, data1.skills));
       })
       .catch((err) => {
@@ -79,6 +79,7 @@ const Session = () => {
         seIsLoading(false);
       });
   }, []);
+  
 
   useEffect(() => {
     if (originFilterListSkill.length > 0) {
@@ -139,7 +140,7 @@ const Session = () => {
               startIcon={<Plus />}
               onClick={handleOpenDialog}
             >
-              Add Report
+              Add Session
             </Button>
           </div>
         }
@@ -163,17 +164,18 @@ const Session = () => {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell
+                  
+                      <TableCell
                           className={styles.tableCellHead}
                           align="left"
                         >
-                          Mentor Name
+                          Session Name
                         </TableCell>
                         <TableCell
                           className={styles.tableCellHead}
                           align="left"
                         >
-                          Skill List
+                          Session Skill
                         </TableCell>
                         <TableCell
                           className={styles.tableCellHead}
@@ -181,12 +183,7 @@ const Session = () => {
                         >
                           Duration
                         </TableCell>
-                        <TableCell
-                          className={styles.tableCellHead}
-                          align="left"
-                        >
-                          Session Name
-                        </TableCell>
+                        
                         <TableCell
                           className={styles.tableCellHead}
                           align="left"
@@ -211,19 +208,7 @@ const Session = () => {
                           hover={true}
                         >
                           <TableCell align="left">
-                            <div className={styles.mentorInfoWrapper}>
-                              <img
-                                src={
-                                  item.avatar
-                                    ? `data:image/jpeg;base64, ${item.avatar}`
-                                    : AvatarDefault
-                                }
-                                alt="avatar"
-                              />
-                              <div className={styles.infoLeft}>
-                                <h4>{item.username}</h4>
-                              </div>
-                            </div>
+                            {item.session_name}
                           </TableCell>
                           <TableCell align="left">
                             <div className={styles.skillList}>
@@ -235,10 +220,8 @@ const Session = () => {
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell align="center">{item.duration}</TableCell>
-                          <TableCell align="left">
-                            {item.session_Name}
-                          </TableCell>
+                          <TableCell align="center">{item.duration} minutes</TableCell>
+                          
                           <TableCell align="center">
                             <span
                               className={
@@ -286,7 +269,7 @@ const Session = () => {
         }
       />
       <Dialog open={isOpenDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Submit</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Add Infomation to submit Session
@@ -407,7 +390,7 @@ const Session = () => {
             {addSession.skills &&
               addSession.skills.map((skill, index) => (
                 <div key={index} className={styles.skillItem}>
-                  {skill}
+                  {skill.skill_name}
                   <IconButton
                     color="secondary"
                     className={styles.customDeleteSkill}
@@ -421,7 +404,7 @@ const Session = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmitAddSessions}>Subscribe</Button>
+          <Button onClick={handleSubmitAddSessions}>Submit</Button>
         </DialogActions>
       </Dialog>
     </>
