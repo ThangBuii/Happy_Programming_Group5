@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.model.Skills.dto.Mentor_SkillsRequestDTO;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.model.Skills.dto.SkillsRequestDTO;
 

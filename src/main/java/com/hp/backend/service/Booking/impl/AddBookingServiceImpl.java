@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Booking;
-import com.hp.backend.entity.Report;
 import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
 import com.hp.backend.model.booking.dto.AddBookingRequestDTO;

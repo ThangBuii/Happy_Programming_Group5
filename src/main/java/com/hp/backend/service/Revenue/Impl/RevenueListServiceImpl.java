@@ -5,17 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hp.backend.entity.Booking;
 import com.hp.backend.entity.System_Revenue;
-import com.hp.backend.model.booking.dto.BookingListAdminDTO;
-import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.model.revenue.dto.RevenueDTO;
 import com.hp.backend.model.revenue.mapper.RevenueMapper;
-import com.hp.backend.repository.AccountRepository;
-import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.SystemRevenueRepository;
-import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Revenue.RevenueListService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,14 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RevenueListServiceImpl implements RevenueListService {
-    private final BookingRepository bookingRepository;
-
-    private final TimeRepository timeRepository;
-
-    private final AccountRepository accountRepository;
-
-    private final SessionRepository sessionRepository;
-
     private final RevenueMapper revenueMapper;
 
     private final SystemRevenueRepository systemRevenueRepository;

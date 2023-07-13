@@ -13,8 +13,6 @@ import com.hp.backend.model.receipt.dto.InvoiceAdminDTO;
 import com.hp.backend.model.receipt.dto.InvoiceDTO;
 import com.hp.backend.model.receipt.dto.ViewInvoiceDTO;
 import com.hp.backend.model.receipt.mapper.InvoiceMapper;
-import com.hp.backend.repository.AccountRepository;
-import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.ReceiptRepository;
 import com.hp.backend.service.Invoice.InvoiceService;
 
@@ -24,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
     private final ReceiptRepository receiptRepository;
-    private final BookingRepository bookingRepository;
-    private final AccountRepository accountRepository;
     private final InvoiceMapper invoiceMapper;
 
     @Override

@@ -26,12 +26,10 @@ import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
-import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
 
-import antlr.Token;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -64,11 +62,6 @@ public class AccountController {
     public List<MentorDTOResponse> getMentorList(){
         return accountService.getMentorList();
     }
-
-    // @GetMapping("/admin/mentee/{id}")
-    // public MenteeDTODetailResponse getMenteeByID(@PathVariable int id) throws CustomBadRequestException{
-    //     return accountService.findMenteeByID(id);
-    // }
 
     @GetMapping("/admin/men/{id}")
     public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException{

@@ -1,8 +1,6 @@
 package com.hp.backend.model.report.mapper;
 
 import java.sql.Date;
-import java.util.Base64;
-
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
@@ -14,7 +12,6 @@ import com.hp.backend.model.report.dto.ReportDetailResponseDTO;
 import com.hp.backend.model.report.dto.ReportListMentorMenteeResponseDTO;
 import com.hp.backend.model.report.dto.ReportListResponseDTO;
 import com.hp.backend.repository.AccountRepository;
-import com.hp.backend.repository.ReportRepository;
 import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;

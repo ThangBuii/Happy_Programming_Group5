@@ -1,9 +1,6 @@
 package com.hp.backend.model.feedback.mapper;
 
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.Base64;
-
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;

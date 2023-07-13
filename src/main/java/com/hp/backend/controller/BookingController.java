@@ -26,7 +26,6 @@ import com.hp.backend.model.booking.dto.BookingUpdateRequestDTO;
 import com.hp.backend.model.booking.dto.DashboardMenteeDTO;
 import com.hp.backend.model.booking.dto.DashboardMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
-import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.service.Booking.AddBookingService;
 import com.hp.backend.service.Booking.BookingListAdminService;
 import com.hp.backend.service.Booking.BookingListMenteeService;

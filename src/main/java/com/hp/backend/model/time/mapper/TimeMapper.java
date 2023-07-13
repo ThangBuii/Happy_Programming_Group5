@@ -5,17 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.hp.backend.entity.Account;
-import com.hp.backend.entity.Booking;
-import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
-import com.hp.backend.model.booking.dto.BookingListMenteeDTO;
-import com.hp.backend.model.time.dto.GetListTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseFindMentorDTO;
-import com.hp.backend.repository.TimeRepository;
-import com.hp.backend.service.Time.TimeService;
-
 import lombok.RequiredArgsConstructor;
 
 @Component
