@@ -14,11 +14,13 @@ export const handleBuildFilterSkills = (skills, mySkill = []) => {
   return skills.map((skill) => {
     if (mySkill.some((item) => item.skill_name === skill.skill_name))
       return {
+        skillId: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: true,
       };
     else
       return {
+        skillId: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: false,
       };
@@ -79,6 +81,7 @@ const EditProfile = () => {
         console.log(profile.accountId, filterName, nameState);
 
         return {
+          skill_id: item.skill_id,
           skill_name: item.skill_name,
           isChoosed: nameState,
         };

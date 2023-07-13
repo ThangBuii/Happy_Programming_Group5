@@ -30,9 +30,9 @@ import CustomInputFilter from "../../component/custom-input-filter";
 import { handleBuildFilterSkills } from "../profile-edit";
 
 const fakeListSkills = [
-  { skill_name: "Python" },
-  { skill_name: "Java" },
-  { skill_name: "Csla" },
+  { skill_id: "1", skill_name: "Python" },
+  { skill_id: "2", skill_name: "Java" },
+  { skill_id: "3", skill_name: "Csla" },
 ];
 
 const Session = () => {
@@ -96,6 +96,7 @@ const Session = () => {
       else {
         nameState = !item.isChoosed;
         return {
+          skill_id: item.skill_id,
           skill_name: item.skill_name,
           isChoosed: nameState,
         };

@@ -160,3 +160,44 @@
   color: rgb(74, 74, 74);
   font-size: 16px;
 }
+
+.paymentWidget {
+  padding: 0 24px 24px 24px;
+}
+
+.paymentWidget h4 {
+  margin-bottom: 15px;
+  font-weight: 400;
+  border-top: 1px solid #ccc;
+  padding-top: 30px;
+}
+
+.radioWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.radioWrapper input {
+  width: 13px;
+  height: 13px;
+}
+
+.paymentRatio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  font-weight: 600;
+  color: #26292c;
+  text-transform: capitalize;
+}
+
+.customRadio:focus {
+  width: auto;
+  margin: 0;
+  border-bottom: none;
+}

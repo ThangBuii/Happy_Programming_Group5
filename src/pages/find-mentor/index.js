@@ -91,24 +91,15 @@ const fakeData = [
 ];
 
 const fakeSkillSearch = [
-  "Leadership",
-  "Project Management",
-  "Sales",
-  "Startup",
-  "Career",
-  "Product Designer",
-  "UX Design",
-  "Interviews",
-  "Product Designer1",
-  "Software Engineer",
-  "Javascript Developer",
-  "Python Developer",
-  "Product Strategy",
+  { skill_id: "1", skill_name: "Leadership" },
+  { skill_id: "2", skill_name: "Project Management" },
+  { skill_id: "3", skill_name: "Sales" },
 ];
 
 const handleBuildFilterSkills = (skillList) => {
   return skillList.map((skill) => ({
-    skillName: skill,
+    skillId: skill.skill_id,
+    skillName: skill.skill_name,
     isChoosed: false,
   }));
 };
@@ -157,6 +148,13 @@ const FindMentor = () => {
   }, []);
 
   useEffect(() => {
+    const skillIdList = filterListSkill
+      .filter((skill) => skill.isChoosed === true)
+      .map((item) => item.skillId);
+    console.log(">>check SbumitSkill id>> ", skillIdList, filterListSkill);
+  }, [filterListSkill]);
+
+  useEffect(() => {
     if (originFilterListSkill.length > 0) {
       const newFilterListSkill = originFilterListSkill.filter((skill) =>
         skill.skillName.toLowerCase().includes(filterSearch.toLowerCase())
@@ -170,6 +168,7 @@ const FindMentor = () => {
       if (item.skillName !== filterName) return item;
       else
         return {
+          skillId: item.skillId,
           skillName: item.skillName,
           isChoosed: !item.isChoosed,
         };
