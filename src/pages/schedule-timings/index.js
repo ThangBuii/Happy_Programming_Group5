@@ -11,6 +11,9 @@ import AddIcon from "@mui/icons-material/Add";
 import MainLayout from "../../component/main-layout";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./index.module.css";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { request } from "../../axios_helper";
 
 const fakeSessionList = [
   {
@@ -32,20 +35,11 @@ const fakeSlotList = [
   { slotId: "slot2", slotFrom: "12:30", slotTo: "13:00" },
 ];
 
-const dayList = [
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-  "SUNDAY",
-];
 const ScheduleTimings = () => {
   const [sessions, setSessions] = useState([]);
   const [slotList, setSlotList] = useState([]);
   const [sessionIdChoosed, setSessionIdChoosed] = useState("");
-  const [dayChoosed, setDayChoosed] = useState("MONDAY");
+  const [dayChoosed, setDayChoosed] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isDetailLoading, seIsDetailLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -70,9 +64,15 @@ const ScheduleTimings = () => {
   }, []);
 
   useEffect(() => {
+    // console.log(new Date(dayChoosed.$d).toLocaleDateString("en-US").toString());
     if (sessionIdChoosed === "" || dayChoosed === "") return;
     seIsDetailLoading(true);
-    fetch(`http://localhost:9999/my-slot/${sessionIdChoosed}/${dayChoosed}`)
+    request("POST", "http://localhost:9999/my-slot", {
+      sessionId: sessionIdChoosed,
+      dayChoosed: new Date(dayChoosed.$d)
+        .toLocaleDateString("en-US")
+        .toString(),
+    })
       .then((resp) => resp.json())
       .then((data) => {
         setSlotList([...data]);
@@ -175,7 +175,7 @@ const ScheduleTimings = () => {
                   <div className="col-md-12">
                     <div className={styles.scheduleWrapper}>
                       <div className={styles.scheduleHead}>
-                        {dayList.map((item, index) => (
+                        {/* {dayList.map((item, index) => (
                           <div
                             key={index}
                             className={
@@ -187,7 +187,20 @@ const ScheduleTimings = () => {
                           >
                             {item}
                           </div>
-                        ))}
+                        ))} */}
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            value={dayChoosed}
+                            onChange={(newValue) => setDayChoosed(newValue)}
+                            sx={{
+                              "& input:focus": {
+                                width: "auto",
+                                margin: "0",
+                                borderBottom: "0px solid",
+                              },
+                            }}
+                          />
+                        </LocalizationProvider>
                       </div>
                       <div className={styles.slotWrapper}>
                         <h4>

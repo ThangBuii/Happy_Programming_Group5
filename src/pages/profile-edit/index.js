@@ -10,15 +10,17 @@ import { ApplicationContext } from "../../routes/AppRoutes";
 import { useNavigate } from "react-router";
 // 2-mentee, 1-mentor
 
-const handleBuildFilterSkills = (skills, mySkill) => {
+export const handleBuildFilterSkills = (skills, mySkill = []) => {
   return skills.map((skill) => {
     if (mySkill.some((item) => item.skill_name === skill.skill_name))
       return {
+        skillId: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: true,
       };
     else
       return {
+        skillId: skill.skill_id,
         skill_name: skill.skill_name,
         isChoosed: false,
       };
@@ -29,13 +31,15 @@ const EditProfile = () => {
   const [isLoading, seIsLoading] = useState(true);
   const [profile, setProfile] = useState({});
   const { user } = useContext(ApplicationContext);
-  const role = user.role; 
+  const role = user.role;
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const navigate = useNavigate();
-  const imageSource = profile.avatar ? `data:image/jpeg;base64, ${profile.avatar}` : AvatarDefault;
+  const imageSource = profile.avatar
+    ? `data:image/jpeg;base64, ${profile.avatar}`
+    : AvatarDefault;
 
   useEffect(() => {
     seIsLoading(true);
@@ -50,9 +54,7 @@ const EditProfile = () => {
       })
       .then(([data1, data2]) => {
         setProfile(data1);
-        setOriginFilterListSkill(
-          handleBuildFilterSkills(data2, data1.skills)
-        );
+        setOriginFilterListSkill(handleBuildFilterSkills(data2, data1.skills));
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +74,6 @@ const EditProfile = () => {
       setFilterListSkill(newFilterListSkill);
     }
   }, [originFilterListSkill, filterSearch]);
-  
 
   const handleClickFilterItem = (filterName) => {
     let nameState = false;
@@ -85,6 +86,7 @@ const EditProfile = () => {
         console.log(profile.accountId, filterName, nameState);
 
         return {
+          skill_id: item.skill_id,
           skill_name: item.skill_name,
           isChoosed: nameState,
         };
@@ -106,14 +108,14 @@ const EditProfile = () => {
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
-  
+
     // Validate file type
     if (file && file.type.startsWith("image/")) {
       setSelectedPhoto(file);
-  
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1]; 
+        const base64String = reader.result.split(",")[1];
         setProfile((prevProfile) => ({
           ...prevProfile,
           avatar: base64String,
@@ -130,7 +132,7 @@ const EditProfile = () => {
       // Show an error message or handle the invalid file type here
     }
   };
-  
+
   const handleSaveChange = () => {
     const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile";
     request("POST", url, profile)
@@ -160,10 +162,7 @@ const EditProfile = () => {
                   <div className="form-group">
                     <div className={styles.changeAvatar}>
                       <div className={styles.profileImage}>
-                        <img
-                          src={imageSource}
-                          alt="avatar"
-                        />
+                        <img src={imageSource} alt="avatar" />
                       </div>
                       <div className={styles.uploadImg}>
                         <div className={styles.changePhotoBtn}>
@@ -171,8 +170,11 @@ const EditProfile = () => {
                             <i className="fa fa-upload"></i> Upload Photo
                           </span>
                           {/* onChange o input voi cai base64 de thay doi state cua avatar */}
-                          <input type="file" className={styles.upload} 
-                          onChange={handlePhotoChange} />
+                          <input
+                            type="file"
+                            className={styles.upload}
+                            onChange={handlePhotoChange}
+                          />
                         </div>
                         <small
                           className="form-text text-muted"
@@ -220,11 +222,11 @@ const EditProfile = () => {
                     <label className="mb-2">Gender</label>
                     <select
                       className="form-control select"
-                      value={profile.gender === 0 ? 'Female' : 'Male'}
+                      value={profile.gender === 0 ? "Female" : "Male"}
                       onChange={(e) =>
                         setProfile((pre) => ({
                           ...pre,
-                          gender: e.target.value === 'Female' ? 0 : 1,
+                          gender: e.target.value === "Female" ? 0 : 1,
                         }))
                       }
                     >
@@ -263,25 +265,25 @@ const EditProfile = () => {
                     />
                   </div>
                 </div>
-                
+
                 {profile.role === 1 && (
                   <>
-                  <div className="col-12 col-md-6 mb-3">
-                  <div className="form-group">
-                    <label className="mb-2">University</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={profile.university}
-                      onChange={(e) =>
-                        setProfile((pre) => ({
-                          ...pre,
-                          university: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
+                    <div className="col-12 col-md-6 mb-3">
+                      <div className="form-group">
+                        <label className="mb-2">University</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={profile.university}
+                          onChange={(e) =>
+                            setProfile((pre) => ({
+                              ...pre,
+                              university: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
                     <div className="col-12 col-md-6 mb-3">
                       <div className="form-group">
                         <label className="mb-2">Major</label>

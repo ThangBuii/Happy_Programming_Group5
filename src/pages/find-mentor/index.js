@@ -14,6 +14,7 @@ import { request } from "../../axios_helper";
 
 const handleBuildFilterSkills = (skillList) => {
   return skillList.map((skill) => ({
+    skillId: skill.skill_id,
     skillName: skill.skill_name,
     isChoosed: false,
   }));
@@ -58,6 +59,13 @@ const FindMentor = () => {
   }, []);
 
   useEffect(() => {
+    const skillIdList = filterListSkill
+      .filter((skill) => skill.isChoosed === true)
+      .map((item) => item.skillId);
+    console.log(">>check SbumitSkill id>> ", skillIdList, filterListSkill);
+  }, [filterListSkill]);
+
+  useEffect(() => {
     if (originFilterListSkill.length > 0) {
       const newFilterListSkill = originFilterListSkill.filter((skill) =>
         skill.skillName.toLowerCase().includes(filterSearch.toLowerCase())
@@ -71,6 +79,7 @@ const FindMentor = () => {
       if (item.skillName !== filterName) return item;
       else
         return {
+          skillId: item.skillId,
           skillName: item.skillName,
           isChoosed: !item.isChoosed,
         };

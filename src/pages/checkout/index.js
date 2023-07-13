@@ -1,5 +1,13 @@
 import { useLocation, useNavigate, useParams } from "react-router";
-import { Button, CircularProgress, Container, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Container,
+  Slide,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { Home, NavigateNext, Send } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -71,6 +79,7 @@ const Checkout = () => {
   const [sessions, setSessions] = useState({});
   const [dayChoosed, setDayChoosed] = useState("Mon");
   const [isLoading, seIsLoading] = useState(true);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -206,9 +215,35 @@ const Checkout = () => {
                       <span>${sessions.price}</span>
                     </div>
                   </div>
+                  <div className={styles.paymentWidget}>
+                    <h4 className="card-title">Payment Method</h4>
+                    <div className={styles.radioWrapper}>
+                      <label className={styles.paymentRatio}>
+                        <input
+                          type="radio"
+                          name="radio"
+                          className={styles.customRadio}
+                        />
+                        <span className="checkmark"></span>Credit card
+                      </label>
+                      <label className={styles.paymentRatio}>
+                        <input
+                          type="radio"
+                          name="radio"
+                          className={styles.customRadio}
+                        />
+                        <span className="checkmark"></span>Paypal
+                      </label>
+                    </div>
+                  </div>
                   <div className={styles.actionWrapper}>
-                    <Button variant="contained" endIcon={<Send />} fullWidth>
-                      Send
+                    <Button
+                      variant="contained"
+                      endIcon={<Send />}
+                      fullWidth
+                      onClick={() => setSnackbarOpen(true)}
+                    >
+                      Confirm and Pay
                     </Button>
                   </div>
                 </div>
@@ -217,6 +252,25 @@ const Checkout = () => {
           </div>
         </Container>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => {
+          setSnackbarOpen(false);
+          navigate("/");
+        }}
+        style={{ marginTop: "40px" }}
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+          Payment Successfull!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

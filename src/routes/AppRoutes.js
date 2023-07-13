@@ -44,11 +44,16 @@ import PrivateRoute from "./PrivateRoute";
 import PrivateAdminRoute from "./PrivateAdminRoute";
 import PrivateMenteeRoute from "./PrivateMenteeRoute";
 import PrivateMentorRoute from "./PrivateMentorRoute";
+import Session from "../pages/session";
 
 export const ApplicationContext = React.createContext([]);
 
 const AppRoutes = () => {
-  const [user, setUser] = useState({ isAuthenticated: false, token: "", role: -1 });
+  const [user, setUser] = useState({
+    isAuthenticated: false,
+    token: "",
+    role: -1,
+  });
 
   const makeSignIn = (user) => {
     setUser(user);
@@ -58,7 +63,9 @@ const AppRoutes = () => {
   };
 
   useLayoutEffect(() => {
-    const tmpUser = getDataFromLocal("user") ? getDataFromLocal("user") : { isAuthenticated: false, token: "", role: -1 };
+    const tmpUser = getDataFromLocal("user")
+      ? getDataFromLocal("user")
+      : { isAuthenticated: false, token: "", role: -1 };
     setUser(tmpUser);
   }, []);
 
@@ -78,43 +85,40 @@ const AppRoutes = () => {
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
 
+          {/* <Route element={<PrivateRoute />}> */}
+          <Route
+            path="/mentor/:id/checkout/:sessionId"
+            element={<Checkout />}
+          />
 
-          <Route element={<PrivateRoute />}>
-            <Route
-              path="/mentor/:id/checkout/:sessionId"
-              element={<Checkout />}
-            />
+          <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
+          <Route path="/bookings" element={<Booking />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
-            <Route path="/bookings" element={<Booking />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-
-            
-
-            <Route element={<PrivateMenteeRoute />}>
+          <Route element={<PrivateMenteeRoute />}>
             <Route path="/favorite-mentor" element={<FavouriteMentor />} />
-            </Route>
-
-            <Route element={<PrivateMentorRoute />}>
-            <Route path="/schedule-timings" element={<ScheduleTimings />} />
-            </Route>
-            
-
-            <Route path="/feedback" element={<Feedback />} />
-
-            <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
-            <Route path="/invoice" element={<Invoice />} />
-
-            <Route path="/report/add" element={<ReportAdd />} />
-            <Route path="/report/:report_id" element={<ReportDetail />} />
-            <Route path="/report" element={<Report />} />
-
-            <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
-
-            <Route path="/profile/edit" element={<EditProfile />} />
-            <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/profile" element={<Profile />} />
           </Route>
+
+          <Route element={<PrivateMentorRoute />}>
+            <Route path="/schedule-timings" element={<ScheduleTimings />} />
+          </Route>
+
+          <Route path="/feedback" element={<Feedback />} />
+
+          <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
+          <Route path="/invoice" element={<Invoice />} />
+
+          <Route path="/report/add" element={<ReportAdd />} />
+          <Route path="/report/:report_id" element={<ReportDetail />} />
+          <Route path="/report" element={<Report />} />
+
+          <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
+          <Route path="/sessions" element={<Session />} />
+
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
+          {/* </Route> */}
 
           <Route element={<PrivateAdminRoute />}>
             {/*Call Dashboard Admin */}
