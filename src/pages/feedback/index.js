@@ -131,6 +131,13 @@ const Feedback = () => {
                         defaultValue={item.rating}
                         readOnly
                         precision={0.5}
+                        sx={{
+                          marginTop: "-6px",
+                          marginLeft: "-6px",
+                          "& .MuiRating-iconFilled": {
+                            color: "rgb(33, 163, 145)", // Màu fill tùy chỉnh khi được chọn
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell align="center">

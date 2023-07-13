@@ -43,7 +43,7 @@ const EditProfile = () => {
     const url = role === 1 ? "/api/mentor/profile" : "/api/mentee/profile"
     Promise.all([
       request("GET", url),
-      request("GET", "/api/men/skills"),
+      request("GET", "/api/public/men/skills"),
     ])
       .then((responses) => {
         return Promise.all(responses.map((response) => response.data));
@@ -61,6 +61,7 @@ const EditProfile = () => {
         seIsLoading(false);
       });
   }, []);
+  console.log(profile)
 
 
   useEffect(() => {
@@ -358,14 +359,14 @@ const EditProfile = () => {
                             </>
                           }
                         />
-                        <div className={styles.skills}>
+                        <div className={styles.skillList}>
                           {profile.skills.map((skill, index) => (
                             <div key={index} className={styles.skillItem}>
                               {skill.skill_name}
                               <IconButton
                                 color="secondary"
                                 className={styles.customDeleteSkill}
-                                onClick={() => handleClickFilterItem(skill)}
+                                onClick={() => handleClickFilterItem(skill.skill_name)}
                               >
                                 <CloseIcon />
                               </IconButton>

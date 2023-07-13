@@ -48,6 +48,24 @@ const Favourite = () => {
       });
   }, []);
 
+  const handleBookmarkClick = (id) => {
+    // Send delete request to the backend
+    request("DELETE", `/api/mentee/favorite/${id}`)
+    .then(response => {
+      // Handle successful deletion
+      // Fetch the updated list of mentors
+      return request("GET", "/api/mentee/favorite");
+    })
+    .then(updatedResponse => {
+      // Update the mentorList state with the updated list
+      setMentorList(updatedResponse.data);
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error deleting bookmark:', error);
+    });
+  };
+
   // Calculate the start and end index of the mentors to display on the current page
   const startIndex = (page - 1) * mentorsPerPage;
   const endIndex = startIndex + mentorsPerPage;
@@ -126,7 +144,7 @@ const Favourite = () => {
                           <Button variant="contained">Book Now</Button>
                         </div>
                         <div className={styles.bookMark}>
-                          <BookmarkIcon />
+                          <BookmarkIcon onClick={() => handleBookmarkClick(mentor.favorite_id)}/>
                         </div>
                       </div>
                     </div>
