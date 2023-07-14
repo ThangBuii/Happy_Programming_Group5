@@ -121,8 +121,14 @@ public class AccountController {
     }
     
      @GetMapping("/public/profile/{id}")
-    public MentorDTODetailResponse getFindMentorProfile(@PathVariable int id) throws CustomBadRequestException{
-        return accountService.findMentorByID(id);
+    public FindMentorResponseDTO getFindMentorProfile(@PathVariable int id,HttpServletRequest request) throws CustomBadRequestException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        int account_id = 0;
+        if(!token.isEmpty()){
+            TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+            account_id = tokenPayload.getAccount_id();
+        }
+        return accountService.findMentorProfile(id,account_id);
     }
 
 }

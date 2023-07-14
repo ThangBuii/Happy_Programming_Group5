@@ -59,7 +59,7 @@ public class SkillController {
         skillsService.addSkills(skillsRequestDTO);
     }
 
-    @GetMapping("/men/skills")
+    @GetMapping("/public/men/skills")
     List<Skills> getAllSkills(){
         return skillsService.getAllSkills();
     }

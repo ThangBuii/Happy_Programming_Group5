@@ -69,7 +69,7 @@ public class FeedbackController {
         feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());
     }
 
-    @GetMapping("feedbacks/{id}")
+    @GetMapping("/public/feedbacks/{id}")
     public List<FeedbackListMentorResponseDTO> getFeedbacksFindMentor(@PathVariable int id) throws CustomInternalServerException{
         return feedbackService.getFeedbacksMentor(id);
     }

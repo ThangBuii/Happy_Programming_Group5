@@ -71,4 +71,10 @@ public class SessionController {
             TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
             sessionService.addSession(addSessionDTO,tokenPayload.getAccount_id());
         }
+
+        @GetMapping("/public/session/{id}")
+    List<MentorSessionDTO> getSessionListByMentorId(@PathVariable int id) throws CustomBadRequestException {
+        
+        return sessionService.getListSessionByMentorId(id);
+    }
 }
