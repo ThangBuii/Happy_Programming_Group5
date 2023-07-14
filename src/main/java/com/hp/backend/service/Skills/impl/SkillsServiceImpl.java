@@ -54,12 +54,12 @@ public class SkillsServiceImpl implements SkillsService {
 
     @Override
     public Skills findSkillsByID(int id) throws CustomBadRequestException {
-        Skills skills = skillsRepository.findById(id).get();
-        if (skills == null) {
+        Optional<Skills> skills = skillsRepository.findById(id);
+        if (!skills.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no skill for the skill id: " + id).code("404").build());
         }
-        return skills;
+        return skills.get();
     }
 
     @Override
