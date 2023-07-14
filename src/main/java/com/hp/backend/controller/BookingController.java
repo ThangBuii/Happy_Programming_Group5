@@ -26,7 +26,6 @@ import com.hp.backend.model.booking.dto.BookingUpdateRequestDTO;
 import com.hp.backend.model.booking.dto.DashboardMenteeDTO;
 import com.hp.backend.model.booking.dto.DashboardMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
-import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.service.Booking.AddBookingService;
 import com.hp.backend.service.Booking.BookingListAdminService;
 import com.hp.backend.service.Booking.BookingListMenteeService;
@@ -88,7 +87,8 @@ public class BookingController {
     }
 
     @PutMapping("/mentor/booking/{id}")
-    void updateMentorBooking(@PathVariable int id, @RequestBody BookingUpdateRequestDTO booking) throws CustomBadRequestException {
+    void updateMentorBooking(@PathVariable int id, @RequestBody BookingUpdateRequestDTO booking)
+            throws CustomBadRequestException {
         Booking b = bookingListMentorService.findBookingByID(id);
         b.setStatus(booking.getStatus());
         bookingListMentorService.saveMentorBooking(b);
@@ -102,10 +102,10 @@ public class BookingController {
     }
 
     @PostMapping("mentee/booking")
-    void addBookingForMentee(@RequestBody AddBookingRequestDTO addBooking,HttpServletRequest request){
+    void addBookingForMentee(@RequestBody AddBookingRequestDTO addBooking, HttpServletRequest request) {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        addBookingService.addBookingForMentee(addBooking,tokenPayload.getAccount_id());
+        addBookingService.addBookingForMentee(addBooking, tokenPayload.getAccount_id());
     }
 
 }

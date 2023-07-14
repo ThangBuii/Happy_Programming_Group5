@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hp.backend.service.Invoice.InvoiceService;
 import com.hp.backend.entity.Receipt;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
@@ -15,6 +14,7 @@ import com.hp.backend.model.receipt.mapper.InvoiceMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.ReceiptRepository;
+import com.hp.backend.service.Invoice.InvoiceService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
             InvoiceDTO invoiceDTO = invoiceMapper.toMentorInvoiceDTO(receipt);
             if (invoiceDTO.getUsername() == null || invoiceDTO.getEmail() == null) {
-                CustomError error = new CustomError("DataNotFound", "Data for mentor not found", "");
+                CustomError error = new CustomError("DataNotFound", "Data for mentee not found", "");
                 throw new CustomNotFoundException(error);
             }
 
