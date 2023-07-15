@@ -39,20 +39,19 @@ const Session = () => {
   const { user } = useContext(ApplicationContext);
   const role = user.role;
   const location = useLocation();
-  console.log(location.pathname, linkObjList);
   const [session, setSession] = useState([]);
   const [isOpenDialog, setOpendDialog] = useState(false);
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
   const [addSession, setAddSession] = useState({
-    skills: [],
+    skills: {},
     session_Name: "",
     price: 0,
     description: "",
     duration: 0,
   });
-  const [isLoading, seIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,26 +59,28 @@ const Session = () => {
   }, []);
 
   useEffect(() => {
-    seIsLoading(true);
-    if (role === -1) return;
-    Promise.all([request("GET", "/api/mentor/session"), request("GET", "/api/public/men/skills")])
+    setIsLoading(true);
+    // if (role === -1) return;
+    Promise.all([
+      request("GET", "/api/mentor/session"),
+      request("GET", "/api/public/men/skills"),
+    ])
       .then((responses) => {
         return Promise.all(responses.map((response) => response.data));
       })
       .then(([data1, data2]) => {
         setSession(data1);
-        console.log(data1)
-        setOriginFilterListSkill(handleBuildFilterSkills(data2, data1.skills));
+        console.log(data1);
+        setOriginFilterListSkill(handleBuildFilterSkills(data2));
       })
       .catch((err) => {
         console.log(err);
         setOriginFilterListSkill(handleBuildFilterSkills(fakeListSkills));
       })
       .finally(() => {
-        seIsLoading(false);
+        setIsLoading(false);
       });
   }, []);
-  
 
   useEffect(() => {
     if (originFilterListSkill.length > 0) {
@@ -90,12 +91,18 @@ const Session = () => {
     }
   }, [originFilterListSkill, filterSearch]);
 
-  const handleClickFilterItem = (filterName) => {
+  const handleClickFilterItem = (skill) => {
     let nameState = false;
     const newFilterSkill = originFilterListSkill.map((item) => {
-      if (item.skill_name !== filterName) return item;
+      if (item.skill_name !== skill.skill_name)
+        return {
+          skill_id: item.skill_id,
+          skill_name: item.skill_name,
+          isChoosed: false,
+        };
       else {
         nameState = !item.isChoosed;
+
         return {
           skill_id: item.skill_id,
           skill_name: item.skill_name,
@@ -107,12 +114,12 @@ const Session = () => {
     if (nameState)
       setAddSession((pre) => ({
         ...pre,
-        skills: [...pre.skills, filterName],
+        skills: { skill_id: skill.skill_id, skill_name: skill.skill_name },
       }));
     else
       setAddSession((pre) => ({
         ...pre,
-        skills: [...pre.skills].filter((item) => item !== filterName),
+        skills: {},
       }));
     setOriginFilterListSkill(newFilterSkill);
   };
@@ -164,8 +171,7 @@ const Session = () => {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                  
-                      <TableCell
+                        <TableCell
                           className={styles.tableCellHead}
                           align="left"
                         >
@@ -183,7 +189,7 @@ const Session = () => {
                         >
                           Duration
                         </TableCell>
-                        
+
                         <TableCell
                           className={styles.tableCellHead}
                           align="left"
@@ -220,8 +226,10 @@ const Session = () => {
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell align="center">{item.duration} minutes</TableCell>
-                          
+                          <TableCell align="center">
+                            {item.duration} minutes
+                          </TableCell>
+
                           <TableCell align="center">
                             <span
                               className={
@@ -365,7 +373,7 @@ const Session = () => {
                     <div
                       key={item.skill_name}
                       className={styles.searchItem}
-                      onClick={() => handleClickFilterItem(item.skill_name)}
+                      onClick={() => handleClickFilterItem(item)}
                     >
                       <Checkbox
                         sx={{
@@ -387,19 +395,18 @@ const Session = () => {
             }
           />
           <div className={styles.skillList}>
-            {addSession.skills &&
-              addSession.skills.map((skill, index) => (
-                <div key={index} className={styles.skillItem}>
-                  {skill.skill_name}
-                  <IconButton
-                    color="secondary"
-                    className={styles.customDeleteSkill}
-                    onClick={() => handleClickFilterItem(skill)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </div>
-              ))}
+            {addSession.skills.skill_name && (
+              <div className={styles.skillItem}>
+                {addSession.skills.skill_name}
+                <IconButton
+                  color="secondary"
+                  className={styles.customDeleteSkill}
+                  onClick={() => handleClickFilterItem(addSession.skills)}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </div>
+            )}
           </div>
         </DialogContent>
         <DialogActions>
