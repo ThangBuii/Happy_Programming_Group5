@@ -32,7 +32,7 @@ public class TimeController {
     private final TimeService timeService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/mentor/time")
+    @PostMapping("/mentor/times")
     List<GetListTimeResponseDTO> getListTime(@RequestBody GetListTimeRequestDTO getListTimeRequestDTO) {
         return timeService.getAllTime(getListTimeRequestDTO);
     }

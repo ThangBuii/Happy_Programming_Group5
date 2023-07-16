@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Feedback;
+import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
@@ -81,7 +82,12 @@ public class FeedbackMapper {
                                 .rating(feedback.getRating()).build();
         }
 
-        public Feedback toFeedback(FeedbackAddRequestDTO feedback, int mentee_id) {
+        public Feedback toFeedback(FeedbackAddRequestDTO feedback, int mentee_id) throws CustomBadRequestException {
+                if(!accountRepository.findById(feedback.getMentor_id()).isPresent()){
+                        throw new CustomBadRequestException(CustomError.builder().message("Mentor is not exist").code("400")
+                                                        .build());
+                }
+
                 Date currentDate = commonUtils.getCurrentDate();
 
                 return Feedback.builder().content(feedback.getContent()).mentor_id(feedback.getMentor_id())

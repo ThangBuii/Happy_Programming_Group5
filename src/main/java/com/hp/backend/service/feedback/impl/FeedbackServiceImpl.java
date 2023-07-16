@@ -82,7 +82,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) {
+    public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) throws CustomBadRequestException {
         Feedback feedback1 = feedbackMapper.toFeedback(feedback,mentee_id);
         feedbackRepository.save(feedback1);
     }

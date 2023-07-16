@@ -63,7 +63,7 @@ public class FeedbackController {
     }
 
     @PostMapping("mentee/feedback")
-    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request){
+    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());

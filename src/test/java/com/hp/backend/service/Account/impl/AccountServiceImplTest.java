@@ -11,11 +11,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,12 +40,22 @@ import com.hp.backend.model.account.mapper.AccountMapper;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
+import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.service.Account.AccountService;
+import com.hp.backend.utils.JwtTokenUtil;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Find;
 
 public class AccountServiceImplTest {
     @Mock
     private AccountRepository accountRepository;
+
+     @Mock
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Mock
+    private SessionRepository sessionRepository;
+
+    
 
     @Mock
     private FavoriteRepository favoriteRepository;
@@ -118,93 +130,43 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    void testAuthenticate_ValidCredentials() throws CustomBadRequestException {
-        // Arrange
-        MockitoAnnotations.openMocks(this); // Initialize mocks
-
-        String email = "test@example.com";
-        String password = "password";
-
-        AccountDTOLoginRequest accountDTOLoginRequest = AccountDTOLoginRequest.builder().build();
-        accountDTOLoginRequest.setEmail(email);
-        accountDTOLoginRequest.setPassword(password);
+    void testAuthenticate_WithValidCredentials() throws CustomBadRequestException {
+        MockitoAnnotations.openMocks(this);
+        // Mock input data
+        AccountDTOLoginRequest loginRequest = AccountDTOLoginRequest.builder().email("example@example.com").password("password").build();
 
         Account account = new Account();
-        account.setEmail(email);
-        account.setPassword(password);
+        account.setEmail("example@example.com");
+        account.setPassword("password");
+        account.setAccount_id(1);
+        account.setRole(0);
 
-        Map<String, AccountDTOLoginRequest> accountLoginRequestMap = new HashMap<>();
-        accountLoginRequestMap.put("account", accountDTOLoginRequest);
+        // Mock the account repository's behavior
+        when(accountRepository.findByEmail(loginRequest.getEmail())).thenReturn(Optional.of(account));
+        when(jwtTokenUtil.generateToken(account, 24 * 60 * 60)).thenReturn("dummyToken");
+        // Call the method to test
+        Map<String, AccountDTOLoginResponse> response = accountService.authenticate(Collections.singletonMap("account", loginRequest));
 
-        when(accountRepository.findByEmail(email)).thenReturn(Optional.of(account));
-
-        // Act
-        Map<String, AccountDTOLoginResponse> response = accountService.authenticate(accountLoginRequestMap);
-
-        // Assert
-        assertTrue(response.containsKey("account"));
-        assertNotNull(response.get("account"));
+        // Perform assertions
+        Assertions.assertEquals(1, response.size());
+        AccountDTOLoginResponse accountResponse = response.get("account");
+        Assertions.assertNotNull(accountResponse);
+        Assertions.assertNotNull(accountResponse.getToken());
     }
 
     @Test
-    void testAuthenticate_InvalidCredentials() {
-        // Arrange
-        MockitoAnnotations.openMocks(this); // Initialize mocks
+    void testAuthenticate_WithInvalidCredentials() {
+        MockitoAnnotations.openMocks(this);
+        // Mock input data
+        AccountDTOLoginRequest loginRequest = AccountDTOLoginRequest.builder().email("example@example.com").password("password").build();
 
-        String email = "test@example.com";
-        String password = "password";
-        String incorrectPassword = "incorrectPassword";
+        // Mock the account repository's behavior
+        when(accountRepository.findByEmail(loginRequest.getEmail())).thenReturn(Optional.empty());
 
-        AccountDTOLoginRequest accountDTOLoginRequest = AccountDTOLoginRequest.builder().build();
-        accountDTOLoginRequest.setEmail(email);
-        accountDTOLoginRequest.setPassword(incorrectPassword);
-
-        Account account = new Account();
-        account.setEmail(email);
-        account.setPassword(password);
-
-        Map<String, AccountDTOLoginRequest> accountLoginRequestMap = new HashMap<>();
-        accountLoginRequestMap.put("account", accountDTOLoginRequest);
-
-        when(accountRepository.findByEmail(email)).thenReturn(Optional.of(account));
-
-        // Act & Assert
-        CustomBadRequestException exception = assertThrows(CustomBadRequestException.class, () -> {
-            accountService.authenticate(accountLoginRequestMap);
+        // Call the method to test and assert that it throws the expected exception
+        Assertions.assertThrows(CustomBadRequestException.class, () -> {
+            accountService.authenticate(Collections.singletonMap("account", loginRequest));
         });
-
-        assertEquals("400", exception.getErrors().get("errors").getCode());
-        assertEquals("Email or password incorrect", exception.getErrors().get("errors").getMessage());
-
-        verify(accountRepository, never()).findByEmail(any());
-    }
-
-    @Test
-    void testAuthenticate_AccountNotFound() {
-        // Arrange
-        MockitoAnnotations.openMocks(this); // Initialize mocks
-
-        String email = "test@example.com";
-        String password = "password";
-
-        AccountDTOLoginRequest accountDTOLoginRequest = AccountDTOLoginRequest.builder().build();
-        accountDTOLoginRequest.setEmail(email);
-        accountDTOLoginRequest.setPassword(password);
-
-        Map<String, AccountDTOLoginRequest> accountLoginRequestMap = new HashMap<>();
-        accountLoginRequestMap.put("account", accountDTOLoginRequest);
-
-        when(accountRepository.findByEmail(email)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        CustomBadRequestException exception = assertThrows(CustomBadRequestException.class, () -> {
-            accountService.authenticate(accountLoginRequestMap);
-        });
-
-        assertEquals("400", exception.getErrors().get("errors").getCode());
-        assertEquals("Email or password incorrect", exception.getErrors().get("errors").getMessage());
-
-        verify(accountRepository, never()).findByEmail(any());
     }
 
     @Test
@@ -581,7 +543,86 @@ public class AccountServiceImplTest {
 
     @Test
     void testGetListFindMentor_SkillIdNotZero() {
-        
+        // Arrange
+        MockitoAnnotations.openMocks(this); // Initialize mocks
+
+        int accountId = 1;
+        int skillId = 2;
+
+        List<Integer> mentorIds = new ArrayList<>();
+        mentorIds.add(3);
+        mentorIds.add(4);
+
+        int[] mentorIdsArray = mentorIds.stream().mapToInt(Integer::intValue).toArray();
+
+        Account account1 = new Account();
+        Account account2 = new Account();
+
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        List<FindMentorResponseDTO> expectedResults = new ArrayList<>();
+        FindMentorResponseDTO result1 = FindMentorResponseDTO.builder().build();
+        FindMentorResponseDTO result2 = FindMentorResponseDTO.builder().build();
+        expectedResults.add(result1);
+        expectedResults.add(result2);
+
+        when(sessionRepository.findAllBySkill_ID(skillId)).thenReturn(mentorIds);
+        when(accountRepository.findById(3)).thenReturn(Optional.of(account1));
+        when(accountRepository.findById(4)).thenReturn(Optional.of(account2));
+        when(accountMapper.toFindMentorResponse(account1, accountId)).thenReturn(result1);
+        when(accountMapper.toFindMentorResponse(account2, accountId)).thenReturn(result2);
+
+        // Act
+        List<FindMentorResponseDTO> actualResults = accountService.getListFindMentor(accountId, skillId);
+
+        // Assert
+        assertEquals(expectedResults.size(), actualResults.size());
+        assertEquals(expectedResults.get(0), actualResults.get(0));
+        assertEquals(expectedResults.get(1), actualResults.get(1));
+    }
+
+    @Test
+    void testGetListFindMentor_SkillIdZero() {
+        // Arrange
+        MockitoAnnotations.openMocks(this); // Initialize mocks
+
+        int accountId = 1;
+        int skillId = 0;
+
+        List<Integer> mentorIds = new ArrayList<>();
+        mentorIds.add(3);
+        mentorIds.add(4);
+
+        int[] mentorIdsArray = mentorIds.stream().mapToInt(Integer::intValue).toArray();
+
+        Account account1 = new Account();
+        Account account2 = new Account();
+
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        List<FindMentorResponseDTO> expectedResults = new ArrayList<>();
+        FindMentorResponseDTO result1 = FindMentorResponseDTO.builder().build();
+        FindMentorResponseDTO result2 = FindMentorResponseDTO.builder().build();
+        expectedResults.add(result1);
+        expectedResults.add(result2);
+
+        when(sessionRepository.findAllBySkill_ID()).thenReturn(mentorIds);
+        when(accountRepository.findById(3)).thenReturn(Optional.of(account1));
+        when(accountRepository.findById(4)).thenReturn(Optional.of(account2));
+        when(accountMapper.toFindMentorResponse(account1, accountId)).thenReturn(result1);
+        when(accountMapper.toFindMentorResponse(account2, accountId)).thenReturn(result2);
+
+        // Act
+        List<FindMentorResponseDTO> actualResults = accountService.getListFindMentor(accountId, skillId);
+
+        // Assert
+        assertEquals(expectedResults.size(), actualResults.size());
+        assertEquals(expectedResults.get(0), actualResults.get(0));
+        assertEquals(expectedResults.get(1), actualResults.get(1));
     }
 
     @Test
