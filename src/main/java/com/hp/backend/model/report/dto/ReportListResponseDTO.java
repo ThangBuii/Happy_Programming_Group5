@@ -13,6 +13,7 @@ public class ReportListResponseDTO {
     private String email;
     private String avatar;
     private String title;
+    private String content;
     private Date created_date;
     private int role;
     private int status;

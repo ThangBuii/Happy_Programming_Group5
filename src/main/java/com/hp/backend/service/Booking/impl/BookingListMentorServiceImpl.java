@@ -17,9 +17,8 @@ import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
-import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Booking.BookingListMentorService;
+import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,10 +27,9 @@ import lombok.RequiredArgsConstructor;
 public class BookingListMentorServiceImpl implements BookingListMentorService {
 
     private final BookingRepository bookingRepository;
-    private final TimeRepository timeRepository;
     private final AccountRepository accountRepository;
-    private final SessionRepository sessionRepository;
     private final BookingMapper bookingMapper;
+    private final CommonUtils commonUtils;
 
     @Override
     public List<BookingListMentorDTO> getAllMentorBooking(int id) throws CustomNotFoundException {
@@ -51,7 +49,9 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
                 }
 
                 BookingListMentorDTO bookingMentorDTO = new BookingListMentorDTO();
-                // bookingMentorDTO.setMenteeID(menteeId);
+                bookingMentorDTO.setAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()));
+                bookingMentorDTO.setMenteeID(menteeId);
+                bookingMentorDTO.setBookingID(booking.getBooking_id());
                 bookingMentorDTO.setUsername(mentee.getUsername());
                 bookingMentorDTO.setEmail(mentee.getEmail());
                 bookingMentorDTO.setScheduleDate(time.getStart_date());
@@ -108,7 +108,8 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
                 }
 
                 DashboardMentorDTO dashboardMentorDTO = new DashboardMentorDTO();
-                // bookingMentorDTO.setMenteeID(menteeId);
+                dashboardMentorDTO.setAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()));
+                dashboardMentorDTO.setBookingID(booking.getBooking_id());
                 dashboardMentorDTO.setUsername(mentee.getUsername());
                 dashboardMentorDTO.setEmail(mentee.getEmail());
                 dashboardMentorDTO.setCreated_Date(booking.getCreated_date());

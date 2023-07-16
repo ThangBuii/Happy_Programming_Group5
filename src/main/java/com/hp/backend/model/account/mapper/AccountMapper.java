@@ -22,7 +22,6 @@ import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
-import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
@@ -97,8 +96,8 @@ public class AccountMapper {
                 .avatar(commonUtils.imageToFrontEnd(account.getAvatar())).email(account.getEmail()).username(account.getUsername())
                 .created_date(account.getCreated_date()).gender(account.getGender()).dob(account.getDob())
                 .country(account.getCountry()).city(account.getCity()).university(account.getUniversity())
-                .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription()).role(account.getRole())
-                .short_description(account.getShort_description()).skills(skills).build();
+                .major(account.getMajor()).degree(account.getDegree()).description(account.getDescription())
+                .short_description(account.getShort_description()).role(account.getRole()).skills(skills).build();
     }
 
     public MenteeDTODetailResponse toMenteeDTODetailResponse(Account account) {
@@ -109,7 +108,7 @@ public class AccountMapper {
                 .country(account.getCountry()).city(account.getCity()).description(account.getDescription()).build();
     }
 
-    public Account toUpdatedMenteeAccount(MenteeDTODetailUpdateRequest mentee, int account_id)
+    public Account toUpdatedMenteeAccount(MentorDTODetailUpdateRequest mentee, int account_id)
             throws CustomBadRequestException {
         Account account = accountRepository.findById(account_id).get();
 
@@ -169,10 +168,13 @@ public class AccountMapper {
 
     public FindMentorResponseDTO toFindMentorResponse(Account account, int account_id) {
         List<Skills> skills = skillRepository.findSkillsByMentorId(account.getAccount_id());
-        boolean isFavorite = favoriteRepository.existsByMentorIdAndMenteeId(account.getAccount_id(), account_id);
+        boolean isFavorite = false;
+        if(account_id != 0){
+            isFavorite = favoriteRepository.existsByMentorIdAndMenteeId(account.getAccount_id(), account_id);
+        }
 
         return FindMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
             .username(account.getUsername()).short_description(account.getShort_description())
-            .description(account.getDescription()).skills(skills).mentor_id(account_id).isFavorite(isFavorite).build();
+            .description(account.getDescription()).skills(skills).mentor_id(account.getAccount_id()).isFavorite(isFavorite).build();
     }
 }

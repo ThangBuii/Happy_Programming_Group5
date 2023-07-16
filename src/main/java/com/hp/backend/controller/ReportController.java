@@ -58,7 +58,7 @@ public class ReportController {
     }
 
     @PostMapping("/men/report")
-    public void addReport(@RequestBody ReportAddRequestDTO reportAddRequestDTO,HttpServletRequest request){
+    public void addReport(@RequestBody ReportAddRequestDTO reportAddRequestDTO,HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         reportService.addReport(tokenPayload.getAccount_id(),reportAddRequestDTO);

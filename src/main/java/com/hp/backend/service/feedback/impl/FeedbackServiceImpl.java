@@ -38,11 +38,22 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public FeedbackListAdminResponseDTO getFeedbackByID(int id) throws CustomBadRequestException, CustomInternalServerException {
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
+
+        if(!feedback.isPresent()){
+            throw new CustomBadRequestException(CustomError.builder().message("Feedback not exist").code("404").build());
+        }
+
+        return feedbackMapper.toFeedbackListResponseDTO(feedback.get());
+    }
+
+    @Override
     public void deleteFeedback(int id) throws CustomBadRequestException {
         Optional<Feedback> feedback = feedbackRepository.findById(id);
 
         if(!feedback.isPresent()){
-            throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
+            throw new CustomBadRequestException(CustomError.builder().message("Feedback not exist").code("404").build());
         }
 
         feedbackRepository.deleteById(id);
@@ -71,10 +82,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) {
+    public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) throws CustomBadRequestException {
         Feedback feedback1 = feedbackMapper.toFeedback(feedback,mentee_id);
         feedbackRepository.save(feedback1);
     }
+
+    
 
     
 

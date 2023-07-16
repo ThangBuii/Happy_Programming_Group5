@@ -1,5 +1,7 @@
 package com.hp.backend.model.booking.dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +18,13 @@ import lombok.Setter;
 
 public class BookingListAdminDTO {
     private int bookingID;
-    private String avatar;
-    private String email;
+    private String avatarMentee;
+    private String avatarMentor;
     private String scheduleDate;
     private String scheduleTime;
     private String menteeUsername;
     private String mentorUsername;
+    private Date created_date;
     private int status;
+    private int session_id;
 }

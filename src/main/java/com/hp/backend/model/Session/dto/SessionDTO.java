@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SessionDTO {
     private String username;
+    private String avatar;
     private String skill_name;
     private int duration;
     private String session_Name;

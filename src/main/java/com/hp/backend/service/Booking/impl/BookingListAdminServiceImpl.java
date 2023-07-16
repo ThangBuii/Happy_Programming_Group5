@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hp.backend.entity.Booking;
 import com.hp.backend.model.booking.dto.BookingListAdminDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
-import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
-import com.hp.backend.repository.SessionRepository;
-import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Booking.BookingListAdminService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,12 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class BookingListAdminServiceImpl implements BookingListAdminService {
 
    private final BookingRepository bookingRepository;
-
-   private final TimeRepository timeRepository;
-
-   private final AccountRepository accountRepository;
-
-   private final SessionRepository sessionRepository;
 
    private final BookingMapper bookingMapper;
 

@@ -14,7 +14,6 @@ import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
-import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 
@@ -36,7 +35,7 @@ public interface AccountService {
 
     public void deleteById(int id) throws CustomBadRequestException;
 
-    public void updateMenteeProfile(MenteeDTODetailUpdateRequest mentee, int account_id)
+    public void updateMenteeProfile(MentorDTODetailUpdateRequest mentee, int account_id)
             throws CustomBadRequestException;
 
     public void updateMentorProfile(MentorDTODetailUpdateRequest mentor, int account_id)
@@ -54,4 +53,6 @@ public interface AccountService {
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id);
 
     public String getAccountName(int receiver_id) throws CustomBadRequestException;
+
+    public FindMentorResponseDTO findMentorProfile(int mentor_id, int account_id) throws CustomBadRequestException;
 }

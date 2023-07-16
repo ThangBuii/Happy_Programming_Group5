@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.CustomError;
-import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.model.Skills.dto.SkillsRequestDTO;
 import com.hp.backend.model.Skills.mapper.SkillsMapper;
@@ -49,7 +48,7 @@ public class SkillsServiceImpl implements SkillsService {
             skillsRepository.deleteById(id);
         } else {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Skills not exist").build());
+                    CustomError.builder().code("400").message("Don't have skill with id: " + id).build());
         }
     }
 
@@ -58,7 +57,7 @@ public class SkillsServiceImpl implements SkillsService {
         Skills skills = skillsRepository.findById(id).get();
         if (skills == null) {
             throw new CustomBadRequestException(CustomError.builder()
-                    .message("There are no session for the session id: " + id).code("404").build());
+                    .message("There are no skill for the skill id: " + id).code("404").build());
         }
         return skills;
     }
@@ -71,5 +70,10 @@ public class SkillsServiceImpl implements SkillsService {
     @Override
     public void addSkills(SkillsRequestDTO skillsRequestDTO) {
         skillsRepository.save(Skills.builder().skill_name(skillsRequestDTO.getSkill_name()).build());
+    }
+
+    @Override
+    public List<Skills> getAllSkills() {
+        return skillsRepository.findAll();
     }
 }

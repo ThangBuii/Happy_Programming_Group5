@@ -1,20 +1,18 @@
 package com.hp.backend.entity;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+@Data
 @Setter
 @Getter
 @NoArgsConstructor
@@ -27,11 +25,12 @@ public class System_Revenue {
     @Column(name = "revenue_id")
     private int revenue_id;
 
+    
     @Column(name = "receipt_id")
     private int receipt_id;
 
     @Column(name = "amount")
-    private float amount;
+    private double amount;
 
- 
+
 }

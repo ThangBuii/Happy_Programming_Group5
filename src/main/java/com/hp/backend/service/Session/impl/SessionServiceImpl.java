@@ -6,9 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Account;
-import com.hp.backend.entity.Booking;
 import com.hp.backend.entity.Session;
-import com.hp.backend.entity.Times;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
@@ -17,7 +15,9 @@ import com.hp.backend.model.Session.dto.MentorSessionDTO;
 import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Session.dto.ViewSessionDTO;
 import com.hp.backend.model.Session.mapper.SessionMapper;
+import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.SessionRepository;
+import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Session.SessionService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,10 @@ public class SessionServiceImpl implements SessionService {
     private final SessionMapper sessionMapper;
 
     private final SessionRepository sessionRepository;
+
+    private final EmailService emailService;
+
+    private final AccountRepository accountRepository;
 
     @Override
     public ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException {
@@ -76,10 +80,20 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void addSession(AddSessionDTO addSessionDTO, int id) {
+
+
         sessionRepository.save(Session.builder().skill_id(addSessionDTO.getSkill_id())
                 .name(addSessionDTO.getSession_name()).duration(addSessionDTO.getDuration())
                 .description(addSessionDTO.getDescription()).price(addSessionDTO.getPrice()).status(0).mentor_id(id)
                 .build());
+    }
+
+    @Override
+    public void saveSesison(Session session) {
+        Account account = accountRepository.findById(session.getMentor_id()).get();
+        String status = session.getStatus() == 1 ? "accepted" : "rejected"; 
+        emailService.sendEmail(account.getEmail(), "Session Accepted", "Your session " + session.getName() + " has been " + status);
+        sessionRepository.save(session);
     }
 
 }

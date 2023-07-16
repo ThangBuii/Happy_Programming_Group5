@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +38,11 @@ public class FeedbackController {
         return feedbackService.getFeedbacks();
     }
 
+    @GetMapping("admin/feedback/{id}")
+    public FeedbackListAdminResponseDTO getFeedbackByID(@PathVariable int id) throws CustomBadRequestException, CustomInternalServerException{
+        return feedbackService.getFeedbackByID(id);
+    }
+    
     @DeleteMapping("/feedback/{id}")
     public void deleteFeedback(@PathVariable int id) throws CustomBadRequestException{
         feedbackService.deleteFeedback(id);
@@ -59,16 +63,18 @@ public class FeedbackController {
     }
 
     @PostMapping("mentee/feedback")
-    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request){
+    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());
     }
 
-    @GetMapping("feedbacks/{id}")
+    @GetMapping("/public/feedbacks/{id}")
     public List<FeedbackListMentorResponseDTO> getFeedbacksFindMentor(@PathVariable int id) throws CustomInternalServerException{
         return feedbackService.getFeedbacksMentor(id);
     }
+
+    
 
     
 

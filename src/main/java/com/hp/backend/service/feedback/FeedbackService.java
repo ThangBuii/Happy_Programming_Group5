@@ -22,7 +22,9 @@ public interface FeedbackService {
 
     public List<FeedbackListMentorResponseDTO> getFeedbacksMentor(int account_id) throws CustomInternalServerException;
 
-    public void addFeedback(FeedbackAddRequestDTO feedback, int account_id);
+    public void addFeedback(FeedbackAddRequestDTO feedback, int account_id) throws CustomBadRequestException;
+
+    public FeedbackListAdminResponseDTO getFeedbackByID(int id) throws CustomBadRequestException, CustomInternalServerException;
 
     
 

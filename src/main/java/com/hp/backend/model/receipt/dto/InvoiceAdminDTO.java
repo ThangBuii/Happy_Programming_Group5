@@ -22,6 +22,8 @@ public class InvoiceAdminDTO {
     private String mentorUsername;
     private String mentorEmail;
     private String mentorAvatar;
+    private int booking_id;
+    private String payment_method;
     private String amount;
     private Date created_Date;
 }

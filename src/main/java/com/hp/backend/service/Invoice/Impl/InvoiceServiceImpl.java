@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hp.backend.service.Invoice.InvoiceService;
 import com.hp.backend.entity.Receipt;
+import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.receipt.dto.InvoiceAdminDTO;
 import com.hp.backend.model.receipt.dto.InvoiceDTO;
+import com.hp.backend.model.receipt.dto.ViewInvoiceDTO;
 import com.hp.backend.model.receipt.mapper.InvoiceMapper;
-import com.hp.backend.repository.AccountRepository;
-import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.ReceiptRepository;
+import com.hp.backend.service.Invoice.InvoiceService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
     private final ReceiptRepository receiptRepository;
-    private final BookingRepository bookingRepository;
-    private final AccountRepository accountRepository;
     private final InvoiceMapper invoiceMapper;
 
     @Override
@@ -74,5 +72,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceAdminDTO.add(invoiceDTO);
         }
         return invoiceAdminDTO;
+    }
+
+    @Override
+    public ViewInvoiceDTO findInvoiceById(int id) throws CustomBadRequestException {
+        Receipt invoice = receiptRepository.findById(id).get();
+        if (invoice == null) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .message("There are no invoice for the invoice id: " + id).code("404").build());
+        }
+        return invoiceMapper.toViewInvoiceDTO(invoice);
     }
 }

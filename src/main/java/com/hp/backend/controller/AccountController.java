@@ -26,7 +26,6 @@ import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
-import com.hp.backend.model.account.dto.MenteeSiteDTO.MenteeDTODetailUpdateRequest;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
@@ -42,13 +41,13 @@ public class AccountController {
     private final AccountService accountService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/login")
+    @PostMapping("/public/login")
     public Map<String, AccountDTOLoginResponse> login(
             @RequestBody Map<String, AccountDTOLoginRequest> accountLoginRequestMap) throws CustomBadRequestException {
         return accountService.authenticate(accountLoginRequestMap);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/public/register")
     public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap) throws CustomBadRequestException {
         return accountService.registerAccount(accountDTOCreateMap);
     }
@@ -64,12 +63,7 @@ public class AccountController {
         return accountService.getMentorList();
     }
 
-    @GetMapping("/admin/mentee/{id}")
-    public MenteeDTODetailResponse getMenteeByID(@PathVariable int id) throws CustomBadRequestException{
-        return accountService.findMenteeByID(id);
-    }
-
-    @GetMapping("/admin/mentor/{id}")
+    @GetMapping("/admin/men/{id}")
     public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException{
         return accountService.findMentorByID(id);
     }
@@ -87,14 +81,14 @@ public class AccountController {
     }
 
     @GetMapping("/mentee/profile")
-    public MenteeDTODetailResponse getMenteeProfile(HttpServletRequest request) throws CustomBadRequestException{
+    public MenteeDTODetailResponse getMenteeProfileLoggedIn(HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return accountService.findMenteeByID(tokenPayload.getAccount_id());
     }
 
     @PostMapping("/mentee/profile")
-    public void updateMenteeProfile(@RequestBody MenteeDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
+    public void updateMenteeProfile(@RequestBody MentorDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         accountService.updateMenteeProfile(mentee,tokenPayload.getAccount_id());
@@ -114,16 +108,27 @@ public class AccountController {
         accountService.changePassword(password,tokenPayload.getAccount_id());
     }
 
-    @GetMapping("/findMentor")
+    @GetMapping("/public/findMentor")
     public List<FindMentorResponseDTO> getListFindMentor(HttpServletRequest request,@RequestParam int skill_id){
         String token = jwtTokenUtil.getRequestToken(request);
-        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        return accountService.getListFindMentor(tokenPayload.getAccount_id(), skill_id);
+        int account_id = 0;
+        if(!token.isEmpty()){
+            TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+            account_id = tokenPayload.getAccount_id();
+        }
+        
+        return accountService.getListFindMentor(account_id, skill_id);
     }
     
-     @GetMapping("/profile/{id}")
-    public MentorDTODetailResponse getFindMentorProfile(@PathVariable int id) throws CustomBadRequestException{
-        return accountService.findMentorByID(id);
+     @GetMapping("/public/profile/{id}")
+    public FindMentorResponseDTO getFindMentorProfile(@PathVariable int id,HttpServletRequest request) throws CustomBadRequestException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        int account_id = 0;
+        if(!token.isEmpty()){
+            TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+            account_id = tokenPayload.getAccount_id();
+        }
+        return accountService.findMentorProfile(id,account_id);
     }
 
 }
