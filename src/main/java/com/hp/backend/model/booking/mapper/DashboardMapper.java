@@ -38,7 +38,7 @@ public class DashboardMapper {
         Account account = accountRepository.findById(session.getMentor_id()).get();
         // Lấy scheduleTime từ start_time và end_time
         return DashboardMenteeDTO.builder().username(account.getUsername()).email(account.getEmail())
-                .created_Date(booking.getCreated_date()).status(booking.getStatus())
+                .created_Date(booking.getCreated_date()).status(booking.getStatus()).bookingID(id)
                 .build();
     }
 
