@@ -6,17 +6,21 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { ReactComponent as AddressIcon } from "../../assets/address.svg";
 import { ReactComponent as RatingIcon } from "../../assets/rating.svg";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import {
+  Alert,
   Button,
   FormControlLabel,
   Radio,
   RadioGroup,
   Rating,
+  Slide,
+  Snackbar,
 } from "@mui/material";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const MentorProfile = () => {
   const location = useLocation();
@@ -28,6 +32,10 @@ const MentorProfile = () => {
   const [ratingList, setRatingList] = useState([]);
   const [sessionList, setSessionList] = useState([]);
   const [sessionIdChoosed, setSessionIdChoosed] = useState("");
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleRadioChange = (event) => {
     setSessionIdChoosed(event.target.value);
@@ -51,6 +59,10 @@ const MentorProfile = () => {
   };
 
   useEffect(() => {
+    fetch();
+  }, [params.id]);
+  
+  const fetch = () => {
     seIsLoading(true);
     Promise.all([
       request("GET",`/api/public/profile/${params.id}`), // find mentor by mentorId
@@ -71,8 +83,47 @@ const MentorProfile = () => {
       .finally(() => {
         seIsLoading(false);
       });
-  }, [params.id]);
-  console.log(mentorInfo)
+  };
+
+  const handleBookmarkClick = (id, type) => {
+    // Send delete request to the backend
+
+    if (role === -1 || role === 0 || role === 1) {
+      setSnackbarOpen(true);
+      setErrorMessage("Log in as a Mentee to add this Mentor to your favorite list");
+    } else {
+      if (type === 0) {
+        request("DELETE", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      } else {
+        request("POST", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      }
+    }
+
+  };
 
   return (
     <div className={styles.layoutWrapper}>
@@ -105,11 +156,11 @@ const MentorProfile = () => {
                 <div className={styles.isBookMark}>
                   {mentorInfo.favorite ? (
                     <span>
-                    <BookmarkIcon/>
+                    <BookmarkIcon onClick={() => handleBookmarkClick(mentorInfo.mentor_id, 0)}/>
                     </span>
                   ) : (
                     <span>
-                    <BookmarkBorderIcon/>
+                    <BookmarkBorderIcon onClick={() => handleBookmarkClick(mentorInfo.mentor_id, 1)}/>
                     </span>
                   )}
                 </div>
@@ -248,6 +299,22 @@ const MentorProfile = () => {
           </div>
         </>
       )}
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

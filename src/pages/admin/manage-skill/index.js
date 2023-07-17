@@ -245,7 +245,7 @@ const ManageSkill = () => {
       onCloseShowDialog={handleCloseShowDialog}
       showDialogTitle={
         <div className={styles.titleWrapper}>
-          <h4>Update Report</h4>
+          <h4>Add Skill</h4>
         </div>
       }
       showDialogContent={

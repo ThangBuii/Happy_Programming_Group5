@@ -10,104 +10,58 @@ import {
 } from "@mui/material";
 import { Home, NavigateNext, Send } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./index.module.css";
+import { request } from "../../axios_helper";
+import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
-const fakeSessionsDetail = {
-  sessionId: "session1",
-  sessionName: "Lam ngheo khong kho",
-  mentor: {
-    id: "user1",
-    name: "A Minh Quan",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu5iuH9GH49VUAv0qvlrKiFRnsgEC6maRA9g&usqp=CAU",
-  },
-  price: 79,
-  duration: 30,
-  timeList: [
-    {
-      day: "Mon",
-      spots: [
-        { slotFrom: "8:30", slotTo: "11:00" },
-        { slotFrom: "12:30", slotTo: "13:00" },
-      ],
-    },
-    {
-      day: "Tue",
-      spots: [
-        { slotFrom: "9:00", slotTo: "10:00" },
-        { slotFrom: "14:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Wed",
-      spots: [
-        { slotFrom: "11:00", slotTo: "12:00" },
-        { slotFrom: "13:00", slotTo: "14:00" },
-        { slotFrom: "15:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Thu",
-      spots: [
-        { slotFrom: "10:00", slotTo: "11:00" },
-        { slotFrom: "12:00", slotTo: "13:00" },
-        { slotFrom: "14:00", slotTo: "15:00" },
-        { slotFrom: "16:00", slotTo: "17:00" },
-      ],
-    },
-    {
-      day: "Fri",
-      spots: [{ slotFrom: "9:00", slotTo: "12:00" }],
-    },
-    {
-      day: "Sat",
-      spots: [
-        { slotFrom: "9:00", slotTo: "10:00" },
-        { slotFrom: "11:00", slotTo: "12:00" },
-        { slotFrom: "13:00", slotTo: "14:00" },
-        { slotFrom: "15:00", slotTo: "16:00" },
-      ],
-    },
-    {
-      day: "Sun",
-      spots: [],
-    },
-  ],
-};
 const Checkout = () => {
-  const [sessions, setSessions] = useState({});
-  const [dayChoosed, setDayChoosed] = useState("Mon");
+  const [sessions, setSessions] = useState([]);
+  const [sessionDetail, setSessionDetail] = useState();
+  const [dayChoosed, setDayChoosed] = useState();
   const [isLoading, seIsLoading] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [chosenTime, setChosenTime] = useState(); //
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
   const { listPrevPath } = location.state;
-
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
+  const [errorMessage, setErrorMessage] = useState("");
   console.log(params, location);
 
   useEffect(() => {
-    fetch(`http://localhost:9999/sessions/${params.id}/${params.sessionId}`) // lay theo sessionId thoi nhi???
-      .then((resp) => resp.json())
-      .then((data) => {
-        setSessions({ ...data });
+    Promise.all([
+      request("GET", `/api/public/times/${params.sessionId}`),
+      request("GET", `/api/public/sessions/${params.sessionId}`)
+    ])
+      .then(([data1, data2]) => {
+        console.log(data1, data2);
+        setSessions([...data1.data]);
+        // Handle the data from the second request (data2) as needed
+        setSessionDetail(data2.data);
       })
       .catch((err) => {
         console.log(err);
-        setSessions({ ...fakeSessionsDetail });
       })
       .finally(() => {
         seIsLoading(false);
       });
   }, []);
+  console.log("session >>>>", sessions)
 
   const getSpots = (sessionsTmp, dayChoosedTmp) => {
-    if (!sessionsTmp.timeList || sessionsTmp.timeList.length === 0) return [];
-    const result = sessionsTmp.timeList.find(
-      (item) => item.day === dayChoosedTmp
-    ).spots;
-    return result || [];
+    const selectedSession = sessionsTmp.find(
+      (item) => item.schedule_date === dayChoosedTmp
+    );
+
+    if (!selectedSession || !selectedSession.times || selectedSession.times.length === 0) {
+      return [];
+    }
+
+    return selectedSession.times;
   };
 
   return (
@@ -141,25 +95,37 @@ const Checkout = () => {
             <div className="row">
               <div className="col-12 col-lg-6">
                 <div className={styles.timeListWrapper}>
-                  {sessions.timeList.map((item) => (
-                    <div
-                      key={item.day}
-                      className={`${styles.timeItemWrapper} ${
-                        item.day === dayChoosed ? styles.timeItemActive : ""
-                      }`}
-                      onClick={() => setDayChoosed(item.day)}
-                    >
-                      <span>{item.day}</span>
-                      <span>{item.spots.length} spots</span>
-                    </div>
-                  ))}
+                  {sessions.map((item) => {
+                    const date = new Date(item.schedule_date);
+                    const formattedDate = date.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    });
+
+                    return (
+                      <div
+                        key={item.schedule_date}
+                        className={`${styles.timeItemWrapper} ${item.schedule_date === dayChoosed ? styles.timeItemActive : ""
+                          }`}
+                        onClick={() => setDayChoosed(item.schedule_date)}
+                      >
+                        <span>{formattedDate}</span>
+                        <span>{item.times.length} spots</span>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className={styles.spotListWrapper}>
-                  {getSpots(sessions, dayChoosed) &&
-                  getSpots(sessions, dayChoosed).length > 0 ? (
+                  {getSpots(sessions, dayChoosed) && getSpots(sessions, dayChoosed).length > 0 ? (
                     getSpots(sessions, dayChoosed).map((item, index) => (
-                      <div key={index} className={styles.spotItem}>
-                        {item.slotFrom} - {item.slotTo}
+                      <div
+                        key={index}
+                        className={`${styles.timeItemWrapper} ${item.time_id === chosenTime ? styles.timeItemActive : ""
+                          }`}
+                        onClick={() => setChosenTime(item.time_id)}
+                      >
+                        {item.start_time}
                       </div>
                     ))
                   ) : (
@@ -175,44 +141,28 @@ const Checkout = () => {
                 <div className={styles.checkoutWrapper}>
                   <div className={styles.topWrapper}>
                     <div className={styles.imageWrapper}>
-                      <img src={sessions.mentor.imageUrl} alt="avatar" />
+                      <img src={sessionDetail.avatar
+                        ? `data:image/jpeg;base64, ${sessionDetail.avatar}`
+                        : AvatarDefault} alt="avatar" />
                     </div>
                     <div className={styles.sessionName}>
-                      <span>{sessions.sessionName}</span>
-                      <span>Carried out by {sessions.mentor.name}</span>
+                      <span>{sessionDetail.session_name}</span>
+                      <span>Carried out by {sessionDetail.mentor_name}</span>
                     </div>
                   </div>
 
                   <div className={styles.checkoutDes}>
                     <div className={styles.checkoutItem}>
                       <span>Price per Session</span>
-                      <span>${sessions.price}</span>
+                      <span>${sessionDetail.price}</span>
                     </div>
                     <div className={styles.checkoutItem}>
                       <span>Duration</span>
-                      <span>{sessions.duration} minutes</span>
-                    </div>
-                    <div className={styles.checkoutItem}>
-                      <span>Discount Code</span>
-                      <TextField
-                        sx={{
-                          "& input": {
-                            padding: "8px 12px",
-                            fontSize: "14px",
-                          },
-                          "& input:focus": {
-                            width: "auto",
-                            margin: "0",
-                            borderBottom: "0px solid",
-                          },
-                        }}
-                        variant="outlined"
-                        placeholder="Discount Code"
-                      />
+                      <span>{sessionDetail.duration} minutes</span>
                     </div>
                     <div className={styles.checkoutMain}>
                       <span>Total</span>
-                      <span>${sessions.price}</span>
+                      <span>${sessionDetail.price}</span>
                     </div>
                   </div>
                   <div className={styles.paymentWidget}>
@@ -241,7 +191,37 @@ const Checkout = () => {
                       variant="contained"
                       endIcon={<Send />}
                       fullWidth
-                      onClick={() => setSnackbarOpen(true)}
+                      onClick={() => {
+                        const data1 = {
+                          time_id: chosenTime
+                        }
+                        if(role === -1){
+                          setSnackbarOpen(true);
+                          setErrorMessage("Please login in order to book this session!")
+                          return
+                        }else if(role === 0 || role === 1){
+                          setSnackbarOpen(true);
+                          setErrorMessage("Please login as mentee in order to book this session!")
+                          return
+                        }
+                        Promise.all([
+                          request("POST", "/api/mentee/booking", data1),
+                          request("POST", "/api/second-endpoint"),
+                        ])
+                          .then(([response1, response2]) => {
+                            // Handle the responses from the API requests
+
+                            // Set any necessary state or perform additional actions
+                          })
+                          .catch((error) => {
+                            // Handle errors from either API request
+                            console.error("Error:", error);
+                          })
+                          .finally(() => {
+                            setSnackbarOpen(true);
+                            setErrorMessage("Payment Success!");
+                          });
+                      }}
                     >
                       Confirm and Pay
                     </Button>
@@ -250,7 +230,7 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-        </Container>
+        </Container> 
       )}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -258,7 +238,12 @@ const Checkout = () => {
         autoHideDuration={2000}
         onClose={() => {
           setSnackbarOpen(false);
-          navigate("/");
+          if(role === -1 || role === 0 || role === 1) {
+            navigate("/login");
+          }else{
+            navigate("/");
+          }
+          
         }}
         style={{ marginTop: "40px" }}
         TransitionComponent={({ children }) => (
@@ -267,8 +252,8 @@ const Checkout = () => {
           </Slide>
         )}
       >
-        <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-          Payment Successfull!
+        <Alert  severity={role === 2 ? "success" : "error"} variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
         </Alert>
       </Snackbar>
     </div>

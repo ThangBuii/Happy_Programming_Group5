@@ -23,9 +23,9 @@ const Dashboard = () => {
   const location = useLocation();
   const [dashboards, setDashboard] = useState([]);
 
-  useEffect(() => {
+  const fetchData = () => {
     if (role === -1) return;
-    const url = role === 1 ? "/api/mentor/dashboard" : "/api/mentee/dashboard"
+    const url = role === 1 ? "/api/mentor/dashboard" : "/api/mentee/dashboard";
     request("GET", url)
       .then((response) => {
         setDashboard(response.data);
@@ -33,10 +33,38 @@ const Dashboard = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+  useEffect(() => {
+    fetchData();
   }, [role]);
 
   const handleClickUpdate = (id, type) => {
     console.log(id, type);
+
+    if (type === 0) {
+      request("DELETE", `/api/mentee/booking/${id}`)
+        .then((response) => {
+          if(response.status === 200) {
+            fetchData();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      const data = {
+        status: type
+      }
+      request("PUT", `/api/mentor/booking/${id}`,data)
+        .then((response) => {
+          if(response.status === 200) {
+            fetchData();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -133,38 +161,36 @@ const Dashboard = () => {
                             <EyeFill />
                             <span>View</span>
                           </Link>
-                          {item.status === 0 && <><Button
-                            variant="contained"
-                            color="warning"
-                            onClick={() =>
-                              handleClickUpdate(item.bookingID, "DELETE")
-                            }
-                          >
-                            Delete
-                          </Button>
-                            {role === 1 && (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() =>
-                                    handleClickUpdate(item.bookingID, "ACCEPT")
-                                  }
-                                >
-                                  Accept
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  color="warning"
-                                  onClick={() =>
-                                    handleClickUpdate(item.bookingID, "REJECT")
-                                  }
-                                >
-                                  Reject
-                                </Button>
-                              </>
-                            )}
-                          </>}
+                          {item.status === 0 && role === 2 && (
+                            <>
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                onClick={() => handleClickUpdate(item.bookingID, 0)}
+                              >
+                                Delete
+                              </Button>
+                            </>
+                          )}
+
+                          {item.status === 0 && role === 1 && (
+                            <>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleClickUpdate(item.bookingID, 1)}
+                              >
+                                Accept
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                onClick={() => handleClickUpdate(item.bookingID, 2)}
+                              >
+                                Reject
+                              </Button>
+                            </>
+                          )}
 
                         </div>
                       </TableCell>

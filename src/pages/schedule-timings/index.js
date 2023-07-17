@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Button,
   CircularProgress,
   Dialog,
   DialogContent,
   IconButton,
   Skeleton,
+  Slide,
+  Snackbar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MainLayout from "../../component/main-layout";
@@ -14,26 +17,6 @@ import styles from "./index.module.css";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { request } from "../../axios_helper";
-
-const fakeSessionList = [
-  {
-    sessionId: "session1",
-    sessionName: "It vua moi nghe",
-  },
-  {
-    sessionId: "session2",
-    sessionName: "Bi kip 10 diem dai hoc",
-  },
-  {
-    sessionId: "session3",
-    sessionName: "Toi la ai",
-  },
-];
-
-const fakeSlotList = [
-  { slotId: "slot1", slotFrom: "8:30", slotTo: "11:00" },
-  { slotId: "slot2", slotFrom: "12:30", slotTo: "13:00" },
-];
 
 const ScheduleTimings = () => {
   const [sessions, setSessions] = useState([]);
@@ -45,63 +28,72 @@ const ScheduleTimings = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSaveChange, setIsSaveChange] = useState(false);
   const dialogRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   //call API
   useEffect(() => {
     setIsLoading(true);
-    fetch(`http://localhost:9999/my-session`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setSessions([...data]);
+    request("GET", "/api/mentor/session")
+      .then((response) => {
+        setSessions(response.data);
       })
       .catch((err) => {
         console.log(err);
-        setSessions([...fakeSessionList]);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
-  useEffect(() => {
-    // console.log(new Date(dayChoosed.$d).toLocaleDateString("en-US").toString());
-    if (sessionIdChoosed === "" || dayChoosed === "") return;
+  const fetchData = (sessionIdChoosed, dayChoosed) => {
     seIsDetailLoading(true);
-    request("POST", "http://localhost:9999/my-slot", {
-      sessionId: sessionIdChoosed,
-      dayChoosed: new Date(dayChoosed.$d)
-        .toLocaleDateString("en-US")
-        .toString(),
-    })
-      .then((resp) => resp.json())
+    const startDate = new Date(dayChoosed.$d);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, '0');
+    const day = String(startDate.getDate()).padStart(2, '0');
+  
+    const formattedDate = `${year}-${month}-${day}`;
+    const sessionId = parseInt(sessionIdChoosed, 10);
+    const data = {
+      session_id: sessionId,
+      start_date: formattedDate
+    };
+    request("POST", "/api/mentor/times", data)
       .then((data) => {
-        setSlotList([...data]);
+        setSlotList(data.data);
       })
       .catch((err) => {
         console.log(err);
-        setSlotList([...fakeSlotList]);
       })
       .finally(() => {
         seIsDetailLoading(false);
       });
-  }, [dayChoosed, sessionIdChoosed]);
+  };
 
   const handleDeleteSlot = async (sessionId, slotId) => {
     console.log(">>check send data", sessionId, slotId);
 
-    await fetch(`http://localhost:9999/...session/..daychoosed + deleteId`)
-      .then((resp) => resp.json())
-      .then((data) => {
+    request("DELETE", `/api/mentor/time/${slotId}`)
+      .then((response) => {
         // success
-        if (data.status === 0) {
-          setSlotList((pre) =>
-            [...pre].filter((item) => item.slotId !== slotId)
-          );
+        if (response.status === 200) {
+          fetchData(sessionIdChoosed, dayChoosed);
+          handleDialogClose();
         }
       })
-      .catch((err) => {
-        console.log(err);
-        setSlotList((pre) => [...pre].filter((item) => item.slotId !== slotId));
+      .catch((error) => {
+        setSnackbarOpen(true);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.errors
+      ) {
+        setErrorMessage(error.response.data.errors.message);
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
+        console.log(error);
       });
   };
 
@@ -112,32 +104,56 @@ const ScheduleTimings = () => {
   const handleSaveChanges = async () => {
     // check xem da chon session chua
     if (!sessionIdChoosed) return;
+    const startDate = new Date(dayChoosed.$d);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, '0');
+    const day = String(startDate.getDate()).padStart(2, '0');
 
+    const formattedDate = `${year}-${month}-${day}`;
+    const sessionId = parseInt(sessionIdChoosed, 10);
     const slotFrom =
       dialogRef.current.querySelector("input[name='start']")?.value || "";
     const slotTo =
       dialogRef.current.querySelector("input[name='end']")?.value || "";
+    const data = {
+      date: formattedDate,
+      start_time: slotFrom,
+      end_time: slotTo,
+      session_id: sessionId,
+    };
+
 
     // validate
 
     // call api  => add vao thi tra ra status + id, (id de ti con delete)
-    setIsSaveChange(true);
-    await fetch(`http://localhost:9999/...session/..daychoosed + data post`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        // success
-        if (data.status === 0) {
-          setSlotList((pre) => [...pre, { slotId: data.id, slotFrom, slotTo }]);
-          handleDialogClose();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsSaveChange(false);
-      });
+    request("POST", "/api/mentor/time", data)
+    .then((response) => {
+      if (response.status === 200) {
+        fetchData(sessionIdChoosed, dayChoosed);
+        handleDialogClose();
+      }
+    })
+    .catch((error) => {
+      setSnackbarOpen(true);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.errors
+      ) {
+        setErrorMessage(error.response.data.errors.message);
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
+      console.log(error);
+    })
+    .finally(() => {
+      setIsSaveChange(false);
+    });
   };
+  useEffect(() => {
+    if (sessionIdChoosed === "" || dayChoosed === "") return;
+    fetchData(sessionIdChoosed, dayChoosed);
+  }, [dayChoosed, sessionIdChoosed]);
 
   return (
     <>
@@ -155,7 +171,7 @@ const ScheduleTimings = () => {
                 <div className="row">
                   <div className="col-lg-4">
                     <div className="form-group">
-                      <label>Timing Slot Duration</label>
+                      <label>Choose your session</label>
                       <select
                         className="select form-control"
                         value={sessionIdChoosed}
@@ -163,8 +179,8 @@ const ScheduleTimings = () => {
                       >
                         <option value={""}>Select</option>
                         {sessions.map((item) => (
-                          <option key={item.sessionId} value={item.sessionId}>
-                            {item.sessionName}
+                          <option key={item.session_id} value={item.session_id}>
+                            {item.session_name}
                           </option>
                         ))}
                       </select>
@@ -219,17 +235,17 @@ const ScheduleTimings = () => {
                           ) : slotList.length > 0 ? (
                             slotList.map((item) => (
                               <div
-                                key={item.slotId}
+                                key={item.time_id}
                                 className={styles.slotItem}
                               >
-                                {item.slotFrom} - {item.slotTo}{" "}
+                                {item.start_time}{" "}
                                 <IconButton
                                   color="secondary"
                                   className={styles.customDeleteSkill}
                                   onClick={() =>
                                     handleDeleteSlot(
                                       sessionIdChoosed,
-                                      item.slotId
+                                      item.time_id
                                     )
                                   }
                                 >
@@ -247,6 +263,22 @@ const ScheduleTimings = () => {
                 </div>
               </>
             )}
+            <Snackbar
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={snackbarOpen}
+              autoHideDuration={2000}
+              onClose={() => setSnackbarOpen(false)}
+              style={{ marginTop: "40px" }}
+              TransitionComponent={({ children }) => (
+                <Slide direction="left" in={snackbarOpen}>
+                  {children}
+                </Slide>
+              )}
+            >
+              <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+                {errorMessage}
+              </Alert>
+            </Snackbar>
           </div>
         }
       />

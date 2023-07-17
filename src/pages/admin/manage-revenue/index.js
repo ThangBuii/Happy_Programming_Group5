@@ -29,12 +29,13 @@ const ManageRevenue = () => {
       request("GET", "/api/admin/revenue"),
     ])
       .then(([data1, data2]) => {
-        const rowsWithIds = data1.map((row) => ({
+        console.log(data1, data2);
+        const rowsWithIds = data1.data.map((row) => ({
           id: row.revenue_id,
           ...row,
         }));
         setRevenueRow(rowsWithIds);
-        setTotalRevenue(data2);
+        setTotalRevenue(data2.data);
       })
       .catch((err) => {
         console.log(err);

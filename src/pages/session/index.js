@@ -46,7 +46,7 @@ const Session = () => {
   const [filterSearch, setFilterSearch] = useState("");
   const [addSession, setAddSession] = useState({
     skills: {},
-    session_Name: "",
+    session_name: "",
     price: 0,
     description: "",
     duration: 0,
@@ -57,13 +57,15 @@ const Session = () => {
   useEffect(() => {
     if (role !== -1 && role !== 1) navigate("/");
   }, []);
-
   useEffect(() => {
+    fetchData(); // Call the fetchData function
+  }, []);
+
+  const fetchData = () => {
     setIsLoading(true);
-    // if (role === -1) return;
     Promise.all([
       request("GET", "/api/mentor/session"),
-      request("GET", "/api/public/men/skills"),
+      request("GET", "/api/mentor/skill"),
     ])
       .then((responses) => {
         return Promise.all(responses.map((response) => response.data));
@@ -80,7 +82,7 @@ const Session = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  };
 
   useEffect(() => {
     if (originFilterListSkill.length > 0) {
@@ -134,6 +136,24 @@ const Session = () => {
 
   const handleSubmitAddSessions = () => {
     console.log("Submit add sessions >>: ", addSession);
+    const data ={
+      skill_id : addSession.skills.skill_id,
+      session_name: addSession.session_name,
+      duration: addSession.duration,
+      price: addSession.price,
+      description: addSession.description
+    }
+    request("POST", "/api/mentor/session", data)
+    .then((response) => {
+      if (response.status === 200) {
+        fetchData(); // Call the fetchData function
+        handleCloseDialog();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   };
 
   return (
@@ -297,7 +317,7 @@ const Session = () => {
             }}
             value={addSession.session_Name}
             onChange={(e) =>
-              setAddSession((pre) => ({ ...pre, session_Name: e.target.value }))
+              setAddSession((pre) => ({ ...pre, session_name: e.target.value }))
             }
           />
           <TextField

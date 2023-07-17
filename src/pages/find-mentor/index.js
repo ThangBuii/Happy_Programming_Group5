@@ -1,8 +1,8 @@
-import { Container, Rating } from "@mui/material";
+import { Alert, Container, Rating, Slide, Snackbar } from "@mui/material";
 import CustomInputFilter from "../../component/custom-input-filter";
 import CustomButton from "../../component/custom-button";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -11,6 +11,7 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import styles from "./index.module.css";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const handleBuildFilterSkills = (skillList) => {
   return skillList.map((skill) => ({
@@ -22,10 +23,15 @@ const handleBuildFilterSkills = (skillList) => {
 
 const FindMentor = () => {
   const [mentorList, setMentorList] = useState([]);
-  const [isLoading, seIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
+  const [skillIdList, setSkillIdList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,28 +47,37 @@ const FindMentor = () => {
   };
 
   useEffect(() => {
-    seIsLoading(true);
-    Promise.all([
-      request("GET",`/api/public/findMentor?skill_id=0`),
-      request("GET",`/api/public/men/skills`),
-    ])
-      .then(([data1, data2]) => {
-        setMentorList(data1.data);
-        setOriginFilterListSkill(handleBuildFilterSkills(data2.data));
+    fetch();
+  }, [skillIdList]);
+
+  const fetch =() => {
+    const fetchData = async () => {
+      if (skillIdList.length === 0) {
+        return request("GET", "/api/public/findMentor?skill_id=0");
+      } else {
+        const queryParams = skillIdList.map((id) => `skill_id=${id}`).join("&");
+        return request("GET", `/api/public/findMentor?${queryParams}`);
+      }
+    };
+
+    fetchData()
+      .then((data) => {
+        setMentorList(data.data);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        seIsLoading(false);
+        setIsLoading(false);
       });
-  }, []);
+  };
 
   useEffect(() => {
-    const skillIdList = filterListSkill
+    const filteredSkillIds = filterListSkill
       .filter((skill) => skill.isChoosed === true)
       .map((item) => item.skillId);
-    console.log(">>check SbumitSkill id>> ", skillIdList, filterListSkill);
+    console.log(">>check SubmitSkill id>> ", filteredSkillIds);
+    setSkillIdList(filteredSkillIds);
   }, [filterListSkill]);
 
   useEffect(() => {
@@ -73,6 +88,22 @@ const FindMentor = () => {
       setFilterListSkill(newFilterListSkill);
     }
   }, [originFilterListSkill, filterSearch]);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await request("GET", "/api/public/men/skills");
+        setOriginFilterListSkill(handleBuildFilterSkills(response.data));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSkills()
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleClickFilterItem = (filterName) => {
     const newFilterSkill = originFilterListSkill.map((item) => {
@@ -87,6 +118,45 @@ const FindMentor = () => {
 
     setOriginFilterListSkill(newFilterSkill);
   };
+  const handleBookmarkClick = (id, type) => {
+    // Send delete request to the backend
+
+    if (role === -1 || role === 0 || role === 1) {
+      setSnackbarOpen(true);
+      setErrorMessage("Log in as a Mentee to add this Mentor to your favorite list");
+    } else {
+      if (type === 0) {
+        request("DELETE", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      } else {
+        request("POST", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      }
+    }
+
+  };
 
   return (
     <div className={styles.layoutWrapper}>
@@ -97,7 +167,12 @@ const FindMentor = () => {
         }}
       >
         <div className={styles.inputWrapper}>
-          <input type="text" placeholder="Search by skill or job title" />
+          <input
+            type="text"
+            placeholder="Search by skill or job title"
+            value={filterSearch}
+            onChange={(e) => setFilterSearch(e.target.value)}
+          />
           <SearchIcon />
         </div>
         <div className={styles.skillWrapper}>
@@ -155,7 +230,11 @@ const FindMentor = () => {
                   className={styles.mentorItemWrapper}
                 >
                   <img
-                    src={mentor.avatar ? `data:image/jpeg;base64, ${mentor.avatar}` : AvatarDefault}
+                    src={
+                      mentor.avatar
+                        ? `data:image/jpeg;base64, ${mentor.avatar}`
+                        : AvatarDefault
+                    }
                     alt="avatar"
                     onClick={() => handleClickViewMentor(mentor.mentor_id)}
                   />
@@ -167,13 +246,10 @@ const FindMentor = () => {
                       {mentor.username}
                     </h2>
                     <div className={styles.archieveList}>
-                      
-                        <div className={styles.archieveItem}>
-                          {mentor.short_description}
-                        </div>
-                      
+                      <div className={styles.archieveItem}>
+                        {mentor.short_description}
+                      </div>
                     </div>
-            
                     <div className={styles.description}>
                       {mentor.description}
                     </div>
@@ -185,14 +261,14 @@ const FindMentor = () => {
                       ))}
                     </div>
                     <CustomButton
-                      content={"View Profille"}
+                      content={"View Profile"}
                       onClick={() => handleClickViewMentor(mentor.mentor_id)}
                     />
                     <div className={styles.bookMark}>
                       {mentor.favorite ? (
-                        <BookmarkIcon />
+                        <BookmarkIcon onClick={() => handleBookmarkClick(mentor.mentor_id, 0)} />
                       ) : (
-                        <BookmarkBorderIcon />
+                        <BookmarkBorderIcon onClick={() => handleBookmarkClick(mentor.mentor_id, 1)} />
                       )}
                     </div>
                   </div>
@@ -208,6 +284,22 @@ const FindMentor = () => {
           </>
         )}
       </Container>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

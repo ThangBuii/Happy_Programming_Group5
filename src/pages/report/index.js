@@ -112,7 +112,7 @@ const Report = () => {
                         {item.status === 0
                           ? "Pending"
                           : item.status === 1
-                          ? "Accepted"
+                          ? "Reviewed"
                           : item.status === 2
                           ? "Rejected"
                           : ""}

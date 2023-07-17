@@ -27,6 +27,10 @@ const ManageSession = () => {
   const [sessionRow, setSessionRow] = useState([]);
 
   useEffect(() => {
+    fetch();
+  }, []);
+
+  const fetch = () => {
     request("GET", "/api/admin/session")
       .then((response) => {
         const rowsWithIds = response.data.map((row) => ({
@@ -41,7 +45,7 @@ const ManageSession = () => {
       .finally(() => {
         seIsLoading(false);
       });
-  }, []);
+  };
 
   const handleClickAccept = async (id) => {
     await processStatus(id, 1);
@@ -60,7 +64,7 @@ const ManageSession = () => {
     request("PUT", `/api/admin/session/${id}`,requestBody)
       .then((response) => {
         if (response.status === 200)
-          navigate("/admin/session");
+          fetch()
       })
       .catch((err) => {
         console.log(err);
