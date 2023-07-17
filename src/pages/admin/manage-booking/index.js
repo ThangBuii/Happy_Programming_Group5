@@ -67,7 +67,7 @@ const ManageBooking = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.avatarMentor || AvatarDefault} alt="avatar" />
+            <img src={row.avatarMentor ? `data:image/jpeg;base64, ${row.avatarMentor}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.mentorUsername}</h4>
             </div>
@@ -91,7 +91,7 @@ const ManageBooking = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.avatarMentor || AvatarDefault} alt="avatar" />
+            <img src={row.avatarMentee ? `data:image/jpeg;base64, ${row.avatarMentee}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.menteeUsername}</h4>
             </div>

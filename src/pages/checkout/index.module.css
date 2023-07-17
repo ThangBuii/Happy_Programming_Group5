@@ -81,7 +81,24 @@
   gap: 10px;
   margin-top: 8px;
 }
+.activeSpot {
+  padding: 12px 20px;
+  background-color: #000;
+  border: 1px solid rgb(209, 213, 219);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  
+  /* Add any other styles to indicate the clicked spot */
+}
+.spotItem:hover {
+  background-color: rgb(224, 237, 254);
+}
 
+.spotItemActive {
+  background-color: rgb(224, 237, 254);
+}
 .spotItem {
   padding: 12px 20px;
   background-color: #fff;
@@ -89,6 +106,7 @@
   font-size: 16px;
   font-weight: 600;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .notFound {
@@ -159,4 +177,45 @@
 .checkoutMain {
   color: rgb(74, 74, 74);
   font-size: 16px;
+}
+
+.paymentWidget {
+  padding: 0 24px 24px 24px;
+}
+
+.paymentWidget h4 {
+  margin-bottom: 15px;
+  font-weight: 400;
+  border-top: 1px solid #ccc;
+  padding-top: 30px;
+}
+
+.radioWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.radioWrapper input {
+  width: 13px;
+  height: 13px;
+}
+
+.paymentRatio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  font-weight: 600;
+  color: #26292c;
+  text-transform: capitalize;
+}
+
+.customRadio:focus {
+  width: auto;
+  margin: 0;
+  border-bottom: none;
 }

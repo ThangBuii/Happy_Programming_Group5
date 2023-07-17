@@ -1,124 +1,37 @@
-import { Container, Rating } from "@mui/material";
+import { Alert, Container, Rating, Slide, Snackbar } from "@mui/material";
 import CustomInputFilter from "../../component/custom-input-filter";
 import CustomButton from "../../component/custom-button";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import styles from "./index.module.css";
-
-function createData(
-  accountId,
-  name,
-  imageUrl,
-  achievement,
-  description,
-  isBookMark,
-  averateRatings,
-  numOfReivews,
-  skillList
-) {
-  return {
-    accountId,
-    name,
-    imageUrl,
-    achievement,
-    description,
-    isBookMark,
-    averateRatings,
-    numOfReivews,
-    skillList,
-  };
-}
-
-const fakeData = [
-  createData(
-    "mentor1",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-      "Sr. Software Engineer at eBay",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor2",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    ["Mentor: Career Growth | Leadership | Product Marketing"],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    false,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor3",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Founder at multiple digital agencies",
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-  createData(
-    "mentor4",
-    "nguyen trong tai",
-    "https://cdn.mentorcruise.com/cache/ab5639698bbe4e80c445054291de2c29/5b5b3a3e039a50f9/ff33510e7837884ddcc3f2f27030a124.jpg",
-    [
-      "Product Designer at Financial Times Lead Product Designer with 18+ years of experience",
-      "Product Leadership Coach (ex-Director of Product) at ex-ServiceNow, ex-Yandex",
-    ],
-    "Miklos is a highly experienced Lead UX Designer/Product Designer with over 18 years of experience. He is also a speaker, writer, and mentor with over 10,000 followers on Medium, LinkedIn, and Twitter. Miklos has been mentoring for more than five years and has a proven track record of success, having …",
-    true,
-    5.0,
-    7,
-    ["UX", "UI", "Product Designer", "Portfolio Review", "Career Advice"]
-  ),
-];
-
-const fakeSkillSearch = [
-  "Leadership",
-  "Project Management",
-  "Sales",
-  "Startup",
-  "Career",
-  "Product Designer",
-  "UX Design",
-  "Interviews",
-  "Product Designer1",
-  "Software Engineer",
-  "Javascript Developer",
-  "Python Developer",
-  "Product Strategy",
-];
+import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
+import { request } from "../../axios_helper";
+import { ApplicationContext } from "../../routes/AppRoutes";
 
 const handleBuildFilterSkills = (skillList) => {
   return skillList.map((skill) => ({
-    skillName: skill,
+    skillId: skill.skill_id,
+    skillName: skill.skill_name,
     isChoosed: false,
   }));
 };
 
 const FindMentor = () => {
   const [mentorList, setMentorList] = useState([]);
-  const [isLoading, seIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
+  const [skillIdList, setSkillIdList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { user } = useContext(ApplicationContext);
+  const role = user.role;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -134,27 +47,38 @@ const FindMentor = () => {
   };
 
   useEffect(() => {
-    seIsLoading(true);
-    Promise.all([
-      fetch("http://localhost:9999/all-mentor"),
-      fetch("http://localhost:9999/all-skills"),
-    ])
-      .then((responses) => {
-        return Promise.all(responses.map((response) => response.json()));
-      })
-      .then(([data1, data2]) => {
-        setMentorList(data1);
-        setOriginFilterListSkill(handleBuildFilterSkills(data2));
+    fetch();
+  }, [skillIdList]);
+
+  const fetch =() => {
+    const fetchData = async () => {
+      if (skillIdList.length === 0) {
+        return request("GET", "/api/public/findMentor?skill_id=0");
+      } else {
+        const queryParams = skillIdList.map((id) => `skill_id=${id}`).join("&");
+        return request("GET", `/api/public/findMentor?${queryParams}`);
+      }
+    };
+
+    fetchData()
+      .then((data) => {
+        setMentorList(data.data);
       })
       .catch((err) => {
         console.log(err);
-        setMentorList(fakeData);
-        setOriginFilterListSkill(handleBuildFilterSkills(fakeSkillSearch));
       })
       .finally(() => {
-        seIsLoading(false);
+        setIsLoading(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    const filteredSkillIds = filterListSkill
+      .filter((skill) => skill.isChoosed === true)
+      .map((item) => item.skillId);
+    console.log(">>check SubmitSkill id>> ", filteredSkillIds);
+    setSkillIdList(filteredSkillIds);
+  }, [filterListSkill]);
 
   useEffect(() => {
     if (originFilterListSkill.length > 0) {
@@ -165,17 +89,73 @@ const FindMentor = () => {
     }
   }, [originFilterListSkill, filterSearch]);
 
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await request("GET", "/api/public/men/skills");
+        setOriginFilterListSkill(handleBuildFilterSkills(response.data));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSkills()
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const handleClickFilterItem = (filterName) => {
     const newFilterSkill = originFilterListSkill.map((item) => {
       if (item.skillName !== filterName) return item;
       else
         return {
+          skillId: item.skillId,
           skillName: item.skillName,
           isChoosed: !item.isChoosed,
         };
     });
 
     setOriginFilterListSkill(newFilterSkill);
+  };
+  const handleBookmarkClick = (id, type) => {
+    // Send delete request to the backend
+
+    if (role === -1 || role === 0 || role === 1) {
+      setSnackbarOpen(true);
+      setErrorMessage("Log in as a Mentee to add this Mentor to your favorite list");
+    } else {
+      if (type === 0) {
+        request("DELETE", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      } else {
+        request("POST", `/api/mentee/favorite/${id}`)
+          .then(response => {
+            // Handle successful deletion
+            // Fetch the updated list of mentors
+            if(response.status === 200){
+              fetch();
+            }
+            return request("GET", "/api/mentee/favorite");
+          })
+          .catch(error => {
+            // Handle error
+            console.error('Error deleting bookmark:', error);
+          });
+      }
+    }
+
   };
 
   return (
@@ -187,7 +167,12 @@ const FindMentor = () => {
         }}
       >
         <div className={styles.inputWrapper}>
-          <input type="text" placeholder="Search by skill or job title" />
+          <input
+            type="text"
+            placeholder="Search by skill or job title"
+            value={filterSearch}
+            onChange={(e) => setFilterSearch(e.target.value)}
+          />
           <SearchIcon />
         </div>
         <div className={styles.skillWrapper}>
@@ -245,50 +230,45 @@ const FindMentor = () => {
                   className={styles.mentorItemWrapper}
                 >
                   <img
-                    src={mentor.imageUrl}
+                    src={
+                      mentor.avatar
+                        ? `data:image/jpeg;base64, ${mentor.avatar}`
+                        : AvatarDefault
+                    }
                     alt="avatar"
-                    onClick={() => handleClickViewMentor(mentor.accountId)}
+                    onClick={() => handleClickViewMentor(mentor.mentor_id)}
                   />
                   <div className={styles.mentorInfoWrapper}>
                     <h2
                       className={styles.mentorName}
-                      onClick={() => handleClickViewMentor(mentor.accountId)}
+                      onClick={() => handleClickViewMentor(mentor.mentor_id)}
                     >
-                      {mentor.name}
+                      {mentor.username}
                     </h2>
                     <div className={styles.archieveList}>
-                      {mentor.achievement.map((item, index) => (
-                        <div key={index} className={styles.archieveItem}>
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                    <div className={styles.ratingWrapper}>
-                      <Rating defaultValue={mentor.averateRatings} readOnly />
-                      <div className={styles.ratings}>
-                        <b>{mentor.averateRatings}</b>
+                      <div className={styles.archieveItem}>
+                        {mentor.short_description}
                       </div>
-                      <span>({mentor.numOfReivews} reviews)</span>
                     </div>
                     <div className={styles.description}>
                       {mentor.description}
                     </div>
                     <div className={styles.skillList}>
-                      {mentor.skillList.map((skill, index) => (
+                      {mentor.skills.map((skill, index) => (
                         <div key={index} className={styles.skillItem}>
-                          {skill}
+                          {skill.skill_name}
                         </div>
                       ))}
                     </div>
                     <CustomButton
-                      content={"View Profille"}
-                      onClick={() => handleClickViewMentor(mentor.accountId)}
+                      content={"View Profile"}
+                      onClick={() => handleClickViewMentor(mentor.mentor_id)}
                     />
                     <div className={styles.bookMark}>
-                      {mentor.isBookMark ? (
-                        <BookmarkIcon />
+                      {mentor.favorite ? (
+                        <BookmarkIcon onClick={() => handleBookmarkClick(mentor.mentor_id, 0)} />
                       ) : (
-                        <BookmarkBorderIcon />
+                        <BookmarkBorderIcon onClick={() => handleBookmarkClick(mentor.mentor_id, 1)} />
                       )}
                     </div>
                   </div>
@@ -304,6 +284,22 @@ const FindMentor = () => {
           </>
         )}
       </Container>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

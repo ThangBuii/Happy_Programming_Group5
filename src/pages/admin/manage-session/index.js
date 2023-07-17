@@ -27,6 +27,10 @@ const ManageSession = () => {
   const [sessionRow, setSessionRow] = useState([]);
 
   useEffect(() => {
+    fetch();
+  }, []);
+
+  const fetch = () => {
     request("GET", "/api/admin/session")
       .then((response) => {
         const rowsWithIds = response.data.map((row) => ({
@@ -41,7 +45,7 @@ const ManageSession = () => {
       .finally(() => {
         seIsLoading(false);
       });
-  }, []);
+  };
 
   const handleClickAccept = async (id) => {
     await processStatus(id, 1);
@@ -60,7 +64,7 @@ const ManageSession = () => {
     request("PUT", `/api/admin/session/${id}`,requestBody)
       .then((response) => {
         if (response.status === 200)
-          window.location.reload()
+          fetch()
       })
       .catch((err) => {
         console.log(err);
@@ -101,7 +105,7 @@ const ManageSession = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.avatar || AvatarDefault} alt="avatar" />
+            <img src={row.avatar ? `data:image/jpeg;base64, ${row.avatar}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.username}</h4>
             </div>

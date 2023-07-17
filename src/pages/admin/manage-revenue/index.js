@@ -14,26 +14,7 @@ const breadcrumbArr = [
   { to: "/admin/revenue", represent: "Revenue" },
 ];
 
-const fakeRowRevenueData = [
-  {
-    id: "Receipt1",
-    amount: 2000.3,
-    date: "October 13, 2014",
-    receiptId: "Receipt1",
-  },
-  {
-    id: "Receipt2",
-    amount: 1500,
-    date: "October 14, 2014",
-    receiptId: "Receipt2",
-  },
-  {
-    id: "Receipt3",
-    amount: 1800.0,
-    date: "October 12, 2014",
-    receiptId: "Receipt3",
-  },
-];
+
 
 const ManageRevenue = () => {
   // const navigate = useNavigate();
@@ -41,45 +22,30 @@ const ManageRevenue = () => {
   const [revenueRow, setRevenueRow] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState();
 
-  // useEffect(() => {
-  //   request("GET", "/api/admin/revenue")
-  //     .then((response) => {
-  //       const rowsWithIds = response.data.map((row) => ({
-  //         id: row.revenue_id,
-  //         ...row,
-  //       }));
-  //       setRevenueRow(rowsWithIds);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       seIsLoading(false);
-  //     });
-  // }, []);
-
   useEffect(() => {
     seIsLoading(true);
     Promise.all([
       request("GET", "/api/admin/revenue"),
-      fetch("http://localhost:9999/total-revenue"),
+      request("GET", "/api/admin/revenue"),
     ])
-      .then((responses) => {
-        return Promise.all(responses.map((response) => response.json()));
-      })
       .then(([data1, data2]) => {
-        setRevenueRow(data1);
-        setTotalRevenue(data2);
+        console.log(data1, data2);
+        const rowsWithIds = data1.data.map((row) => ({
+          id: row.revenue_id,
+          ...row,
+        }));
+        setRevenueRow(rowsWithIds);
+        setTotalRevenue(data2.data);
       })
       .catch((err) => {
         console.log(err);
-        setRevenueRow([...fakeRowRevenueData]);
         setTotalRevenue(50);
       })
       .finally(() => {
         seIsLoading(false);
       });
   }, []);
+  console.log(revenueRow)
 
   const columns = [
     {

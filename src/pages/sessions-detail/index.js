@@ -65,7 +65,7 @@ const SessionsDetail = () => {
             <div className={styles.topWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={sessions.avatar || AvatarDefault}
+                  src={sessions.avatar ? `data:image/jpeg;base64, ${sessions.avatar}` : AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>

@@ -134,7 +134,7 @@ const ManageFeedback = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentor_avatar || AvatarDefault} alt="avatar" />
+            <img src={row.mentor_avatar ? `data:image/jpeg;base64, ${row.mentor_avatar}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.mentor_username}</h4>
             </div>
@@ -158,7 +158,7 @@ const ManageFeedback = () => {
       renderCell: ({ row }) => {
         return (
           <div className={styles.mentorInfoWrapper}>
-            <img src={row.mentee_avatar || AvatarDefault} alt="avatar" />
+            <img src={row.mentee_avatar ? `data:image/jpeg;base64, ${row.mentee_avatar}` : AvatarDefault} alt="avatar" />
             <div className={styles.infoLeft}>
               <h4>{row.mentee_username}</h4>
             </div>
@@ -266,7 +266,7 @@ const ManageFeedback = () => {
             <div className={styles.titleWrapper}>
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={feedbackDetail.mentee_avatar || AvatarDefault}
+                  src={feedbackDetail.mentee_avatar ? `data:image/jpeg;base64, ${feedbackDetail.mentee_avatar}` : AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>
@@ -286,7 +286,7 @@ const ManageFeedback = () => {
               <NavigateNextIcon />
               <div className={styles.mentorInfoWrapper}>
                 <img
-                  src={feedbackDetail.mentor_avatar || AvatarDefault}
+                  src={feedbackDetail.mentor_avatar ? `data:image/jpeg;base64, ${feedbackDetail.mentor_avatar}` : AvatarDefault}
                   alt="avatar"
                 />
                 <div className={styles.infoLeft}>

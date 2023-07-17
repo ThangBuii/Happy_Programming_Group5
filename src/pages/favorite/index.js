@@ -7,30 +7,8 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { useLocation, useNavigate } from "react-router";
 import styles from "./index.module.css";
 import { request } from '../../axios_helper'
+import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 
-function createData(
-  accountId,
-  name,
-  imageUrl,
-  achievement,
-  description,
-  isBookMark,
-  averateRatings,
-  numOfReivews,
-  skillList
-) {
-  return {
-    accountId,
-    name,
-    imageUrl,
-    achievement,
-    description,
-    isBookMark,
-    averateRatings,
-    numOfReivews,
-    skillList,
-  };
-}
 
 const Favourite = () => {
   const navigate = useNavigate();
@@ -39,6 +17,8 @@ const Favourite = () => {
   const [isLoading, seIsLoading] = useState(true);
   const [searchFavourite, setSearchFavourite] = useState("");
   const [mentorList, setMentorList] = useState([]);
+
+  const mentorsPerPage = 10; // Number of mentors to display per page
 
   const handleClickViewMentor = (id) => {
     navigate(`/mentor/${id}`, {
@@ -55,24 +35,6 @@ const Favourite = () => {
     setPage(value);
   };
 
-  // useEffect(() => {
-  //   seIsLoading(true);
-  //   Promise.all([fetch("http://localhost:9999/all-mentor")])
-  //     .then((responses) => {
-  //       return Promise.all(responses.map((response) => response.json()));
-  //     })
-  //     .then(([data1, data2]) => {
-  //       setMentorList(data1);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setMentorList([...fakeFavouriteMentorList]);
-  //     })
-  //     .finally(() => {
-  //       seIsLoading(false);
-  //     });
-  // }, []);
-
   useEffect(() => {
     request("GET", "/api/mentee/favorite")
       .then((response) => {
@@ -85,6 +47,29 @@ const Favourite = () => {
         seIsLoading(false);
       });
   }, []);
+
+  const handleBookmarkClick = (id) => {
+    // Send delete request to the backend
+    request("DELETE", `/api/mentee/favorite/${id}`)
+    .then(response => {
+      // Handle successful deletion
+      // Fetch the updated list of mentors
+      return request("GET", "/api/mentee/favorite");
+    })
+    .then(updatedResponse => {
+      // Update the mentorList state with the updated list
+      setMentorList(updatedResponse.data);
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error deleting bookmark:', error);
+    });
+  };
+
+  // Calculate the start and end index of the mentors to display on the current page
+  const startIndex = (page - 1) * mentorsPerPage;
+  const endIndex = startIndex + mentorsPerPage;
+  const mentorsToShow = mentorList.slice(startIndex, endIndex);
 
   return (
     <div className={styles.layoutWrapper}>
@@ -113,13 +98,13 @@ const Favourite = () => {
             ) : (
               <>
                 <div className={styles.mentorListWrapper}>
-                  {mentorList.map((mentor) => (
+                  {mentorsToShow.map((mentor) => (
                     <div
                       key={mentor.mentor_id}
                       className={styles.mentorItemWrapper}
                     >
                       <img
-                        src={mentor.avatar}
+                        src={mentor.avatar ? `data:image/jpeg;base64, ${mentor.avatar}` : AvatarDefault}
                         alt="avatar"
                         onClick={() => handleClickViewMentor(mentor.mentor_id)}
                       />
@@ -159,9 +144,7 @@ const Favourite = () => {
                           <Button variant="contained">Book Now</Button>
                         </div>
                         <div className={styles.bookMark}>
-
-                          <BookmarkIcon />
-
+                          <BookmarkIcon onClick={() => handleBookmarkClick(mentor.favorite_id)}/>
                         </div>
                       </div>
                     </div>
@@ -169,7 +152,7 @@ const Favourite = () => {
                 </div>
                 <div className={styles.paginationWrapper}>
                   <Pagination
-                    count={10}
+                    count={Math.ceil(mentorList.length / mentorsPerPage)}
                     color="primary"
                     shape="rounded"
                     size="large"

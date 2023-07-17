@@ -43,7 +43,7 @@ function Header({user, makeSignOut}) {
                 <FaHistory /> Dashboard
               </Nav.Link>}
               {user.role===0 && <Nav.Link as={Link} to="/admin">
-                <FaHistory /> Admin
+                <FaHistory /> Admin Dashboard
               </Nav.Link>}
             </Nav>
             <Nav className={`ms-auto ${user.isAuthenticated? 'd-none' : ''}`}>

@@ -22,7 +22,7 @@ const Feedback = () => {
   const { user } = useContext(ApplicationContext);
   const role = user.role;  // authen => context => role
 
-  useEffect(() => {
+  const fetchData = () => {
     if (role === -1) return;
     const url = role === 1 ? "/api/mentor/feedbacks" : "/api/mentee/feedbacks"
     request("GET", url)
@@ -32,32 +32,24 @@ const Feedback = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [role]);
 
   const handleDelete = (id) => {
-    if (window.confirm("Muon xoa-id: " + id + "?")) {
+    if (window.confirm("Muon xoa feedback: " + id + "?")) {
       request("DELETE", `/api/feedback/${id}`)
         .then(() => {
-          alert("Delete success");
-          window.location.reload();
+        alert("Delete success");
+         fetchData();
         })
         .catch((err) => {
           console.log(err.message);
         });
     }
   };
-
-  // useEffect(() => {
-  //   fetch("http://localhost:9999/report-list/mentorId")
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       setReportList(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setReportList([...fakeFeedbackListData]);
-  //     });
-  // }, []);
   return (
     <MainLayout
       pageTitle={"List Of Report"}
@@ -115,7 +107,7 @@ const Feedback = () => {
                   >
                     <TableCell align="left">
                       <div className={styles.mentorInfoWrapper}>
-                        <img src={item.avatar || AvatarDefault} alt="avatar" />
+                        <img src={item.avatar ? `data:image/jpeg;base64, ${item.avatar}` : AvatarDefault} alt="avatar" />
                         <div className={styles.infoLeft}>
                           <h4>{item.username}</h4>
                           <p>{item.email}</p>
@@ -131,6 +123,13 @@ const Feedback = () => {
                         defaultValue={item.rating}
                         readOnly
                         precision={0.5}
+                        sx={{
+                          marginTop: "-6px",
+                          marginLeft: "-6px",
+                          "& .MuiRating-iconFilled": {
+                            color: "rgb(33, 163, 145)", // Màu fill tùy chỉnh khi được chọn
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell align="center">
