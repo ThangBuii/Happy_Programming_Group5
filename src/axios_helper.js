@@ -26,7 +26,7 @@ export const setDataToLocal = (field, data) => {
 export const request = (method,url,data) => {
     let headers = {};
     const authToken = getDataFromLocal("token");
-    if(getDataFromLocal("token") != null && getDataFromLocal("token")!= "null") { 
+    if(getDataFromLocal("token") != null && getDataFromLocal("token") != "null") { 
         headers = {"Authorization": `Token ${authToken}`};
     }
     return axios({

@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/Header.css";
 import {
   FaSearch,
-  FaHeart,
+  
   FaHistory,
   FaFingerprint,
   FaUser,
