@@ -76,4 +76,9 @@ public class SkillsServiceImpl implements SkillsService {
     public List<Skills> getAllSkills() {
         return skillsRepository.findAll();
     }
+
+    @Override
+    public List<Skills> getAllMentorSkill(int account_id) {
+        return skillsRepository.findSkillsByMentorId(account_id); 
+    }
 }

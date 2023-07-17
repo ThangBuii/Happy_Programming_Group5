@@ -38,7 +38,7 @@ public class SessionController {
     private final SessionService sessionService;
 
     private final JwtTokenUtil jwtTokenUtil;
-    
+
     private final SessionRepository sessionRepository;
 
     @GetMapping("/admin/session")
@@ -46,13 +46,13 @@ public class SessionController {
         return sessionService.getAllSession();
     }
 
-    @GetMapping("/session/{id}")
+    @GetMapping("/public/sessions/{id}")
     ViewSessionDTO getSessionById(@PathVariable int id) throws CustomBadRequestException {
         return sessionService.findSessionByID(id);
     }
 
     @PutMapping("/admin/session/{id}")
-    void updateSession(@PathVariable int id, @RequestBody UpdateSessionDTO updateSession){
+    void updateSession(@PathVariable int id, @RequestBody UpdateSessionDTO updateSession) {
         Session session = sessionRepository.findById(id).get();
         session.setStatus(updateSession.getStatus());
         sessionService.saveSesison(session);
@@ -66,15 +66,15 @@ public class SessionController {
     }
 
     @PostMapping("/mentor/session")
-        void addSession(@RequestBody AddSessionDTO addSessionDTO, HttpServletRequest request){
-            String token = jwtTokenUtil.getRequestToken(request);
-            TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-            sessionService.addSession(addSessionDTO,tokenPayload.getAccount_id());
-        }
+    void addSession(@RequestBody AddSessionDTO addSessionDTO, HttpServletRequest request) {
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        sessionService.addSession(addSessionDTO, tokenPayload.getAccount_id());
+    }
 
-        @GetMapping("/public/session/{id}")
+    @GetMapping("/public/session/{id}")
     List<MentorSessionDTO> getSessionListByMentorId(@PathVariable int id) throws CustomBadRequestException {
-        
-        return sessionService.getListSessionByMentorId(id);
+
+        return sessionService.getListSessionFindMentorByMentorId(id);
     }
 }

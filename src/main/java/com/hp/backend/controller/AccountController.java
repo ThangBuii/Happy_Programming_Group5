@@ -48,87 +48,95 @@ public class AccountController {
     }
 
     @PostMapping("/public/register")
-    public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap) throws CustomBadRequestException {
+    public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap)
+            throws CustomBadRequestException {
         return accountService.registerAccount(accountDTOCreateMap);
     }
 
     @GetMapping("/admin/mentee-list")
-    public List<MenteeDTOResponse> getMenteeList(){
+    public List<MenteeDTOResponse> getMenteeList() {
 
         return accountService.getMenteeList();
     }
 
     @GetMapping("/admin/mentor-list")
-    public List<MentorDTOResponse> getMentorList(){
+    public List<MentorDTOResponse> getMentorList() {
         return accountService.getMentorList();
     }
 
     @GetMapping("/admin/men/{id}")
-    public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException{
+    public MentorDTODetailResponse getMentorByID(@PathVariable int id) throws CustomBadRequestException {
         return accountService.findMentorByID(id);
     }
 
     @DeleteMapping("/admin/account/{id}")
-    public void deleteAccount(@PathVariable int id) throws CustomBadRequestException{
+    public void deleteAccount(@PathVariable int id) throws CustomBadRequestException {
         accountService.deleteById(id);
     }
 
     @GetMapping("/mentor/profile")
-    public MentorDTODetailResponse getMentorProfile(HttpServletRequest request) throws CustomBadRequestException{
+    public MentorDTODetailResponse getMentorProfile(HttpServletRequest request) throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return accountService.findMentorByID(tokenPayload.getAccount_id());
     }
 
     @GetMapping("/mentee/profile")
-    public MenteeDTODetailResponse getMenteeProfileLoggedIn(HttpServletRequest request) throws CustomBadRequestException{
+    public MenteeDTODetailResponse getMenteeProfileLoggedIn(HttpServletRequest request)
+            throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         return accountService.findMenteeByID(tokenPayload.getAccount_id());
     }
 
     @PostMapping("/mentee/profile")
-    public void updateMenteeProfile(@RequestBody MentorDTODetailUpdateRequest mentee ,HttpServletRequest request) throws CustomBadRequestException{
+    public void updateMenteeProfile(@RequestBody MentorDTODetailUpdateRequest mentee, HttpServletRequest request)
+            throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        accountService.updateMenteeProfile(mentee,tokenPayload.getAccount_id());
+        accountService.updateMenteeProfile(mentee, tokenPayload.getAccount_id());
     }
 
     @PostMapping("/mentor/profile")
-    public void updateMentorProfile(@RequestBody MentorDTODetailUpdateRequest mentor ,HttpServletRequest request) throws CustomBadRequestException{
+    public void updateMentorProfile(@RequestBody MentorDTODetailUpdateRequest mentor, HttpServletRequest request)
+            throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        accountService.updateMentorProfile(mentor,tokenPayload.getAccount_id());
+        accountService.updateMentorProfile(mentor, tokenPayload.getAccount_id());
     }
 
     @PostMapping("/password")
-    public void changePassword(@RequestBody AccountChangePasswordRequestDTO password ,HttpServletRequest request) throws CustomBadRequestException{
+    public void changePassword(@RequestBody AccountChangePasswordRequestDTO password, HttpServletRequest request)
+            throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-        accountService.changePassword(password,tokenPayload.getAccount_id());
+        accountService.changePassword(password, tokenPayload.getAccount_id());
     }
 
     @GetMapping("/public/findMentor")
-    public List<FindMentorResponseDTO> getListFindMentor(HttpServletRequest request,@RequestParam int skill_id){
+    public List<FindMentorResponseDTO> getListFindMentor(
+            HttpServletRequest request,
+            @RequestParam("skill_id") List<Integer> skillIds) {
         String token = jwtTokenUtil.getRequestToken(request);
         int account_id = 0;
-        if(!token.isEmpty()){
+        if (!token.isEmpty()) {
             TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
             account_id = tokenPayload.getAccount_id();
         }
-        
-        return accountService.getListFindMentor(account_id, skill_id);
+
+        return accountService.getListFindMentor(account_id, skillIds);
     }
-    
-     @GetMapping("/public/profile/{id}")
-    public FindMentorResponseDTO getFindMentorProfile(@PathVariable int id,HttpServletRequest request) throws CustomBadRequestException{
+
+    @GetMapping("/public/profile/{id}")
+    public FindMentorResponseDTO getFindMentorProfile(@PathVariable int id, HttpServletRequest request)
+            throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         int account_id = 0;
-        if(!token.isEmpty()){
+        if (!token.isEmpty()) {
             TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
             account_id = tokenPayload.getAccount_id();
         }
-        return accountService.findMentorProfile(id,account_id);
+        return accountService.findMentorProfile(id, account_id);
     }
 
 }

@@ -20,4 +20,6 @@ public interface SkillsService {
     public void addSkills(SkillsRequestDTO skillsRequestDTO);
 
     public List<Skills> getAllSkills();
+
+    public List<Skills> getAllMentorSkill(int account_id);
 }

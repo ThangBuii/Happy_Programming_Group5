@@ -21,4 +21,6 @@ public interface SessionService {
     void addSession(AddSessionDTO addSessionDTO, int i);
 
     void saveSesison(Session session);
+
+    List<MentorSessionDTO> getListSessionFindMentorByMentorId(int id) throws CustomBadRequestException;
 }

@@ -55,10 +55,9 @@ public class SessionServiceImpl implements SessionService {
                     null);
             throw new CustomNotFoundException(error);
         }
-        for (Session session : sessions) {
-
+        for (int i = sessions.size() - 1; i >= 0; i--) {
+            Session session = sessions.get(i);
             sessionDTO.add(sessionMapper.toSessionDTO(session));
-
         }
 
         return sessionDTO;
@@ -94,6 +93,20 @@ public class SessionServiceImpl implements SessionService {
         String status = session.getStatus() == 1 ? "accepted" : "rejected"; 
         emailService.sendEmail(account.getEmail(), "Session Accepted", "Your session " + session.getName() + " has been " + status);
         sessionRepository.save(session);
+    }
+
+    @Override
+    public List<MentorSessionDTO> getListSessionFindMentorByMentorId(int account_id) throws CustomBadRequestException {
+        List<MentorSessionDTO> mentorSessionDTOs = new ArrayList<>();
+        List<Session> session = sessionRepository.findAcceptedByMentorId(account_id);
+        if (session.isEmpty()) {
+            throw new CustomBadRequestException(CustomError.builder()
+                    .message("There are no session for the mentor id: " + account_id).code("404").build());
+        }
+        for (Session sessions : session) {
+            mentorSessionDTOs.add(sessionMapper.toMentorSessionDTO(sessions));
+        }
+        return mentorSessionDTOs;
     }
 
 }

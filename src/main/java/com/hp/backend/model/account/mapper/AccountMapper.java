@@ -27,7 +27,8 @@ import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.FavoriteRepository;
-import com.hp.backend.repository.SkillRepository;
+
+import com.hp.backend.repository.SkillsRepository;
 import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountMapper {
     private final BookingRepository bookingRepository;
-    private final SkillRepository skillRepository;
+    private final SkillsRepository skillRepository;
     private final AccountRepository accountRepository;
     private final CommonUtils commonUtils;
     private final FavoriteRepository favoriteRepository;
