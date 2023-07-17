@@ -40,6 +40,4 @@ public class MentorDTODetailResponse {
     private int role;
 
     private List<Skills> skills;
-
-    private int role;
 }

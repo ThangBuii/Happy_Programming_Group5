@@ -19,4 +19,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite_Mentor,Intege
                    "FROM Favorite_Mentor f " +
                    "WHERE f.mentor_id = :mentor_id AND f.mentee_id = :mentee_id")
     boolean existsByMentorIdAndMenteeId(@Param("mentor_id") int mentor_id, @Param("mentee_id") int mentee_id);
+
+    @Query("Select f from Favorite_Mentor f where f.mentee_id = :mentee_id and f.mentor_id = :mentor_id")
+    Favorite_Mentor findByMentorMenteeId(int mentor_id, int mentee_id);
 }

@@ -15,6 +15,7 @@ import com.hp.backend.model.booking.dto.BookingListMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
+import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.utils.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class BookingMapper {
 
     private final BookingRepository bookingRepository;
     private final AccountRepository accountRepository;
+    private final TimeRepository timeRepository;
     private final CommonUtils commonUtils;
 
     public static BookingListMenteeDTO toBookingDTO(BookingListMenteeDTO book1) {
@@ -99,7 +101,8 @@ public class BookingMapper {
 
     public Booking toBooking(AddBookingRequestDTO addBookingRequestDTO, int mentee_id) {
         Date currentDate = commonUtils.getCurrentDate();
-        return Booking.builder().mentee_id(mentee_id).time(Times.builder().time_id(addBookingRequestDTO.getTime_id()).build())
+        Times time = timeRepository.findById(addBookingRequestDTO.getTime_id()).get();
+        return Booking.builder().mentee_id(mentee_id).time(time)
                 .created_date(currentDate).status(0).build();
     }
 

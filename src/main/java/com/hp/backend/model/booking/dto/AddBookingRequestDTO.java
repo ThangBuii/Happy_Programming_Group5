@@ -15,6 +15,5 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class AddBookingRequestDTO {
-    private int mentee_id;
     private int time_id;
 }

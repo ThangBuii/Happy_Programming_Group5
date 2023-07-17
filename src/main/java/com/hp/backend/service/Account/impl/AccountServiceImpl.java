@@ -214,39 +214,31 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteFavorite(int favorite_id,int mentee_id) throws CustomInternalServerException, CustomBadRequestException {
-        Optional<Favorite_Mentor> favorite = favoriteRepository.findById(favorite_id);
+    public void deleteFavorite(int mentor_id,int mentee_id) throws CustomInternalServerException, CustomBadRequestException {
+        Favorite_Mentor favorite = favoriteRepository.findByMentorMenteeId(mentor_id,mentee_id);
 
-        if(!favorite.isPresent()){
-            throw new CustomInternalServerException(
-                    CustomError.builder().code("500").message("System failure").build());
-        }
 
-        if(favorite.get().getMentee_id() != mentee_id){
+        if(favorite.getMentee_id() != mentee_id){
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Bad request").build());
         }
 
-        favoriteRepository.delete(favorite.get());
+        favoriteRepository.delete(favorite);
     }
 
     @Override
-    public List<FindMentorResponseDTO> getListFindMentor(int account_id, int skill_id) {
+    public List<FindMentorResponseDTO> getListFindMentor(int account_id, List<Integer> skills) {
         List<Account> accounts = new ArrayList<>();
         List<Integer> mentor_ids = new ArrayList<>();
-        if(skill_id != 0){
-            mentor_ids = sessionRepository.findAllBySkill_ID(skill_id);
-            int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
-            for(int id : mentorIdsArray){
-                accounts.add(accountRepository.findById(id).get());
-            }
+        if(skills.get(0) != 0){
+            mentor_ids = sessionRepository.findAllBySkill_ID(skills);
         }else{
             mentor_ids = sessionRepository.findAllBySkill_ID();
-            int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
+        }
+        int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
             for(int id : mentorIdsArray){
                 accounts.add(accountRepository.findById(id).get());
             }
-        }
         List<FindMentorResponseDTO> results = new ArrayList<>();
         for(Account account : accounts){
             results.add(accountMapper.toFindMentorResponse(account, account_id));

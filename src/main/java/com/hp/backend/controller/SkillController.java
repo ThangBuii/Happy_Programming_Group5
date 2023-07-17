@@ -70,4 +70,14 @@ public class SkillController {
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
         mentor_SkillsService.addMentor_Skills(id, tokenPayload.getAccount_id());
     }
+
+    @GetMapping("/mentor/skill")
+    List<Skills> getAllMentorSkill(HttpServletRequest request) {
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+
+        return skillsService.getAllMentorSkill(tokenPayload.getAccount_id());
+       
+    }
+    
 }

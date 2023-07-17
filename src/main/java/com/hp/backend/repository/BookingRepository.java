@@ -29,4 +29,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query("SELECT b.mentee_id FROM Booking b JOIN b.time t JOIN t.session s WHERE s.mentor_id = :mentor_id")
     List<Integer> findMenteeIdsByMentorId(@Param("mentor_id") int mentorId);
+
+    @Query("SELECT COUNT(b)>0 FROM Booking b WHERE b.time.time_id = :timeId")
+    boolean checkBookedTime(@Param("timeId") int time_id);
 }

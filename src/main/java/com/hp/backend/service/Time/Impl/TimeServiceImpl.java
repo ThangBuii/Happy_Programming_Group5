@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import com.hp.backend.model.time.dto.GetListTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseFindMentorDTO;
 import com.hp.backend.model.time.mapper.TimeMapper;
+import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.service.Time.TimeService;
@@ -30,6 +32,7 @@ public class TimeServiceImpl implements TimeService {
     private final TimeRepository timeRepository;
     private final TimeMapper timeMapper;
     private final SessionRepository sessionRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     public List<GetListTimeResponseDTO> getAllTime(GetListTimeRequestDTO requestDTO) {
@@ -86,6 +89,9 @@ public class TimeServiceImpl implements TimeService {
 
         // Tính toán thời gian duration từ startTime và endTime
         long timeDifference = endTimeObj.getTime() - startTimeObj.getTime();
+        if (timeDifference < 0) {
+            timeDifference += TimeUnit.DAYS.toMillis(1); // Add one day in milliseconds
+        }
         int calculatedDuration = (int) (timeDifference / (1000 * 60)); // Đổi từ milliseconds sang phút
 
         // Kiểm tra calculatedDuration và duration có khớp nhau
@@ -108,10 +114,10 @@ public class TimeServiceImpl implements TimeService {
         List<Date> dates = timeRepository.getListTimesBySession(session_id);
         List<GetListTimeResponseFindMentorDTO> timeList = new ArrayList<>();
 
-        for(Date date : dates){
+        for (Date date : dates) {
             List<GetListTimeResponseDTO> getListTimeResponseDTOs = getAllTime(
-                GetListTimeRequestDTO.builder().session_id(session_id).start_date(date).build());
-            timeList.add(timeMapper.toGetListTimeResponseFindMentorDTO(date,getListTimeResponseDTOs));
+                    GetListTimeRequestDTO.builder().session_id(session_id).start_date(date).build());
+            timeList.add(timeMapper.toGetListTimeResponseFindMentorDTO(date, getListTimeResponseDTOs));
         }
 
         return timeList;
@@ -121,9 +127,13 @@ public class TimeServiceImpl implements TimeService {
     public void deleteTimeByID(int timeID) throws CustomBadRequestException {
         Optional<Times> time = timeRepository.findById(timeID);
 
-        if(!time.isPresent()){
+        
+        if (!time.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Bad request").code("400").build());
+        }else if(bookingRepository.checkBookedTime(time.get().getTime_id())){
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("This time slot has already been booked by a mentee").code("400").build());
         }
 
         timeRepository.deleteById(timeID);
