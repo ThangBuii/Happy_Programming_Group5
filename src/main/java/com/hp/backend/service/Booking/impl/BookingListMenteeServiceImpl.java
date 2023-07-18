@@ -2,6 +2,7 @@ package com.hp.backend.service.Booking.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -46,30 +47,30 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
 
    @Override
    public ViewBookingDTO findMenteeBookingDetailByID(int id) throws CustomBadRequestException {
-      Booking booking = bookingRepository.findById(id).get();
-      if (booking == null) {
+      Optional<Booking> booking = bookingRepository.findById(id);
+      if (!booking.isPresent()) {
          throw new CustomBadRequestException(CustomError.builder()
                .message("There are no session for the session id: " + id).code("400").build());
       }
-      return bookingMapper.toViewBookingDTO(booking);
+      return bookingMapper.toViewBookingDTO(booking.get());
    }
 
    @Override
    public Booking findBookingByID(int id) throws CustomBadRequestException {
-      Booking booking = bookingRepository.findById(id).get();
-      if (booking == null) {
+      Optional<Booking> booking = bookingRepository.findById(id);
+      if (!booking.isPresent()) {
          throw new CustomBadRequestException(CustomError.builder()
                .message("There are no booking for the booking id: " + id).code("400").build());
       }
-      return booking;
+      return booking.get();
    }
 
    @Override
    public void deleteMenteeBookingByStatus(int id) throws CustomBadRequestException {
-      Booking booking = bookingRepository.findById(id).get();
-      if (booking != null) {
-         if (booking.getStatus() == 0) {
-            bookingRepository.delete(booking);
+      Optional<Booking> booking = bookingRepository.findById(id);
+      if (!booking.isPresent()) {
+         if (booking.get().getStatus() == 0) {
+            bookingRepository.delete(booking.get());
          } else {
             throw new CustomBadRequestException(
                   CustomError.builder().message("Cannot delete booking with status other than 0.").code("400").build());

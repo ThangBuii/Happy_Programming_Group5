@@ -2,6 +2,7 @@ package com.hp.backend.service.Booking.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -66,23 +67,22 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
 
     @Override
     public ViewBookingDTO findBookingDetailByID(int id) throws CustomBadRequestException {
-        Booking booking = bookingRepository.findById(id).get();
-        if (booking == null) {
+        Optional<Booking> booking = bookingRepository.findById(id);
+        if (!booking.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no booking for the booking id: " + id).code("400").build());
         }
-        return bookingMapper.toViewBookingDTO(booking);
+        return bookingMapper.toViewBookingDTO(booking.get());
     }
-
 
     @Override
     public Booking findBookingByID(int id) throws CustomBadRequestException {
-        Booking booking = bookingRepository.findById(id).get();
-        if (booking == null) {
+        Optional<Booking> booking = bookingRepository.findById(id);
+        if (!booking.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no booking for the booking id: " + id).code("400").build());
         }
-        return booking;
+        return booking.get();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
             List<Booking> bookings = bookingRepository.findAllByMentee_Id(menteeId);
 
             for (Booking booking : bookings) {
-                Account mentee = accountRepository.findById(menteeId).get();
+                Optional<Account> mentee = accountRepository.findById(menteeId);
                 Times time = booking.getTime();
 
                 if (mentee == null || time == null) {
@@ -120,7 +120,5 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
         }
         return mentorBookings;
     }
-
-    
 
 }

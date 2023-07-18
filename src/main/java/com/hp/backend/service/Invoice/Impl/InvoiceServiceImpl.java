@@ -33,7 +33,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
             InvoiceDTO invoiceDTO = invoiceMapper.toMentorInvoiceDTO(receipt);
             if (invoiceDTO.getUsername() == null || invoiceDTO.getEmail() == null) {
-                CustomError error = new CustomError("DataNotFound", "Data for mentor not found", "");
+                CustomError error = new CustomError("DataNotFound", "Data for mentee not found", "");
                 throw new CustomNotFoundException(error);
             }
 

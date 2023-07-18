@@ -29,11 +29,13 @@ public class BookingMapper {
     private final TimeRepository timeRepository;
     private final CommonUtils commonUtils;
 
-    public static BookingListMenteeDTO toBookingDTO(BookingListMenteeDTO book1) {
-        return BookingListMenteeDTO.builder().bookingID(book1.getBookingID()).avatar(book1.getAvatar())
-                .username(book1.getUsername()).email(book1.getEmail())
-                .scheduleDate(book1.getScheduleDate())
-                .scheduleTime(book1.getScheduleTime())
+    public BookingListMenteeDTO toBookingDTO(Booking book1) {
+        Account account = accountRepository.findById(book1.getMentee_id()).get();
+        Times time = book1.getTime();
+        return BookingListMenteeDTO.builder().bookingID(book1.getBooking_id()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
+                .username(account.getUsername()).email(account.getEmail())
+                .scheduleDate(book1.getCreated_date())
+                .scheduleTime(time.getStart_time().toString() + "-" + time.getEnd_time().toString())
                 .build();
     }
 
