@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.hp.backend.entity.Session;
 import com.hp.backend.exception.custom.CustomBadRequestException;
+import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.CustomError;
 import com.hp.backend.model.Session.dto.AddSessionDTO;
 import com.hp.backend.model.Session.dto.MentorSessionDTO;
@@ -94,7 +95,7 @@ class SessionServiceImplTest {
     }
 
     @Test
-    void testGetAllSession() throws CustomBadRequestException {
+    void testGetAllSession() throws CustomBadRequestException, CustomNotFoundException {
         when(sessionRepository.findAll()).thenReturn(sessions);
         when(sessionMapper.toSessionDTO(session)).thenReturn(sessionDTO);
 

@@ -108,10 +108,10 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
                 }
 
                 DashboardMentorDTO dashboardMentorDTO = new DashboardMentorDTO();
-                dashboardMentorDTO.setAvatar(commonUtils.imageToFrontEnd(mentee.getAvatar()));
+                dashboardMentorDTO.setAvatar(commonUtils.imageToFrontEnd(mentee.get().getAvatar()));
                 dashboardMentorDTO.setBookingID(booking.getBooking_id());
-                dashboardMentorDTO.setUsername(mentee.getUsername());
-                dashboardMentorDTO.setEmail(mentee.getEmail());
+                dashboardMentorDTO.setUsername(mentee.get().getUsername());
+                dashboardMentorDTO.setEmail(mentee.get().getEmail());
                 dashboardMentorDTO.setCreated_Date(booking.getCreated_date());
                 dashboardMentorDTO.setStatus(booking.getStatus());
 
