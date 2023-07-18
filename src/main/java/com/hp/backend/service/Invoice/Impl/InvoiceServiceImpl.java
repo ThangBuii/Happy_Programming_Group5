@@ -2,6 +2,7 @@ package com.hp.backend.service.Invoice.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -76,11 +77,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ViewInvoiceDTO findInvoiceById(int id) throws CustomBadRequestException {
-        Receipt invoice = receiptRepository.findById(id).get();
-        if (invoice == null) {
+        Optional<Receipt> invoice = receiptRepository.findById(id);
+        if (!invoice.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no invoice for the invoice id: " + id).code("404").build());
         }
-        return invoiceMapper.toViewInvoiceDTO(invoice);
+        return invoiceMapper.toViewInvoiceDTO(invoice.get());
     }
 }

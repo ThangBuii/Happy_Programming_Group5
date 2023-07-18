@@ -2,6 +2,7 @@ package com.hp.backend.service.Session.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -36,13 +37,13 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public ViewSessionDTO findSessionByID(int id) throws CustomBadRequestException {
-        Session session = sessionRepository.findById(id).get();
-        if (session == null) {
+        Optional<Session> session = sessionRepository.findById(id);
+        if (!session.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no session for the session id: " + id).code("404").build());
-        }
+        }   
 
-        return sessionMapper.toViewSessionDTO(session);
+        return sessionMapper.toViewSessionDTO(session.get());
     }
 
     @Override

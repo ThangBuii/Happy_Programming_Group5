@@ -1,5 +1,7 @@
 package com.hp.backend.service.Mentor_Skills.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.hp.backend.entity.Mentor_Skills;
@@ -18,12 +20,12 @@ public class Mentor_SkillsServiceImpl implements Mentor_SkillsService {
 
     @Override
     public Mentor_Skills findSkillsById(int id) throws CustomBadRequestException {
-        Mentor_Skills mentor_Skills = mentor_SkillsRepository.findById(id).get();
-        if (mentor_Skills == null) {
+        Optional<Mentor_Skills> mentor_Skills = mentor_SkillsRepository.findById(id);
+        if (!mentor_Skills.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no Mentor Skill with id: " + id).code("404").build());
         }
-        return mentor_Skills;
+        return mentor_Skills.get();
     }
 
     @Override
