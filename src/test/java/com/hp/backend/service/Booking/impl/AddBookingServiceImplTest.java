@@ -27,9 +27,10 @@ public class AddBookingServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void testAddBookingForMentee() {
- // Arrange
+        // Arrange
         int accountId = 1;
         AddBookingRequestDTO addBookingRequestDTO = new AddBookingRequestDTO();
         Booking booking = new Booking();

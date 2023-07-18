@@ -32,7 +32,7 @@ public class ReportServiceImpl implements ReportService {
         List<Report> reports = reportRepository.findAll();
         List<ReportListResponseDTO> reportListResponseDTOs = new ArrayList<>();
 
-        for(Report report : reports) {
+        for (Report report : reports) {
             reportListResponseDTOs.add(reportMapper.toReportListResponseDTO(report));
         }
         return reportListResponseDTOs;
@@ -42,10 +42,10 @@ public class ReportServiceImpl implements ReportService {
     public void updateReport(ReportUpdateRequestDTO reportUpdateRequestDTO) throws CustomBadRequestException {
         Optional<Report> report = reportRepository.findById(reportUpdateRequestDTO.getReport_id());
 
-        if(report == null){
+        if (report == null) {
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
-        Report report1  = report.get();
+        Report report1 = report.get();
 
         report1.setStatus(1);
         report1.setAnswer(reportUpdateRequestDTO.getAnswer());
@@ -53,14 +53,15 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportDetailResponseDTO getReportDetail(int id) throws CustomBadRequestException, CustomInternalServerException {
-        Report report = reportRepository.findById(id).get();
+    public ReportDetailResponseDTO getReportDetail(int id)
+            throws CustomBadRequestException, CustomInternalServerException {
+        Optional<Report> report = reportRepository.findById(id);
 
-        if(report == null){
+        if (!report.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
 
-        return reportMapper.toReportDetailResponseDTO(report);
+        return reportMapper.toReportDetailResponseDTO(report.get());
     }
 
     @Override
@@ -68,7 +69,7 @@ public class ReportServiceImpl implements ReportService {
         List<Report> reports = reportRepository.findByAccountId(account_id);
         List<ReportListMentorMenteeResponseDTO> reportListMentorMenteeResponseDTOs = new ArrayList<>();
 
-        for(Report report : reports){
+        for (Report report : reports) {
             reportListMentorMenteeResponseDTOs.add(reportMapper.toReportListMenteeMentorResponseDTO(report));
         }
 
@@ -86,12 +87,12 @@ public class ReportServiceImpl implements ReportService {
     public void deleteReport(int id) throws CustomBadRequestException {
         Optional<Report> report = reportRepository.findById(id);
 
-        if(!report.isPresent()){
+        if (!report.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
         }
 
         reportRepository.delete(report.get());
-        
+
     }
-    
+
 }

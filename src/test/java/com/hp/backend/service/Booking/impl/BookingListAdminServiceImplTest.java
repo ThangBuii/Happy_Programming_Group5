@@ -24,7 +24,7 @@ public class BookingListAdminServiceImplTest {
     @Mock
     private TimeRepository timeRepository;
 
-@Mock
+    @Mock
     private BookingRepository bookingRepository;
 
     @Mock
@@ -45,7 +45,7 @@ public class BookingListAdminServiceImplTest {
     }
     @Test
     void testGetAllAdminBooking() {
- // Arrange
+        // Arrange
         List<Booking> bookings = new ArrayList<>();
         Booking booking = new Booking();
         bookings.add(booking);

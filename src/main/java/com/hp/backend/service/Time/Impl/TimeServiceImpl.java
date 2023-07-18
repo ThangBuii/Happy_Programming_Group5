@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -75,12 +76,12 @@ public class TimeServiceImpl implements TimeService {
         }
 
         // Tính toán thời gian duration từ Session
-        Session session = sessionRepository.findById(addTimeRequestDTO.getSession_id()).get();
-        if (session.getMentor_id() != account_id) {
+        Optional<Session> session = sessionRepository.findById(addTimeRequestDTO.getSession_id());
+        if (session.get().getMentor_id() != account_id) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Bad request").code("400").build());
         }
-        int duration = session.getDuration();
+        int duration = session.get().getDuration();
 
         // Tính toán thời gian duration từ startTime và endTime
         long timeDifference = endTimeObj.getTime() - startTimeObj.getTime();
@@ -95,7 +96,7 @@ public class TimeServiceImpl implements TimeService {
         Times time = Times.builder()
                 .start_time(startTimeObj)
                 .end_time(endTimeObj)
-                .session(session)
+                .session(session.get())
                 .start_date(date)
                 .build();
         timeRepository.save(time);

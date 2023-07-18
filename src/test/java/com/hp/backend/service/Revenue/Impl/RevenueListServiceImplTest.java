@@ -31,9 +31,10 @@ public class RevenueListServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void testGetRevenueList() {
- // Arrange
+        // Arrange
         List<System_Revenue> revenues = new ArrayList<>();
         System_Revenue revenue = new System_Revenue();
         revenues.add(revenue);
