@@ -4,6 +4,7 @@ import {} from "react-bootstrap";
 import { useContext, useState } from "react";
 import { request, setDataToLocal } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
+import { Alert, Slide, Snackbar } from "@mui/material";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const SignUp = () => {
   const [role, setRole] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { makeSignIn } = useContext(ApplicationContext);
 
   const handleSubmit = (e) => {
@@ -39,7 +40,7 @@ const SignUp = () => {
       })
       .catch((error) => {
         // Handle the error here (e.g., show an error message)
-        setIsValid(false);
+        setSnackbarOpen(true)
         if (
           error.response &&
           error.response.data &&
@@ -166,7 +167,7 @@ const SignUp = () => {
                     >
                       Sign up
                     </button>
-                    {!isValid && <p class="error-message">{errorMessage}</p>}
+                
 
                     <div class="text-center">
                       <p>or sign up with:</p>
@@ -205,6 +206,22 @@ const SignUp = () => {
           </div>
         </div>
       </section>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

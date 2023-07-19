@@ -94,13 +94,14 @@ const SignIn = () => {
             </Link>
             <p>
               Don't have an account?
-              <Link to="/register" className="signup-link">
+              <Link to="/resgiter" className="signup-link">
                 Sign Up
               </Link>
             </p>
           </div>
         </div>
       </div>
+
       <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={snackbarOpen}
