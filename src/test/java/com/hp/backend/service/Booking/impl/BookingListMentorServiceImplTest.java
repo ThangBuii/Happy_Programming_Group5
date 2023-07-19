@@ -32,7 +32,7 @@ import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.utils.CommonUtils;
 
-public class BookingListMentorServiceImplTest {
+class BookingListMentorServiceImplTest {
 
     @Mock
     private BookingRepository bookingRepository;
@@ -83,9 +83,8 @@ public class BookingListMentorServiceImplTest {
     }
 
     @Test
-    void testFindBookingDetailByID(){
-    
-    
+    void testFindBookingDetailByID() {
+
     }
 
     @Test
@@ -136,9 +135,8 @@ public class BookingListMentorServiceImplTest {
     }
 
     @Test
-    void testGetDashboardMentorBooking(){
+    void testGetDashboardMentorBooking() {
 
-        
     }
 
     @Test
