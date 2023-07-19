@@ -150,15 +150,4 @@ class TimeServiceImplTest {
         assertThrows(CustomBadRequestException.class, () -> timeService.addTime(accountId, addTimeRequestDTO));
     }
 
-    // Write more test cases to cover different scenarios as needed
-
-    // @Test
-    // void testAddTime() throws CustomBadRequestException {
-
-    // }
-
-    // @Test
-    // void testGetAllTime() {
-
-    // }
 }

@@ -513,7 +513,7 @@ class AccountServiceImplTest {
         });
 
         assertEquals("400", exception.getErrors().get("errors").getCode());
-        assertEquals("Account not exists", exception.getErrors().get("errors").getMessage());
+        assertEquals("Account not exist", exception.getErrors().get("errors").getMessage());
     }
 
     @Test
