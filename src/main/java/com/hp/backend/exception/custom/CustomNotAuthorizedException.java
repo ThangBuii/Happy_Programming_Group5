@@ -6,7 +6,7 @@ public class CustomNotAuthorizedException extends BaseCustomException {
 
     public CustomNotAuthorizedException(CustomError error) {
         super(error);
-        // TODO Auto-generated constructor stub
+
     }
 
 }

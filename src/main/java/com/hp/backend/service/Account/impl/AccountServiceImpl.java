@@ -65,25 +65,25 @@ public class AccountServiceImpl implements AccountService {
                     CustomError.builder().code("400").message("Email or password incorrect").build());
         }
 
-        
-
         return buildDTOResponse(accountOptional.get());
     }
 
     @Override
-    public Map<String, AccountDTOLoginResponse> registerAccount(Map<String, AccountDTOCreate> accountDTOCreateMap) throws CustomBadRequestException {
+    public Map<String, AccountDTOLoginResponse> registerAccount(Map<String, AccountDTOCreate> accountDTOCreateMap)
+            throws CustomBadRequestException {
         AccountDTOCreate accountDTOCreate = accountDTOCreateMap.get("account");
-        if(accountRepository.existsByEmail(accountDTOCreate.getEmail())){
+        if (accountRepository.existsByEmail(accountDTOCreate.getEmail())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Email has already existed").build());
-        }else if(accountRepository.existsByUsername(accountDTOCreate.getUsername())){
+        } else if (accountRepository.existsByUsername(accountDTOCreate.getUsername())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Username has already existed").build());
         }
         Account account = AccountMapper.toUser(accountDTOCreate);
 
         account = accountRepository.save(account);
-        emailService.sendEmail(account.getEmail(), "Register Account Successfully", "Welcome to happy programming. Contact us by this email!");
+        emailService.sendEmail(account.getEmail(), "Register Account Successfully",
+                "Welcome to happy programming. Contact us by this email!");
         return buildDTOResponse(account);
     }
 
@@ -121,22 +121,22 @@ public class AccountServiceImpl implements AccountService {
     public MentorDTODetailResponse findMentorByID(int id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(id);
 
-        if(account.isPresent()){
+        if (account.isPresent()) {
             return accountMapper.toMentorDTODetailResponse(account.get());
-        }else{
+        } else {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
         }
-        
+
     }
 
     @Override
     public MenteeDTODetailResponse findMenteeByID(int id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(id);
 
-        if(account.isPresent() && account.get().getRole() == 2){
+        if (account.isPresent() && account.get().getRole() == 2) {
             return accountMapper.toMenteeDTODetailResponse(account.get());
-        }else{
+        } else {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
         }
@@ -145,38 +145,41 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deleteById(int id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(id);
-        if(account.isPresent()){
+        if (account.isPresent()) {
             accountRepository.deleteById(id);
-        }else{
+        } else {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
         }
     }
 
     @Override
-    public void updateMenteeProfile(MentorDTODetailUpdateRequest mentee, int account_id) throws CustomBadRequestException {
-        
-        Account account = accountMapper.toUpdatedMenteeAccount(mentee,account_id);
+    public void updateMenteeProfile(MentorDTODetailUpdateRequest mentee, int account_id)
+            throws CustomBadRequestException {
+
+        Account account = accountMapper.toUpdatedMenteeAccount(mentee, account_id);
         accountRepository.save(account);
     }
 
     @Override
-    public void updateMentorProfile(MentorDTODetailUpdateRequest mentor, int account_id) throws CustomBadRequestException {
-        Account account = accountMapper.toUpdatedMentorAccount(mentor,account_id);
+    public void updateMentorProfile(MentorDTODetailUpdateRequest mentor, int account_id)
+            throws CustomBadRequestException {
+        Account account = accountMapper.toUpdatedMentorAccount(mentor, account_id);
         accountRepository.save(account);
     }
 
     @Override
-    public void changePassword(AccountChangePasswordRequestDTO password, int account_id) throws CustomBadRequestException {
+    public void changePassword(AccountChangePasswordRequestDTO password, int account_id)
+            throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(account_id);
 
-        if(!account.isPresent()){
+        if (!account.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
-        }else if(!account.get().getPassword().equals(password.getOld_password())){
+        } else if (!account.get().getPassword().equals(password.getOld_password())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Old Password is not true").build());
-        }else if(!password.getRepass().equals(password.getNew_password())){
+        } else if (!password.getRepass().equals(password.getNew_password())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Repassword is not equal to New Password").build());
         }
@@ -188,8 +191,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<FavoriteListMenteeResponseDTO> getListFavorite(int account_id) throws CustomBadRequestException {
         List<Favorite_Mentor> favorites = favoriteRepository.findByMentee_id(account_id);
-        List<FavoriteListMenteeResponseDTO> responseDTOs  = new ArrayList<>();
-        for(Favorite_Mentor favorite : favorites){
+        List<FavoriteListMenteeResponseDTO> responseDTOs = new ArrayList<>();
+        for (Favorite_Mentor favorite : favorites) {
             responseDTOs.add(accountMapper.toFavoriteListResponseDTO(favorite));
         }
 
@@ -200,25 +203,25 @@ public class AccountServiceImpl implements AccountService {
     public void addFavorite(int mentee_id, int mentor_id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(mentor_id);
 
-        if(!account.isPresent()){
+        if (!account.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exist").build());
         }
 
-        if(account.get().getRole() != 1){
+        if (account.get().getRole() != 1) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Mentor not exist").build());
         }
-        
+
         favoriteRepository.save(Favorite_Mentor.builder().mentee_id(mentee_id).mentor_id(mentor_id).build());
     }
 
     @Override
-    public void deleteFavorite(int mentor_id,int mentee_id) throws CustomInternalServerException, CustomBadRequestException {
-        Favorite_Mentor favorite = favoriteRepository.findByMentorMenteeId(mentor_id,mentee_id);
+    public void deleteFavorite(int mentor_id, int mentee_id)
+            throws CustomInternalServerException, CustomBadRequestException {
+        Favorite_Mentor favorite = favoriteRepository.findByMentorMenteeId(mentor_id, mentee_id);
 
-
-        if(favorite.getMentee_id() != mentee_id){
+        if (favorite.getMentee_id() != mentee_id) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Bad request").build());
         }
@@ -230,17 +233,20 @@ public class AccountServiceImpl implements AccountService {
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, List<Integer> skills) {
         List<Account> accounts = new ArrayList<>();
         List<Integer> mentor_ids = new ArrayList<>();
-        if(skills.get(0) != 0){
+        if (skills.get(0) != 0) {
             mentor_ids = sessionRepository.findAllBySkill_ID(skills);
-        }else{
+        } else {
             mentor_ids = sessionRepository.findAllBySkill_ID();
         }
         int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
-            for(int id : mentorIdsArray){
-                accounts.add(accountRepository.findById(id).get());
+        for (int id : mentorIdsArray) {
+            Optional<Account> accountOptional = accountRepository.findById(id);
+            if (accountOptional.isPresent()) {
+                accounts.add(accountOptional.get());
             }
+        }
         List<FindMentorResponseDTO> results = new ArrayList<>();
-        for(Account account : accounts){
+        for (Account account : accounts) {
             results.add(accountMapper.toFindMentorResponse(account, account_id));
         }
 
@@ -250,8 +256,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String getAccountName(int receiver_id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(receiver_id);
-        if(!account.isPresent()){
-             throw new CustomBadRequestException(
+        if (!account.isPresent()) {
+            throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exists").build());
         }
 
@@ -259,13 +265,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public FindMentorResponseDTO findMentorProfile(int mentor_id,int account_id) throws CustomBadRequestException {
+    public FindMentorResponseDTO findMentorProfile(int mentor_id, int account_id) throws CustomBadRequestException {
         Optional<Account> account = accountRepository.findById(mentor_id);
-        if(!account.isPresent()){
-             throw new CustomBadRequestException(
+        if (!account.isPresent()) {
+            throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Account not exists").build());
         }
-        return accountMapper.toFindMentorResponse(account.get(),account_id);
+        return accountMapper.toFindMentorResponse(account.get(), account_id);
     }
 
 }

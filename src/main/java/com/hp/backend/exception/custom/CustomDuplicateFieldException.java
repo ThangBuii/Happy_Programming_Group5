@@ -6,7 +6,7 @@ public class CustomDuplicateFieldException extends BaseCustomException {
 
     public CustomDuplicateFieldException(CustomError error) {
         super(error);
-        // TODO Auto-generated constructor stub
+        
     }
 
 }

@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TimeMapper {
-   
 
     public GetListTimeResponseDTO toGetListTimeResponseDTO(Times time) {
         return GetListTimeResponseDTO.builder()
@@ -25,12 +24,5 @@ public class TimeMapper {
     public GetListTimeResponseFindMentorDTO toGetListTimeResponseFindMentorDTO(Date start_date,List<GetListTimeResponseDTO> times) {
         return GetListTimeResponseFindMentorDTO.builder().schedule_date(start_date).times(times).build();
     }
-
-    // public GetListTimeRequestDTO findSessionIdAndStartDate(int id) {
-    // Times time = timeRepository.findById(id).get();
-    // return
-    // GetListTimeRequestDTO.builder().session_id(time.getSession().getSession_id()).start_date(time.getStart_date())
-    // .build();
-    // }
 
 }

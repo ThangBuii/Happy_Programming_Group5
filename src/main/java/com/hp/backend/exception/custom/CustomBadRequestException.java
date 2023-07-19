@@ -6,7 +6,7 @@ public class CustomBadRequestException extends BaseCustomException {
 
     public CustomBadRequestException(CustomError error) {
         super(error);
-        // TODO Auto-generated constructor stub
+        
     }
 
 }

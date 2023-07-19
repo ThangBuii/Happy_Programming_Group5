@@ -23,6 +23,7 @@ import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.time.dto.AddTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
+import com.hp.backend.model.time.mapper.TimeMapper;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
@@ -32,6 +33,9 @@ public class TimeServiceImplTest {
 
     @Mock
     private SessionRepository sessionRepository;
+
+    @Mock
+    private TimeMapper timeMapper;
 
     @InjectMocks
     private TimeServiceImpl timeService;
@@ -45,24 +49,63 @@ public class TimeServiceImplTest {
     void testGetAllTime() {
         // Mock data
         int sessionId = 1;
-        Date startDate = Date.valueOf("2023-07-17");
-        GetListTimeRequestDTO requestDTO = new GetListTimeRequestDTO(sessionId, startDate);
-        List<Times> mockTimesList = new ArrayList<>();
-        mockTimesList.add(new Times(1, Time.valueOf("10:00:00"), Time.valueOf("11:00:00"), new Session(), startDate));
+        Date startDate = Date.valueOf("2023-07-19");
 
-        // Mock repository method
-        when(timeRepository.findStartTimeAndEndTime(sessionId, startDate)).thenReturn(mockTimesList);
+        Times time1 = new Times();
+        time1.setTime_id(1);
+        time1.setStart_time(Time.valueOf("09:00:00"));
+        time1.setEnd_time(Time.valueOf("10:00:00"));
+        time1.setStart_date(startDate);
 
-        // Call the service method
-        List<GetListTimeResponseDTO> result = timeService.getAllTime(requestDTO);
+        Times time2 = new Times();
+        time2.setTime_id(2);
+        time2.setStart_time(Time.valueOf("13:00:00"));
+        time2.setEnd_time(Time.valueOf("14:00:00"));
+        time2.setStart_date(startDate);
 
-        // Assertions
-        assertEquals(1, result.size());
-        GetListTimeResponseDTO responseDTO = result.get(0);
-        assertEquals("10:00:00-11:00:00", responseDTO.getStart_time());
-        assertEquals(1, responseDTO.getTime_id());
+        List<Times> timesList = new ArrayList<>();
+        timesList.add(time1);
+        timesList.add(time2);
+
+        GetListTimeRequestDTO requestDTO = GetListTimeRequestDTO.builder()
+                .session_id(sessionId)
+                .start_date(startDate)
+                .build();
+
+        GetListTimeResponseDTO responseDTO1 = GetListTimeResponseDTO.builder()
+                .time_id(time1.getTime_id())
+                .start_time(time1.getStart_time().toString())
+                .build();
+
+        GetListTimeResponseDTO responseDTO2 = GetListTimeResponseDTO.builder()
+                .time_id(time2.getTime_id())
+                .start_time(time2.getStart_time().toString())
+                .build();
+
+        List<GetListTimeResponseDTO> expectedResponse = new ArrayList<>();
+        expectedResponse.add(responseDTO1);
+        expectedResponse.add(responseDTO2);
+
+        // Set up mock behavior
+        when(timeRepository.findStartTimeAndEndTime(sessionId, startDate)).thenReturn(timesList);
+        when(timeMapper.toGetListTimeResponseDTO(time1)).thenReturn(responseDTO1);
+        when(timeMapper.toGetListTimeResponseDTO(time2)).thenReturn(responseDTO2);
+
+        // Call the method to be tested
+        List<GetListTimeResponseDTO> actualResponse = timeService.getAllTime(requestDTO);
+
+        // Verify the results
+        assertEquals(expectedResponse.size(), actualResponse.size());
+        assertEquals(expectedResponse.get(0).getTime_id(), actualResponse.get(0).getTime_id());
+        assertEquals(expectedResponse.get(0).getStart_time(), actualResponse.get(0).getStart_time());
+        assertEquals(expectedResponse.get(1).getTime_id(), actualResponse.get(1).getTime_id());
+        assertEquals(expectedResponse.get(1).getStart_time(), actualResponse.get(1).getStart_time());
+
+        // Verify the interactions with mocks
+        verify(timeRepository, times(1)).findStartTimeAndEndTime(sessionId, startDate);
+        verify(timeMapper, times(1)).toGetListTimeResponseDTO(time1);
+        verify(timeMapper, times(1)).toGetListTimeResponseDTO(time2);
     }
-
 
     @Test
     void testAddTimeInvalidDate() {
