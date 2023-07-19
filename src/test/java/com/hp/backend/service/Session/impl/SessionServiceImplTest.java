@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +20,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.repository.CrudRepository;
 
+import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Session;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
@@ -29,10 +32,18 @@ import com.hp.backend.model.Session.dto.MentorSessionDTO;
 import com.hp.backend.model.Session.dto.SessionDTO;
 import com.hp.backend.model.Session.dto.ViewSessionDTO;
 import com.hp.backend.model.Session.mapper.SessionMapper;
+import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.SessionRepository;
+import com.hp.backend.service.EmailService;
 
 @ExtendWith(MockitoExtension.class)
 class SessionServiceImplTest {
+
+    @Mock
+    private EmailService emailService;
+
+    @Mock
+    private AccountRepository accountRepository;
 
     @Mock
     private SessionRepository sessionRepository;
@@ -49,7 +60,6 @@ class SessionServiceImplTest {
     private List<Session> sessions;
     private MentorSessionDTO mentorSessionDTO;
     private AddSessionDTO addSessionDTO;
-
 
     @BeforeEach
     void setUp() {
@@ -109,7 +119,7 @@ class SessionServiceImplTest {
     @Test
     void testGetAllSession_NoSessionFound() {
         when(sessionRepository.findAll()).thenReturn(new ArrayList<>());
-        assertThrows(CustomBadRequestException.class,
+        assertThrows(CustomNotFoundException.class,
                 () -> sessionService.getAllSession());
     }
 
@@ -136,18 +146,58 @@ class SessionServiceImplTest {
     void testAddSession() {
         sessionService.addSession(addSessionDTO, 1);
 
-        // Verify that the sessionRepository.save() method was called with the expected session object
+        // Verify that the sessionRepository.save() method was called with the expected
+        // session object
         verify(sessionRepository).save(argThat(s -> s.getName().equals("New Session")));
+
     }
 
     @Test
-    void testSaveSession() {
+    void testSaveSessionWithAcceptedStatus() {
+        // Test data
+        Session session = new Session();
+        session.setName("Test Session");
+        session.setMentor_id(1);
+        session.setStatus(1);
+
+        Account account = new Account();
+        account.setEmail("mentor@test.com");
+
+        // Mocking repository calls
+        when(accountRepository.findById(1)).thenReturn(Optional.of(account));
+
+        // Call the method to be tested
         sessionService.saveSesison(session);
 
-        // Verify that the sessionRepository.save() method was called with the expected session object
-        verify(sessionRepository).save(session);
+        // Verify that the repository.save() methods were
+        // called
+        verify(sessionRepository, times(1)).save(session);
+        verify(emailService, times(1)).sendEmail("mentor@test.com", "Session Accepted",
+                "Your session Test Session has been accepted");
     }
 
-    // Write similar test methods for other methods in SessionServiceImpl
+    @Test
+    void testSaveSessionWithRejectedStatus() {
+        // Test data
+        Session session = new Session();
+        session.setName("Test Session");
+        session.setMentor_id(1);
+        session.setStatus(0);
+
+        Account account = new Account();
+        account.setEmail("mentor@test.com");
+
+        // Mocking repository calls
+        when(accountRepository.findById(1)).thenReturn(Optional.of(account));
+
+        // Call the method to be tested
+        sessionService.saveSesison(session);
+
+        // Verify that the repository.save() and emailService.sendEmail() methods were
+        // called
+        verify(sessionRepository, times(1)).save(session);
+        verify(emailService, times(1)).sendEmail("mentor@test.com", "Session Accepted",
+                "Your session Test Session has been rejected");
+    }
 
 }
