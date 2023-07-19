@@ -42,7 +42,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             token = requestTokenHeader.substring(6).trim();
             tokenPayload = parseToken(token);
         } else {
-            System.out.println("JWT TOKEN does not start with Token");
+            logger.error("JWT TOKEN does not start with Token");
         }
 
         if (tokenPayload != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -53,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 if (jwtTokenUtil.validate(token, account)) {
                     handleValidToken(account, tokenPayload);
                 } else {
-                    System.out.println("Token khong hop le");
+                    logger.error("Token khong hop le");
                 }
             }
         }
@@ -66,11 +66,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
             tokenPayload = jwtTokenUtil.getTokenPayload(token);
         } catch (SignatureException e) {
-            System.out.println("Invalid JWT signature");
+            logger.error("Invalid JWT signature", e);
         } catch (IllegalArgumentException ex) {
-            System.out.println("Unable to get JWT");
+            logger.error("Unable to get JWT", ex);
         } catch (ExpiredJwtException ex) {
-            System.out.println("Token has expired");
+            logger.error("Token has expired", ex);
         }
         return tokenPayload;
     }

@@ -22,9 +22,7 @@ public class CommonUtils {
             java.util.Date parsedDate = dateFormat.parse(formattedDate);
             sqlDate = new java.sql.Date(parsedDate.getTime());
         } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle parsing error
-            return null; // or throw an exception
+            return null; 
         }
         return sqlDate;
     }

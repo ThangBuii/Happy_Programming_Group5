@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.hp.backend.entity.Session;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
-import com.hp.backend.model.CustomError;
 import com.hp.backend.model.Session.dto.AddSessionDTO;
 import com.hp.backend.model.Session.dto.MentorSessionDTO;
 import com.hp.backend.model.Session.dto.SessionDTO;

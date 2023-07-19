@@ -3,7 +3,6 @@ package com.hp.backend.service.Account.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -12,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,13 +24,11 @@ import org.mockito.MockitoAnnotations;
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Favorite_Mentor;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.account.dto.AccountChangePasswordRequestDTO;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
-import com.hp.backend.model.account.dto.FindMentorDTO.FindMentorResponseDTO;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginRequest;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
@@ -41,9 +37,7 @@ import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
 import com.hp.backend.repository.SessionRepository;
-import com.hp.backend.service.Account.AccountService;
 import com.hp.backend.utils.JwtTokenUtil;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Find;
 
 class AccountServiceImplTest {
     @Mock

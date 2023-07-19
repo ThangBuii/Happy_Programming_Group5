@@ -27,7 +27,6 @@ import com.hp.backend.model.account.mapper.AccountMapper;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
-import com.hp.backend.repository.Mentor_SkillsRepository;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Account.AccountService;
@@ -92,7 +91,7 @@ public class AccountServiceImpl implements AccountService {
     private Map<String, AccountDTOLoginResponse> buildDTOResponse(Account account) {
         Map<String, AccountDTOLoginResponse> wrapper = new HashMap<>();
         AccountDTOLoginResponse accountDTOResponse = AccountMapper.toAccountDTOResponse(account);
-        accountDTOResponse.setToken(jwtTokenUtil.generateToken(account, 24 * 60 * 60));
+        accountDTOResponse.setToken(jwtTokenUtil.generateToken(account, 24L * 60L * 60L));
         wrapper.put(ACCOUNT, accountDTOResponse);
         return wrapper;
     }

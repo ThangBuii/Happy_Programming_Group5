@@ -1,13 +1,9 @@
 package com.hp.backend.service.Booking.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +19,6 @@ import com.hp.backend.entity.Times;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomNotFoundException;
 import com.hp.backend.model.booking.dto.BookingListMentorDTO;
-import com.hp.backend.model.booking.dto.DashboardMentorDTO;
-import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;

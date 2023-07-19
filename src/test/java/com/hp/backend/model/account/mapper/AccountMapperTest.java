@@ -1,11 +1,7 @@
 package com.hp.backend.model.account.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,8 +9,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,14 +17,12 @@ import org.mockito.MockitoAnnotations;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Skills;
-import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTOResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTODetailResponse;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MentorDTOResponse;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOCreate;
 import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
-import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SkillsRepository;

@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
-    // private final UserDetailsService userDetailsService;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity

@@ -3,7 +3,6 @@ package com.hp.backend.service.Skills.impl;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
@@ -23,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.model.CustomError;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.model.Skills.dto.SkillsRequestDTO;
 import com.hp.backend.model.Skills.mapper.SkillsMapper;
