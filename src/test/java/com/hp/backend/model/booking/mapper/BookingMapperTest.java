@@ -46,6 +46,16 @@ class BookingMapperTest {
     }
 
     @Test
+    void testFindEmailAndUsernameByAdminBookingID() {
+
+    }
+
+    @Test
+    void testFindEmailAndUsernameByBookingID() {
+
+    }
+
+    @Test
     void testToBooking() {
         // Prepare mock objects
         AddBookingRequestDTO addBookingRequestDTO = new AddBookingRequestDTO();
@@ -88,5 +98,8 @@ class BookingMapperTest {
         assertEquals("09:00:00-11:00:00", result.getScheduleTime());
     }
 
-    
+    @Test
+    void testToViewBookingDTO() {
+
+    }
 }
