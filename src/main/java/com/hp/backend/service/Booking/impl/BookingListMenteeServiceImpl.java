@@ -98,30 +98,4 @@ public class BookingListMenteeServiceImpl implements BookingListMenteeService {
       return dashboardDTOs;
    }
 
-   // @Override
-   // public BookingDTO findEmailAndUsernameByBookingID(int id) {
-   // Booking booking = bookingRepository.findById(id).get();
-   // Times time = booking.getTime();
-   // Session session = time.getSession();
-   // Account account = accountRepository.findById(session.getMentor_id()).get();
-
-   // BookingDTO bookingDTO = new BookingDTO();
-   // bookingDTO.setUsername(account.getUsername());
-   // bookingDTO.setEmail(account.getEmail());
-   // bookingDTO.setScheduleDate(time.getStart_date());
-   // bookingDTO.setScheduleTime(time.getStart_time().toString() + "-" +
-   // time.getEnd_time().toString());
-   // return bookingDTO;
-   // }
-
-   // @Override
-   // public void deleteBookingByID(int id) {
-   // bookingRepository.deleteById(id);
-   // }
-
-   // @Override
-   // public void saveBooking(Booking r) {
-   // bookingRepository.save(r);
-   // }
-
 }

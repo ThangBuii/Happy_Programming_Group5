@@ -6,7 +6,7 @@ public class CustomForbiddenException extends BaseCustomException {
 
     public CustomForbiddenException(CustomError error) {
         super(error);
-        // TODO Auto-generated constructor stub
+
     }
 
 }

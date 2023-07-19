@@ -52,4 +52,5 @@ public class InvoiceController {
     ViewInvoiceDTO getInvoiceById(@PathVariable int id) throws CustomBadRequestException {
         return invoiceService.findInvoiceById(id);
     }
+
 }

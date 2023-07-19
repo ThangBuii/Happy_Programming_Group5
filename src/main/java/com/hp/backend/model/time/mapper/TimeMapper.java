@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TimeMapper {
-   
 
     public GetListTimeResponseDTO toGetListTimeResponseDTO(Times time) {
         return GetListTimeResponseDTO.builder()

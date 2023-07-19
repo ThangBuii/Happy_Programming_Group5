@@ -244,9 +244,11 @@ public class AccountServiceImpl implements AccountService {
 
         int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
         for (int id : mentorIdsArray) {
-            accounts.add(accountRepository.findById(id).get());
+            Optional<Account> accountOptional = accountRepository.findById(id);
+            if (accountOptional.isPresent()) {
+                accounts.add(accountOptional.get());
+            }
         }
-
         List<FindMentorResponseDTO> results = new ArrayList<>();
         for (Account account : accounts) {
             results.add(accountMapper.toFindMentorResponse(account, account_id));

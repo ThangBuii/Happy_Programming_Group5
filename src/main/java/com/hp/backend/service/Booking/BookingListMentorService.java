@@ -9,8 +9,6 @@ import com.hp.backend.model.booking.dto.BookingListMentorDTO;
 import com.hp.backend.model.booking.dto.DashboardMentorDTO;
 import com.hp.backend.model.booking.dto.ViewBookingDTO;
 
-
-
 public interface BookingListMentorService {
 
     List<BookingListMentorDTO> getAllMentorBooking(int id) throws CustomNotFoundException;
@@ -22,9 +20,5 @@ public interface BookingListMentorService {
     void saveMentorBooking(Booking b);
 
     List<DashboardMentorDTO> getDashboardMentorBooking(int id) throws CustomNotFoundException;
-        
-    
 
-    
-   
 }

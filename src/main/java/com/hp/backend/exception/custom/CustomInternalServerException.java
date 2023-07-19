@@ -6,7 +6,7 @@ public class CustomInternalServerException extends BaseCustomException {
 
     public CustomInternalServerException(CustomError error) {
         super(error);
-        // TODO Auto-generated constructor stub
+
     }
 
 }
