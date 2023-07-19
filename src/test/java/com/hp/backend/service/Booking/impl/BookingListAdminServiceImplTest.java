@@ -20,7 +20,7 @@ import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
-public class BookingListAdminServiceImplTest {
+class BookingListAdminServiceImplTest {
     @Mock
     private TimeRepository timeRepository;
 
@@ -43,6 +43,7 @@ public class BookingListAdminServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void testGetAllAdminBooking() {
         // Arrange

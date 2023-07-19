@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final ReportMapper reportMapper;
+    private static final String REPORT_NOT_EXIST = "Report not exist";
 
     @Override
     public List<ReportListResponseDTO> getReports() throws CustomInternalServerException {
@@ -43,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
         Optional<Report> report = reportRepository.findById(reportUpdateRequestDTO.getReport_id());
 
         if(!report.isPresent()){
-            throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
+            throw new CustomBadRequestException(CustomError.builder().message(REPORT_NOT_EXIST).code("404").build());
         }
         Report report1 = report.get();
 
@@ -57,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
         Optional<Report> report = reportRepository.findById(id);
 
         if(!report.isPresent()){
-            throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
+            throw new CustomBadRequestException(CustomError.builder().message(REPORT_NOT_EXIST).code("404").build());
         }
 
         return reportMapper.toReportDetailResponseDTO(report.get());
@@ -94,7 +95,7 @@ public class ReportServiceImpl implements ReportService {
         Optional<Report> report = reportRepository.findById(id);
 
         if (!report.isPresent()) {
-            throw new CustomBadRequestException(CustomError.builder().message("Report not exist").code("404").build());
+            throw new CustomBadRequestException(CustomError.builder().message(REPORT_NOT_EXIST).code("404").build());
         }
 
         reportRepository.delete(report.get());

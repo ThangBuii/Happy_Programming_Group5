@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BaseCustomException extends Exception {
-    private Map<String, CustomError> errors = new HashMap<>();
+    private final Map<String, CustomError> errors;
 
     public BaseCustomException(CustomError error) {
         this.errors = new HashMap<>();

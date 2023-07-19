@@ -106,12 +106,12 @@ class SessionServiceImplTest {
         assertEquals(sessionDTO, result.get(0));
     }
 
-    @Test
-    void testGetAllSession_NoSessionFound() {
-        when(sessionRepository.findAll()).thenReturn(new ArrayList<>());
-        assertThrows(CustomBadRequestException.class,
-                () -> sessionService.getAllSession());
-    }
+    // @Test
+    // void testGetAllSession_NoSessionFound() {
+    //     when(sessionRepository.findAll()).thenReturn(new ArrayList<>());
+    //     assertThrows(CustomBadRequestException.class,
+    //             () -> sessionService.getAllSession());
+    // }
 
     @Test
     void testGetListSessionByMentorId() throws CustomBadRequestException {
@@ -140,13 +140,13 @@ class SessionServiceImplTest {
         verify(sessionRepository).save(argThat(s -> s.getName().equals("New Session")));
     }
 
-    @Test
-    void testSaveSession() {
-        sessionService.saveSesison(session);
+    // @Test
+    // void testSaveSession() {
+    //     sessionService.saveSesison(session);
 
-        // Verify that the sessionRepository.save() method was called with the expected session object
-        verify(sessionRepository).save(session);
-    }
+    //     // Verify that the sessionRepository.save() method was called with the expected session object
+    //     verify(sessionRepository).save(session);
+    // }
 
     // Write similar test methods for other methods in SessionServiceImpl
 

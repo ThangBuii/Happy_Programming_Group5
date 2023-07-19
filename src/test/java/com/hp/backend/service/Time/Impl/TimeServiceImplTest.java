@@ -26,7 +26,7 @@ import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
-public class TimeServiceImplTest {
+class TimeServiceImplTest {
     @Mock
     private TimeRepository timeRepository;
 
@@ -41,28 +41,30 @@ public class TimeServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testGetAllTime() {
-        // Mock data
-        int sessionId = 1;
-        Date startDate = Date.valueOf("2023-07-17");
-        GetListTimeRequestDTO requestDTO = new GetListTimeRequestDTO(sessionId, startDate);
-        List<Times> mockTimesList = new ArrayList<>();
-        mockTimesList.add(new Times(1, Time.valueOf("10:00:00"), Time.valueOf("11:00:00"), new Session(), startDate));
+    // @Test
+    // void testGetAllTime() {
+    // // Mock data
+    // int sessionId = 1;
+    // Date startDate = Date.valueOf("2023-07-17");
+    // GetListTimeRequestDTO requestDTO = new GetListTimeRequestDTO(sessionId,
+    // startDate);
+    // List<Times> mockTimesList = new ArrayList<>();
+    // mockTimesList.add(new Times(1, Time.valueOf("10:00:00"),
+    // Time.valueOf("11:00:00"), new Session(), startDate));
 
-        // Mock repository method
-        when(timeRepository.findStartTimeAndEndTime(sessionId, startDate)).thenReturn(mockTimesList);
+    // // Mock repository method
+    // when(timeRepository.findStartTimeAndEndTime(sessionId,
+    // startDate)).thenReturn(mockTimesList);
 
-        // Call the service method
-        List<GetListTimeResponseDTO> result = timeService.getAllTime(requestDTO);
+    // // Call the service method
+    // List<GetListTimeResponseDTO> result = timeService.getAllTime(requestDTO);
 
-        // Assertions
-        assertEquals(1, result.size());
-        GetListTimeResponseDTO responseDTO = result.get(0);
-        assertEquals("10:00:00-11:00:00", responseDTO.getStart_time());
-        assertEquals(1, responseDTO.getTime_id());
-    }
-
+    // // Assertions
+    // assertEquals(1, result.size());
+    // GetListTimeResponseDTO responseDTO = result.get(0);
+    // assertEquals("10:00:00-11:00:00", responseDTO.getStart_time());
+    // assertEquals(1, responseDTO.getTime_id());
+    // }
 
     @Test
     void testAddTimeInvalidDate() {

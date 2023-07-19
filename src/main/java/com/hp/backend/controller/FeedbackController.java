@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 public class FeedbackController {
     private final FeedbackService feedbackService;
     private final JwtTokenUtil jwtTokenUtil;

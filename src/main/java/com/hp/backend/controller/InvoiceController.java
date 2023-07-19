@@ -52,13 +52,4 @@ public class InvoiceController {
     ViewInvoiceDTO getInvoiceById(@PathVariable int id) throws CustomBadRequestException {
         return invoiceService.findInvoiceById(id);
     }
-
-    // @GetMapping("/mentee/bookings")
-    // List<BookingListMenteeDTO> getBookingListMentee(HttpServletRequest request)
-    // throws CustomNotFoundException {
-    // String token = jwtTokenUtil.getRequestToken(request);
-    // TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
-    // return
-    // bookingListMenteeService.getAllMenteeBooking(tokenPayload.getAccount_id());
-    // }
 }

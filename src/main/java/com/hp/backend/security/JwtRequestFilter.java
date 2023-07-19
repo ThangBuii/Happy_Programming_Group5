@@ -40,44 +40,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Token ")) {
             token = requestTokenHeader.substring(6).trim();
-
-            try {
-                tokenPayload = jwtTokenUtil.getTokenPayload(token);
-
-            } catch (SignatureException e) {
-                System.out.println("Invalid JWT signature");
-            } catch (IllegalArgumentException ex) {
-                System.out.println("Unable to get JWT");
-            } catch (ExpiredJwtException ex) {
-                System.out.println("Token has expired");
-            }
+            tokenPayload = parseToken(token);
         } else {
-            System.out.println("JWT TOKEN doest not start with Token");
+            System.out.println("JWT TOKEN does not start with Token");
         }
 
         if (tokenPayload != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Optional<Account> accountOptional = accountRepository.findById(tokenPayload.getAccount_id());
+            Optional<Account> accountOptional = getAccountFromTokenPayload(tokenPayload);
 
             if (accountOptional.isPresent()) {
                 Account account = accountOptional.get();
                 if (jwtTokenUtil.validate(token, account)) {
-                    // Extract role from the token payload
-                    int role = tokenPayload.getRole();
-
-                    // Create the authority for the role
-                    String roleString = "ROLE_" + role;
-                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleString);
-
-                    // Create the UserDetails object with the necessary information
-                    UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                            account.getEmail(),
-                            account.getPassword(),
-                            Collections.singleton(authority));
-
-                    // Create the authentication token and set it to the SecurityContextHolder
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    handleValidToken(account, tokenPayload);
                 } else {
                     System.out.println("Token khong hop le");
                 }
@@ -85,7 +59,39 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
 
+    private TokenPayload parseToken(String token) {
+        TokenPayload tokenPayload = null;
+        try {
+            tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        } catch (SignatureException e) {
+            System.out.println("Invalid JWT signature");
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Unable to get JWT");
+        } catch (ExpiredJwtException ex) {
+            System.out.println("Token has expired");
+        }
+        return tokenPayload;
+    }
+
+    private Optional<Account> getAccountFromTokenPayload(TokenPayload tokenPayload) {
+        return accountRepository.findById(tokenPayload.getAccount_id());
+    }
+
+    private void handleValidToken(Account account, TokenPayload tokenPayload) {
+        int role = tokenPayload.getRole();
+        String roleString = "ROLE_" + role;
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleString);
+
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                account.getEmail(),
+                account.getPassword(),
+                Collections.singleton(authority));
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
 }
