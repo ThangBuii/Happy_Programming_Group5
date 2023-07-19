@@ -15,15 +15,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
-    // private final UserDetailsService userDetailsService;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/public/**", "/api/register", "/api/profile/**", "/api/feedbacks/**", "/api/findMentor")
+                .antMatchers("/api/public/**", "/api/register", "/api/profile/**", "/api/feedbacks/**",
+                        "/api/findMentor")
                 .permitAll()
                 .antMatchers("/api/admin/**").access("hasRole('0')")
                 .antMatchers("/api/mentor/**").access("hasRole('1')")

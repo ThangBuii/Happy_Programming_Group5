@@ -19,13 +19,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenUtil {
     private String secret = "Thang";
+    private static final String PAYLOAD = "payload";
 
     public String generateToken(Account account, long expiredDate) {
         Map<String, Object> claims = new HashMap<>();
 
         TokenPayload tokenPayload = TokenPayload.builder().account_id(account.getAccount_id()).role(account.getRole())
                 .build();
-        claims.put("payload", tokenPayload);
+        claims.put(PAYLOAD, tokenPayload);
         return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredDate * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -46,14 +47,13 @@ public class JwtTokenUtil {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        TokenPayload payload = claims.get("payload", TokenPayload.class);
-        return payload;
+    
+        return claims.get(PAYLOAD, TokenPayload.class);
     }
 
     public TokenPayload getTokenPayload(String token) {
         return getClaimsFromToken(token, (Claims claim) -> {
-            Map<String, Object> mapResult = (Map<String, Object>) claim.get("payload");
+            Map<String, Object> mapResult = (Map<String, Object>) claim.get(PAYLOAD);
             return TokenPayload.builder()
                     .account_id((int) mapResult.get("account_id"))
                     .role((int) mapResult.get("role")).build();

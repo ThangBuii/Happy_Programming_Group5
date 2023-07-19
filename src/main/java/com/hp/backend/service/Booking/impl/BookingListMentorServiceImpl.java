@@ -102,7 +102,7 @@ public class BookingListMentorServiceImpl implements BookingListMentorService {
                 Optional<Account> mentee = accountRepository.findById(menteeId);
                 Times time = booking.getTime();
 
-                if (mentee == null || time == null) {
+                if (!mentee.isPresent() || time == null) {
                     CustomError error = new CustomError("DataNotFound", "Data for mentee or time not found", "");
                     throw new CustomNotFoundException(error);
                 }

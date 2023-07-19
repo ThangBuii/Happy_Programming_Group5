@@ -72,12 +72,12 @@ class InvoiceServiceImplTest {
         invoiceDTO.setEmail("john.doe@example.com"); // Set the email
         List<InvoiceDTO> expectedInvoiceList = new ArrayList<>();
         expectedInvoiceList.add(invoiceDTO);
-    
+
         when(receiptRepository.findReceiptIdsByMenteeId(menteeId)).thenReturn(receipts);
         when(invoiceMapper.toMenteeInvoiceDTO(receipt)).thenReturn(invoiceDTO);
-    
+
         List<InvoiceDTO> actualInvoiceList = invoiceService.getInvoiceMentee(menteeId);
-    
+
         assertEquals(expectedInvoiceList, actualInvoiceList);
         verify(receiptRepository, times(1)).findReceiptIdsByMenteeId(menteeId);
         verify(invoiceMapper, times(1)).toMenteeInvoiceDTO(receipt);
@@ -94,12 +94,12 @@ class InvoiceServiceImplTest {
         invoiceDTO.setEmail("john.doe@example.com"); // Set the email
         List<InvoiceDTO> expectedInvoiceList = new ArrayList<>();
         expectedInvoiceList.add(invoiceDTO);
-    
+
         when(receiptRepository.findReceiptsByMentorId(mentorId)).thenReturn(receipts);
         when(invoiceMapper.toMentorInvoiceDTO(receipt)).thenReturn(invoiceDTO);
-    
+
         List<InvoiceDTO> actualInvoiceList = invoiceService.getInvoiceMentor(mentorId);
-    
+
         assertEquals(expectedInvoiceList, actualInvoiceList);
         verify(receiptRepository, times(1)).findReceiptsByMentorId(mentorId);
         verify(invoiceMapper, times(1)).toMentorInvoiceDTO(receipt);

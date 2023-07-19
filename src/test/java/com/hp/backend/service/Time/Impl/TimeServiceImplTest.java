@@ -1,7 +1,6 @@
 package com.hp.backend.service.Time.Impl;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.Date;
@@ -28,6 +27,7 @@ import com.hp.backend.model.time.mapper.TimeMapper;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
+class TimeServiceImplTest {
 class TimeServiceImplTest {
     @Mock
     private TimeRepository timeRepository;

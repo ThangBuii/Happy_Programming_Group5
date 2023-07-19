@@ -27,7 +27,6 @@ import com.hp.backend.model.account.mapper.AccountMapper;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FavoriteRepository;
-import com.hp.backend.repository.Mentor_SkillsRepository;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.service.EmailService;
 import com.hp.backend.service.Account.AccountService;
@@ -44,11 +43,13 @@ public class AccountServiceImpl implements AccountService {
     private final FavoriteRepository favoriteRepository;
     private final SessionRepository sessionRepository;
     private final EmailService emailService;
+    public static final String ACCOUNT_NOT_EXIST = "Account not exist";
+    public static final String ACCOUNT = "account";
 
     @Override
     public Map<String, AccountDTOLoginResponse> authenticate(Map<String, AccountDTOLoginRequest> accountLoginRequestMap)
             throws CustomBadRequestException {
-        AccountDTOLoginRequest accountDTOLoginRequest = accountLoginRequestMap.get("account");
+        AccountDTOLoginRequest accountDTOLoginRequest = accountLoginRequestMap.get(ACCOUNT);
 
         Optional<Account> accountOptional = accountRepository.findByEmail(accountDTOLoginRequest.getEmail());
 
@@ -71,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Map<String, AccountDTOLoginResponse> registerAccount(Map<String, AccountDTOCreate> accountDTOCreateMap)
             throws CustomBadRequestException {
-        AccountDTOCreate accountDTOCreate = accountDTOCreateMap.get("account");
+        AccountDTOCreate accountDTOCreate = accountDTOCreateMap.get(ACCOUNT);
         if (accountRepository.existsByEmail(accountDTOCreate.getEmail())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Email has already existed").build());
@@ -90,8 +91,8 @@ public class AccountServiceImpl implements AccountService {
     private Map<String, AccountDTOLoginResponse> buildDTOResponse(Account account) {
         Map<String, AccountDTOLoginResponse> wrapper = new HashMap<>();
         AccountDTOLoginResponse accountDTOResponse = AccountMapper.toAccountDTOResponse(account);
-        accountDTOResponse.setToken(jwtTokenUtil.generateToken(account, 24 * 60 * 60));
-        wrapper.put("account", accountDTOResponse);
+        accountDTOResponse.setToken(jwtTokenUtil.generateToken(account, 24L * 60L * 60L));
+        wrapper.put(ACCOUNT, accountDTOResponse);
         return wrapper;
     }
 
@@ -125,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
             return accountMapper.toMentorDTODetailResponse(account.get());
         } else {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exist").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
 
     }
@@ -138,7 +139,7 @@ public class AccountServiceImpl implements AccountService {
             return accountMapper.toMenteeDTODetailResponse(account.get());
         } else {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exist").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
     }
 
@@ -149,7 +150,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.deleteById(id);
         } else {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exist").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
     }
 
@@ -175,7 +176,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (!account.isPresent()) {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exist").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         } else if (!account.get().getPassword().equals(password.getOld_password())) {
             throw new CustomBadRequestException(
                     CustomError.builder().code("400").message("Old Password is not true").build());
@@ -205,7 +206,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (!account.isPresent()) {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exist").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
 
         if (account.get().getRole() != 1) {
@@ -232,12 +233,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<FindMentorResponseDTO> getListFindMentor(int account_id, List<Integer> skills) {
         List<Account> accounts = new ArrayList<>();
-        List<Integer> mentor_ids = new ArrayList<>();
+
+        List<Integer> mentor_ids;
         if (skills.get(0) != 0) {
             mentor_ids = sessionRepository.findAllBySkill_ID(skills);
         } else {
             mentor_ids = sessionRepository.findAllBySkill_ID();
         }
+
         int[] mentorIdsArray = mentor_ids.stream().mapToInt(Integer::intValue).toArray();
         for (int id : mentorIdsArray) {
             Optional<Account> accountOptional = accountRepository.findById(id);
@@ -258,7 +261,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> account = accountRepository.findById(receiver_id);
         if (!account.isPresent()) {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exists").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
 
         return account.get().getUsername();
@@ -269,7 +272,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> account = accountRepository.findById(mentor_id);
         if (!account.isPresent()) {
             throw new CustomBadRequestException(
-                    CustomError.builder().code("400").message("Account not exists").build());
+                    CustomError.builder().code("400").message(ACCOUNT_NOT_EXIST).build());
         }
         return accountMapper.toFindMentorResponse(account.get(), account_id);
     }

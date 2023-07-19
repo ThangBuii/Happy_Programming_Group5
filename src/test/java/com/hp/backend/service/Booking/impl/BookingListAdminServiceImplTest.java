@@ -43,6 +43,7 @@ class BookingListAdminServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void testGetAllAdminBooking() {
         // Arrange

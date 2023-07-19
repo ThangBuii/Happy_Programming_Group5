@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class FeedbackMapper {
         private final AccountRepository accountRepository;
         private final CommonUtils commonUtils;
+        private static final String REPORT_SENDER_NOT_EXIST_MSG = "Report sender does not exist";
 
         public FeedbackListAdminResponseDTO toFeedbackListResponseDTO(Feedback feedback)
                         throws CustomInternalServerException {
@@ -30,7 +31,7 @@ public class FeedbackMapper {
 
                 if (mentor == null || mentee == null) {
                         throw new CustomInternalServerException(
-                                        CustomError.builder().message("Report sender is not exist").code("500")
+                                        CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
                 }
                 
@@ -51,7 +52,7 @@ public class FeedbackMapper {
 
                 if (mentor == null) {
                         throw new CustomInternalServerException(
-                                        CustomError.builder().message("Report sender is not exist").code("500")
+                                        CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
                 }
                 
@@ -70,7 +71,7 @@ public class FeedbackMapper {
 
                 if (mentee == null) {
                         throw new CustomInternalServerException(
-                                        CustomError.builder().message("Report sender is not exist").code("500")
+                                        CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
                 }
 

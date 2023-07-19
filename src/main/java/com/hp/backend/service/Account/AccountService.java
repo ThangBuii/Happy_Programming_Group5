@@ -3,6 +3,8 @@ package com.hp.backend.service.Account;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
 import com.hp.backend.model.account.dto.AccountChangePasswordRequestDTO;
@@ -17,6 +19,7 @@ import com.hp.backend.model.account.dto.LoginDTO.AccountDTOLoginResponse;
 import com.hp.backend.model.account.dto.MentorSiteDTO.MentorDTODetailUpdateRequest;
 import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 
+@Service
 public interface AccountService {
 
     public Map<String, AccountDTOLoginResponse> authenticate(Map<String, AccountDTOLoginRequest> accountLoginRequestMap)

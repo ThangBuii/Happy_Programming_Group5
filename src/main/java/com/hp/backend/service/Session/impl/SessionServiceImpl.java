@@ -41,7 +41,7 @@ public class SessionServiceImpl implements SessionService {
         if (!session.isPresent()) {
             throw new CustomBadRequestException(CustomError.builder()
                     .message("There are no session for the session id: " + id).code("404").build());
-        }   
+        }
 
         return sessionMapper.toViewSessionDTO(session.get());
     }
@@ -81,7 +81,6 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void addSession(AddSessionDTO addSessionDTO, int id) {
 
-
         sessionRepository.save(Session.builder().skill_id(addSessionDTO.getSkill_id())
                 .name(addSessionDTO.getSession_name()).duration(addSessionDTO.getDuration())
                 .description(addSessionDTO.getDescription()).price(addSessionDTO.getPrice()).status(0).mentor_id(id)
@@ -91,8 +90,9 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void saveSesison(Session session) {
         Account account = accountRepository.findById(session.getMentor_id()).get();
-        String status = session.getStatus() == 1 ? "accepted" : "rejected"; 
-        emailService.sendEmail(account.getEmail(), "Session Accepted", "Your session " + session.getName() + " has been " + status);
+        String status = session.getStatus() == 1 ? "accepted" : "rejected";
+        emailService.sendEmail(account.getEmail(), "Session Accepted",
+                "Your session " + session.getName() + " has been " + status);
         sessionRepository.save(session);
     }
 

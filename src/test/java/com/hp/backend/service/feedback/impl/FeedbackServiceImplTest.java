@@ -28,7 +28,7 @@ import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
 import com.hp.backend.model.feedback.mapper.FeedbackMapper;
 import com.hp.backend.repository.FeedbackRepository;
 
-public class FeedbackServiceImplTest {
+class FeedbackServiceImplTest {
     @Mock
     private FeedbackRepository feedbackRepository;
 
@@ -40,7 +40,7 @@ public class FeedbackServiceImplTest {
 
     @Test
     void testAddFeedback() throws CustomBadRequestException {
-         MockitoAnnotations.openMocks(this); // Initialize mocks
+        MockitoAnnotations.openMocks(this); // Initialize mocks
 
         FeedbackAddRequestDTO feedbackAddRequestDTO = FeedbackAddRequestDTO.builder().build();
         int menteeId = 1;

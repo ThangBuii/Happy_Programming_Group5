@@ -26,7 +26,7 @@ import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
-public class BookingListMenteeServiceImplTest {
+class BookingListMenteeServiceImplTest {
 
     @Mock
     private BookingRepository bookingRepository;
