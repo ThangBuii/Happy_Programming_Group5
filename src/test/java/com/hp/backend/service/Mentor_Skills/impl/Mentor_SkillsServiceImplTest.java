@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.hp.backend.entity.Mentor_Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
-import com.hp.backend.model.CustomError;
 import com.hp.backend.repository.Mentor_SkillsRepository;
 
 @ExtendWith(MockitoExtension.class)

@@ -2,10 +2,14 @@ package com.hp.backend.model.account.dto.AdminSiteDTO;
 
 import java.sql.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MenteeDTOResponse {
     private int account_id;

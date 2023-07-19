@@ -109,43 +109,47 @@ public class AccountMapper {
 
     public Account toUpdatedMenteeAccount(MentorDTODetailUpdateRequest mentee, int account_id)
             throws CustomBadRequestException {
-        Account account = accountRepository.findById(account_id).get();
+        Optional<Account> account = accountRepository.findById(account_id);
 
-        if (account == null) {
+        if (!account.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Account is not exist").code("400").build());
-        } else if (!account.getUsername().equalsIgnoreCase(mentee.getUsername())
+        } else if (!account.get().getUsername().equalsIgnoreCase(mentee.getUsername())
                 && accountRepository.existsByUsername(mentee.getUsername())) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Username has already existed").code("400").build());
         }
+
+        Account account1 = account.get();
         
-        return Account.builder().account_id(account_id).avatar(commonUtils.imageToDatabase(mentee.getAvatar())).email(account.getEmail())
+        return Account.builder().account_id(account_id).avatar(commonUtils.imageToDatabase(mentee.getAvatar())).email(account1.getEmail())
                 .username(mentee.getUsername()).gender(mentee.getGender()).dob(mentee.getDob())
                 .country(mentee.getCountry()).city(mentee.getCity()).description(mentee.getDescription())
-                .created_date(account.getCreated_date()).role(account.getRole()).password(account.getPassword())
+                .created_date(account1.getCreated_date()).role(account1.getRole()).password(account1.getPassword())
                 .build();
     }
 
     public Account toUpdatedMentorAccount(MentorDTODetailUpdateRequest mentor, int account_id)
             throws CustomBadRequestException {
-        Account account = accountRepository.findById(account_id).get();
+        Optional<Account> account = accountRepository.findById(account_id);
 
-        if (account == null) {
+        if (!account.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Account is not exist").code("400").build());
-        } else if (!account.getUsername().equalsIgnoreCase(mentor.getUsername())
+        } else if (!account.get().getUsername().equalsIgnoreCase(mentor.getUsername())
                 && accountRepository.existsByUsername(mentor.getUsername())) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Username has already existed").code("400").build());
         }
+
+        Account account1 = account.get();
         
-        return Account.builder().account_id(account_id).avatar(commonUtils.imageToDatabase(mentor.getAvatar())).email(account.getEmail())
+        return Account.builder().account_id(account_id).avatar(commonUtils.imageToDatabase(mentor.getAvatar())).email(account1.getEmail())
                 .username(mentor.getUsername()).gender(mentor.getGender()).dob(mentor.getDob())
                 .country(mentor.getCountry()).city(mentor.getCity()).description(mentor.getDescription())
-                .created_date(account.getCreated_date()).role(account.getRole()).university(mentor.getUniversity())
+                .created_date(account1.getCreated_date()).role(account1.getRole()).university(mentor.getUniversity())
                 .major(mentor.getMajor()).degree(mentor.getDegree())
-                .password(account.getPassword())
+                .password(account1.getPassword())
                 .short_description(mentor.getShort_description()).build();
     }
 

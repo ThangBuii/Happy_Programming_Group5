@@ -24,7 +24,7 @@ import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.utils.CommonUtils;
 
-public class BookingMapperTest {
+class BookingMapperTest {
     @Mock
     private BookingRepository bookingRepository;
 

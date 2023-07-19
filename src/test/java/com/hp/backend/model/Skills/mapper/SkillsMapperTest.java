@@ -12,7 +12,7 @@ import com.hp.backend.entity.Skills;
 import com.hp.backend.model.Skills.dto.SkillsDTO;
 import com.hp.backend.repository.SkillsRepository;
 
-public class SkillsMapperTest {
+class SkillsMapperTest {
 
     private SkillsMapper skillsMapper;
     private SkillsRepository skillsRepository;

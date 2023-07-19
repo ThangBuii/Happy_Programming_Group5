@@ -2,10 +2,14 @@ package com.hp.backend.model.account.dto.LoginDTO;
 
 import java.sql.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class AccountDTOCreate {
     private String username;

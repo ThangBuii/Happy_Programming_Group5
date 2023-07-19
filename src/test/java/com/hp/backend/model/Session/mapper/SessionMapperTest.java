@@ -20,7 +20,7 @@ import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.SkillsRepository;
 import com.hp.backend.utils.CommonUtils;
 
-public class SessionMapperTest {
+class SessionMapperTest {
     private SessionMapper sessionMapper;
     private AccountRepository accountRepository;
     private SkillsRepository skillsRepository;

@@ -1,6 +1,8 @@
 package com.hp.backend.model.feedback.mapper;
 
 import java.sql.Date;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
@@ -26,21 +28,21 @@ public class FeedbackMapper {
 
         public FeedbackListAdminResponseDTO toFeedbackListResponseDTO(Feedback feedback)
                         throws CustomInternalServerException {
-                Account mentor = accountRepository.findById(feedback.getMentor_id()).get();
-                Account mentee = accountRepository.findById(feedback.getMentee_id()).get();
+                Optional<Account> mentor = accountRepository.findById(feedback.getMentor_id());
+                Optional<Account> mentee = accountRepository.findById(feedback.getMentee_id());
 
-                if (mentor == null || mentee == null) {
+                if (!mentor.isPresent() || !mentee.isPresent()) {
                         throw new CustomInternalServerException(
                                         CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
                 }
                 
 
-                return FeedbackListAdminResponseDTO.builder().mentee_avatar(commonUtils.imageToFrontEnd(mentee.getAvatar()))
-                                .mentee_email(mentee.getEmail())
-                                .mentee_username(mentee.getUsername())
-                                .mentor_avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).mentor_email(mentor.getEmail())
-                                .mentor_username(mentor.getUsername())
+                return FeedbackListAdminResponseDTO.builder().mentee_avatar(commonUtils.imageToFrontEnd(mentee.get().getAvatar()))
+                                .mentee_email(mentee.get().getEmail())
+                                .mentee_username(mentee.get().getUsername())
+                                .mentor_avatar(commonUtils.imageToFrontEnd(mentor.get().getAvatar())).mentor_email(mentor.get().getEmail())
+                                .mentor_username(mentor.get().getUsername())
                                 .created_date(feedback.getTime()).content(feedback.getContent())
                                 .feedback_id(feedback.getFeedback_id())
                                 .rating(feedback.getRating()).build();
@@ -48,9 +50,9 @@ public class FeedbackMapper {
 
         public FeedbackListMenteeResponseDTO toFeedbackListMenteeResponseDTO(Feedback feedback)
                         throws CustomInternalServerException {
-                Account mentor = accountRepository.findById(feedback.getMentor_id()).get();
+                Optional<Account> mentor = accountRepository.findById(feedback.getMentor_id());
 
-                if (mentor == null) {
+                if (!mentor.isPresent()) {
                         throw new CustomInternalServerException(
                                         CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
@@ -58,8 +60,8 @@ public class FeedbackMapper {
                 
         
 
-                return FeedbackListMenteeResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentor.getAvatar())).email(mentor.getEmail())
-                                .username(mentor.getUsername())
+                return FeedbackListMenteeResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentor.get().getAvatar())).email(mentor.get().getEmail())
+                                .username(mentor.get().getUsername())
                                 .content(feedback.getContent()).created_date(feedback.getTime())
                                 .feedback_id(feedback.getFeedback_id())
                                 .rating(feedback.getRating()).build();
@@ -67,17 +69,17 @@ public class FeedbackMapper {
 
         public FeedbackListMentorResponseDTO toFeedbackListMentorResponseDTO(Feedback feedback)
                         throws CustomInternalServerException {
-                Account mentee = accountRepository.findById(feedback.getMentee_id()).get();
+                Optional<Account> mentee = accountRepository.findById(feedback.getMentee_id());
 
-                if (mentee == null) {
+                if (!mentee.isPresent()) {
                         throw new CustomInternalServerException(
                                         CustomError.builder().message(REPORT_SENDER_NOT_EXIST_MSG).code("500")
                                                         .build());
                 }
 
                
-                return FeedbackListMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentee.getAvatar())).email(mentee.getEmail())
-                                .username(mentee.getUsername())
+                return FeedbackListMentorResponseDTO.builder().avatar(commonUtils.imageToFrontEnd(mentee.get().getAvatar())).email(mentee.get().getEmail())
+                                .username(mentee.get().getUsername())
                                 .content(feedback.getContent()).created_date(feedback.getTime())
                                 .feedback_id(feedback.getFeedback_id())
                                 .rating(feedback.getRating()).build();

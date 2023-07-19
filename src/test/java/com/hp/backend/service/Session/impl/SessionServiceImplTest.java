@@ -19,8 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.repository.CrudRepository;
-
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Session;
 import com.hp.backend.exception.custom.CustomBadRequestException;

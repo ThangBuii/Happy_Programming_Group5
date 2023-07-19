@@ -1,6 +1,8 @@
 package com.hp.backend.model.report.mapper;
 
 import java.sql.Date;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
@@ -23,28 +25,29 @@ public class ReportMapper {
     private final CommonUtils commonUtils;
 
     public ReportListResponseDTO toReportListResponseDTO(Report report) throws CustomInternalServerException {
-        Account account = accountRepository.findById(report.getAccount_id()).get();
+        Optional<Account> account = accountRepository.findById(report.getAccount_id());
 
-        if (account == null) {
+        if (!account.isPresent()) {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-        
-        return ReportListResponseDTO.builder().username(account.getUsername()).avatar(commonUtils.imageToFrontEnd(account.getAvatar()))
-                .email(account.getEmail())
+
+        return ReportListResponseDTO.builder().username(account.get().getUsername())
+                .avatar(commonUtils.imageToFrontEnd(account.get().getAvatar()))
+                .email(account.get().getEmail())
                 .title(report.getTitle()).report_id(report.getReport_id())
                 .created_date(report.getDate()).content(report.getContent())
-                .role(account.getRole()).status(report.getStatus()).build();
+                .role(account.get().getRole()).status(report.getStatus()).build();
     }
 
     public ReportDetailResponseDTO toReportDetailResponseDTO(Report report) throws CustomInternalServerException {
-        Account account = accountRepository.findById(report.getAccount_id()).get();
+        Optional<Account> account = accountRepository.findById(report.getAccount_id());
 
-        if (account == null) {
+        if (!account.isPresent()) {
             throw new CustomInternalServerException(
                     CustomError.builder().message("Report sender is not exist").code("500").build());
         }
-        
+
         return ReportDetailResponseDTO.builder()
                 .content(report.getContent()).answer(report.getAnswer())
                 .title(report.getTitle()).report_id(report.getReport_id())

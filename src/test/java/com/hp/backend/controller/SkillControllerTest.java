@@ -2,7 +2,7 @@ package com.hp.backend.controller;
 
 import org.junit.jupiter.api.Test;
 
-public class SkillControllerTest {
+class SkillControllerTest {
     @Test
     void testAddMentor_Skills() {
 
