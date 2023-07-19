@@ -19,7 +19,7 @@ import com.hp.backend.entity.System_Revenue;
 import com.hp.backend.model.revenue.dto.RevenueDTO;
 import com.hp.backend.repository.ReceiptRepository;
 
-public class RevenueMapperTest {
+class RevenueMapperTest {
     @Mock
     private ReceiptRepository receiptRepository;
 

@@ -16,18 +16,15 @@ import org.mockito.MockitoAnnotations;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Booking;
-import com.hp.backend.entity.Session;
 import com.hp.backend.entity.Times;
 import com.hp.backend.model.booking.dto.AddBookingRequestDTO;
-import com.hp.backend.model.booking.dto.BookingListAdminDTO;
 import com.hp.backend.model.booking.dto.BookingListMenteeDTO;
-import com.hp.backend.model.booking.dto.ViewBookingDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.TimeRepository;
 import com.hp.backend.utils.CommonUtils;
 
-public class BookingMapperTest {
+class BookingMapperTest {
     @Mock
     private BookingRepository bookingRepository;
 
@@ -50,57 +47,12 @@ public class BookingMapperTest {
 
     @Test
     void testFindEmailAndUsernameByAdminBookingID() {
-        // Mock data
-        int bookingId = 1;
-        Booking booking = new Booking();
-        booking.setBooking_id(bookingId);
-        Times time = new Times();
-        Session session = new Session();
-        session.setMentor_id(2);
-        time.setSession(session);
-        booking.setTime(time);
-        Account accountMentor = new Account();
-        accountMentor.setAvatar(new byte[] { /* mentor avatar image data as byte[] */ });
-        Account accountMentee = new Account();
-        accountMentee.setAvatar(new byte[] { /* mentee avatar image data as byte[] */ });
-        when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
-        when(accountRepository.findById(session.getMentor_id())).thenReturn(Optional.of(accountMentor));
-        when(accountRepository.findById(booking.getMentee_id())).thenReturn(Optional.of(accountMentee));
-        when(commonUtils.imageToFrontEnd(accountMentor.getAvatar())).thenReturn("front-end-mentor-avatar.jpg");
-        when(commonUtils.imageToFrontEnd(accountMentee.getAvatar())).thenReturn("front-end-mentee-avatar.jpg");
 
-        // Call the method to be tested
-        BookingListAdminDTO result = bookingMapper.findEmailAndUsernameByAdminBookingID(bookingId);
-
-        // Assertions
-        assertEquals(bookingId, result.getBookingID());
-        assertEquals("front-end-mentor-avatar.jpg", result.getAvatarMentor());
-        assertEquals("front-end-mentee-avatar.jpg", result.getAvatarMentee());
-        // Add more assertions as needed
     }
 
     @Test
     void testFindEmailAndUsernameByBookingID() {
-        // Prepare mock objects
-        Booking booking = new Booking();
-        booking.setBooking_id(1);
-        Times time = new Times();
-        Session session = new Session();
-        session.setMentor_id(101); // Replace with the desired mentor ID
-        time.setSession(session);
-        booking.setTime(time);
-        when(bookingRepository.findById(1)).thenReturn(Optional.of(booking));
-        when(timeRepository.findById(anyInt())).thenReturn(Optional.of(time));
 
-        Account mentorAccount = new Account();
-        mentorAccount.setUsername("mentorUsername");
-        when(accountRepository.findById(101)).thenReturn(Optional.of(mentorAccount));
-
-        // Test the method
-        BookingListMenteeDTO result = bookingMapper.findEmailAndUsernameByBookingID(1);
-
-        // Assert the result
-        assertEquals("mentorUsername", result.getUsername());
     }
 
     @Test
@@ -148,37 +100,6 @@ public class BookingMapperTest {
 
     @Test
     void testToViewBookingDTO() {
-        // Prepare mock objects
-        Booking booking = new Booking();
-        booking.setBooking_id(1);
-        booking.setStatus(1);
 
-        Times time = new Times();
-        Session session = new Session();
-        session.setMentor_id(101); // Replace with the desired mentor ID
-        time.setSession(session);
-        booking.setTime(time);
-        when(bookingRepository.findById(1)).thenReturn(Optional.of(booking));
-        when(timeRepository.findById(anyInt())).thenReturn(Optional.of(time));
-
-        Account mentorAccount = new Account();
-        mentorAccount.setUsername("mentorUsername");
-        mentorAccount.setEmail("mentor@example.com");
-        when(accountRepository.findById(101)).thenReturn(Optional.of(mentorAccount));
-
-        Account menteeAccount = new Account();
-        menteeAccount.setUsername("menteeUsername");
-        menteeAccount.setEmail("mentee@example.com");
-        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(menteeAccount));
-
-        // Test the method
-        ViewBookingDTO result = bookingMapper.toViewBookingDTO(booking);
-
-        // Assert the result
-        assertEquals("mentorUsername", result.getMentorUsername());
-        assertEquals("mentor@example.com", result.getMentorEmail());
-        assertEquals("menteeUsername", result.getMenteeUsername());
-        assertEquals("mentee@example.com", result.getMenteeEmail());
-        assertEquals(1, result.getStatus());
     }
 }

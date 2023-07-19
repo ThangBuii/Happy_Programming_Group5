@@ -14,7 +14,7 @@ import com.hp.backend.entity.Times;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseFindMentorDTO;
 
-public class TimeMapperTest {
+class TimeMapperTest {
     @InjectMocks
     private TimeMapper timeMapper;
 

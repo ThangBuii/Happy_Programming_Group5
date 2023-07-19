@@ -21,7 +21,7 @@ import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.ReceiptRepository;
 
-public class InvoiceServiceImplTest {
+class InvoiceServiceImplTest {
     @Mock
     private ReceiptRepository receiptRepository;
 

@@ -22,7 +22,7 @@ import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.utils.CommonUtils;
 
-public class DashboardMapperTest {
+class DashboardMapperTest {
     @Mock
     private BookingRepository bookingRepository;
 

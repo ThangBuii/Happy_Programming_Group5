@@ -17,7 +17,7 @@ import com.hp.backend.model.revenue.dto.RevenueDTO;
 import com.hp.backend.model.revenue.mapper.RevenueMapper;
 import com.hp.backend.repository.SystemRevenueRepository;
 
-public class RevenueListServiceImplTest {
+class RevenueListServiceImplTest {
     @Mock
     private SystemRevenueRepository systemRevenueRepository;
 

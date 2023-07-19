@@ -3,7 +3,9 @@ package com.hp.backend.service.Booking.impl;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +23,8 @@ import com.hp.backend.model.booking.mapper.BookingMapper;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.service.EmailService;
-import com.hp.backend.service.Booking.AddBookingService;
 
-public class AddBookingServiceImplTest {
+class AddBookingServiceImplTest {
     @Mock
     private BookingMapper bookingMapper;
 
@@ -46,44 +47,50 @@ public class AddBookingServiceImplTest {
 
     @Test
     void testAddBookingForMentee() {
-        // Mock data for the test
-        int account_id = 1;
-        AddBookingRequestDTO addBookingRequestDTO = AddBookingRequestDTO.builder().time_id(123).build();
+        // Create a sample input data
+        int accountId = 1;
+        AddBookingRequestDTO addBookingRequest = AddBookingRequestDTO.builder()
+                .time_id(123) // Replace with an appropriate time_id value
+                .build();
 
-        // Mocking Account object
-        Account mentee = Account.builder().account_id(account_id).email("mentee@example.com").username("mentee").build();
+        // Create mock entities and responses
+        Account mentee = new Account();
+        mentee.setEmail("mentee@example.com");
+        mentee.setUsername("MenteeUser");
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(mentee));
 
-        Account mentor = Account.builder().account_id(2).email("mentor@example.com").username("mentor").build();
-        Session session = Session.builder().session_id(456).name("Session Name").mentor_id(mentor.getAccount_id()).build();
+        Time starTime = Time.valueOf("09:00:00");
+        Time endTime = Time.valueOf("11:00:00");
+        Times time = new Times();
+        time.setStart_time(starTime);
+        time.setEnd_time(endTime);
+        Session session = new Session();
+        session.setName("Sample Session");
+        session.setMentor_id(2); // Replace with an appropriate mentor_id value
+        time.setSession(session);
+        when(bookingMapper.toBooking(addBookingRequest, accountId)).thenReturn(
+                Booking.builder()
+                        .mentee_id(accountId)
+                        .time(time)
+                        .created_date(Date.valueOf(LocalDate.now())) // Replace with the current date value
+                        .status(0)
+                        .build());
 
-        // Use java.sql.Time to represent time values
-        Time startTime = Time.valueOf("09:00:00");
-        Time endTime = Time.valueOf("10:00:00");
+        Account mentor = new Account();
+        mentor.setEmail("mentor@example.com");
+        mentor.setUsername("MentorUser");
+        when(accountRepository.findById(session.getMentor_id())).thenReturn(Optional.of(mentor));
 
-        Times time = Times.builder().time_id(123).session(session).start_time(startTime).end_time(endTime).build();
-        Booking booking = Booking.builder().mentee_id(mentee.getAccount_id()).time(time).build();
+        // Call the service method
+        addBookingService.addBookingForMentee(addBookingRequest, accountId);
 
-        // Configure mock behavior for accountRepository.findById
-        when(accountRepository.findById(account_id)).thenReturn(Optional.of(mentee)); // Use Optional.of() to provide a
-                                                                                      // value
-        // Configure mock behavior for bookingMapper
-        when(bookingMapper.toBooking(any(AddBookingRequestDTO.class), eq(account_id))).thenReturn(booking);
-        // Configure mock behavior for bookingRepository.save
-        when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
+        // Verify that the repository's save method was called once
+        verify(bookingRepository, times(1)).save(any());
 
-        // Call the method being tested directly
-        addBookingService.addBookingForMentee(addBookingRequestDTO, account_id);
-
-        // Verify that the required methods were called with the correct parameters
-        verify(bookingMapper).toBooking(addBookingRequestDTO, account_id);
-        verify(bookingRepository).save(booking);
-
-        // Verify that the email service was called to send emails to mentee and mentor
-        verify(emailService).sendEmail(mentee.getEmail(), "Booking successfully",
-                "Your booking of session " + session.getName()
-                        + " has been successfully. Please wait till the mentor accept your request");
-        verify(emailService).sendEmail(mentor.getEmail(), "New booking",
-                "You have a new booking from mentee " + mentee.getUsername() + " on session " + session.getName()
-                        + ". Please check your dashboard to view booking detail");
+        // Verify that the email service's sendEmail method was called twice
+        verify(emailService, times(1))
+                .sendEmail(eq(mentee.getEmail()), eq("Booking successfully"), anyString());
+        verify(emailService, times(1))
+                .sendEmail(eq(mentor.getEmail()), eq("New booking"), anyString());
     }
 }

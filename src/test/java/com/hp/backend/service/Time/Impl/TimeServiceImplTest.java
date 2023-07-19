@@ -23,11 +23,12 @@ import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.time.dto.AddTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeRequestDTO;
 import com.hp.backend.model.time.dto.GetListTimeResponseDTO;
+import com.hp.backend.model.time.dto.GetListTimeResponseFindMentorDTO;
 import com.hp.backend.model.time.mapper.TimeMapper;
 import com.hp.backend.repository.SessionRepository;
 import com.hp.backend.repository.TimeRepository;
 
-public class TimeServiceImplTest {
+class TimeServiceImplTest {
     @Mock
     private TimeRepository timeRepository;
 
@@ -150,15 +151,5 @@ public class TimeServiceImplTest {
         assertThrows(CustomBadRequestException.class, () -> timeService.addTime(accountId, addTimeRequestDTO));
     }
 
-    // Write more test cases to cover different scenarios as needed
 
-    // @Test
-    // void testAddTime() throws CustomBadRequestException {
-
-    // }
-
-    // @Test
-    // void testGetAllTime() {
-
-    // }
 }
