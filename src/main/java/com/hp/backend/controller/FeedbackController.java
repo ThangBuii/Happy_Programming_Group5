@@ -20,6 +20,7 @@ import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackMenteeFeedbackMentorListDTO;
 import com.hp.backend.service.feedback.FeedbackService;
 import com.hp.backend.utils.JwtTokenUtil;
 
@@ -72,6 +73,13 @@ public class FeedbackController {
     @GetMapping("/public/feedbacks/{id}")
     public List<FeedbackListMentorResponseDTO> getFeedbacksFindMentor(@PathVariable int id) throws CustomInternalServerException{
         return feedbackService.getFeedbacksMentor(id);
+    }
+
+    @GetMapping("/mentee/mentorfeedback")
+    public List<FeedbackMenteeFeedbackMentorListDTO> getMenteeFeedbackMentorList(HttpServletRequest request) throws CustomInternalServerException{
+        String token = jwtTokenUtil.getRequestToken(request);
+        TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        return feedbackService.getMenteeFeedbackMentorList(tokenPayload.getAccount_id());
     }
 
     

@@ -18,4 +18,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer> {
 
     @Query("SELECT f FROM Feedback f WHERE f.mentor_id = :mentor_id")
     List<Feedback> findByMentorId(@Param("mentor_id") int mentor_id);
+
+    @Query("SELECT DISTINCT t.session.mentor_id FROM Booking b JOIN b.time t WHERE b.mentee_id = :menteeId")
+    List<Integer> findFeedbackMentorList(@Param("menteeId") int account_id);
 }

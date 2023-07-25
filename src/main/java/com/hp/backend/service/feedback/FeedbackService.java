@@ -8,6 +8,7 @@ import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackMenteeFeedbackMentorListDTO;
 
 
 
@@ -25,6 +26,8 @@ public interface FeedbackService {
     public void addFeedback(FeedbackAddRequestDTO feedback, int account_id) throws CustomBadRequestException;
 
     public FeedbackListAdminResponseDTO getFeedbackByID(int id) throws CustomBadRequestException, CustomInternalServerException;
+
+    public List<FeedbackMenteeFeedbackMentorListDTO> getMenteeFeedbackMentorList(int account_id) throws CustomInternalServerException;
 
     
 

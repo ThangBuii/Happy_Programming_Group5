@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 
+import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Feedback;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
@@ -14,7 +15,9 @@ import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackMenteeFeedbackMentorListDTO;
 import com.hp.backend.model.feedback.mapper.FeedbackMapper;
+import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.FeedbackRepository;
 import com.hp.backend.service.feedback.FeedbackService;
 
@@ -25,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class FeedbackServiceImpl implements FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final FeedbackMapper feedbackMapper;
+    private final AccountRepository accountRepository;
 
     @Override
     public List<FeedbackListAdminResponseDTO> getFeedbacks() throws CustomInternalServerException {
@@ -85,6 +89,23 @@ public class FeedbackServiceImpl implements FeedbackService {
     public void addFeedback(FeedbackAddRequestDTO feedback, int mentee_id) throws CustomBadRequestException {
         Feedback feedback1 = feedbackMapper.toFeedback(feedback,mentee_id);
         feedbackRepository.save(feedback1);
+    }
+
+    @Override
+    public List<FeedbackMenteeFeedbackMentorListDTO> getMenteeFeedbackMentorList(int account_id) throws CustomInternalServerException {
+        List<Integer> feedbackList = feedbackRepository.findFeedbackMentorList(account_id);
+        List<FeedbackMenteeFeedbackMentorListDTO> result = new ArrayList<>();
+
+        for(Integer mentor: feedbackList) {
+            int mentorId = mentor.intValue();
+            Optional<Account> account = accountRepository.findById(mentorId);  
+            if(!account.isPresent()){
+                throw new CustomInternalServerException(CustomError.builder().message("Server error").code("500").build());
+            } 
+            result.add(feedbackMapper.toFeedbackMenteeFeedbackMentorListDTO(account.get()));
+        }   
+ 
+        return result;
     }
 
     

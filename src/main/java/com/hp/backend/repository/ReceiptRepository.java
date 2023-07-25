@@ -16,4 +16,6 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
 
     @Query("SELECT r FROM Receipt r JOIN r.booking b JOIN b.time t JOIN t.session s WHERE s.mentor_id = :mentorId")
     List<Receipt> findReceiptsByMentorId(@Param("mentorId") int mentorId);
+    @Query("SELECT MAX(receipt_id) FROM Receipt")
+    int getLastestID();
 }

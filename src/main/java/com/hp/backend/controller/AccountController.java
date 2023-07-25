@@ -1,10 +1,19 @@
 package com.hp.backend.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
+import com.hp.backend.model.CustomError;
 import com.hp.backend.model.TokenPayload;
 import com.hp.backend.model.account.dto.AccountChangePasswordRequestDTO;
 import com.hp.backend.model.account.dto.AdminSiteDTO.MenteeDTODetailResponse;
@@ -48,8 +58,34 @@ public class AccountController {
     }
 
     @PostMapping("/public/register")
-    public Map<String, AccountDTOLoginResponse> register(@RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap)
+    public Map<String, AccountDTOLoginResponse> register(
+            @RequestBody Map<String, AccountDTOCreate> accountDTOCreateMap, BindingResult bindingResult)
             throws CustomBadRequestException {
+
+        for (Map.Entry<String, AccountDTOCreate> entry : accountDTOCreateMap.entrySet()) {
+            String key = entry.getKey();
+            AccountDTOCreate accountDTOCreate = entry.getValue();
+
+            // Manually validate each AccountDTOCreate object
+            Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+            Set<ConstraintViolation<AccountDTOCreate>> violations = validator.validate(accountDTOCreate);
+
+            // Check for validation errors and add them to BindingResult
+            if (!violations.isEmpty()) {
+                for (ConstraintViolation<AccountDTOCreate> violation : violations) {
+                    String field = violation.getPropertyPath().toString();
+                    String message = violation.getMessage();
+                    bindingResult.addError(new FieldError("accountDTOCreateMap", field, message));
+                }
+            }
+        }
+
+        // Check if there are any validation errors
+        if (bindingResult.hasErrors()) {
+            FieldError firstError = bindingResult.getFieldErrors().get(0);
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message(firstError.getDefaultMessage()).build());
+        }
         return accountService.registerAccount(accountDTOCreateMap);
     }
 
@@ -90,18 +126,31 @@ public class AccountController {
     }
 
     @PostMapping("/mentee/profile")
-    public void updateMenteeProfile(@RequestBody MentorDTODetailUpdateRequest mentee, HttpServletRequest request)
-            throws CustomBadRequestException {
+    public void updateMenteeProfile(
+         @RequestBody @Valid MentorDTODetailUpdateRequest mentee, BindingResult bindingResult,
+            HttpServletRequest request) throws CustomBadRequestException {
+        if (bindingResult.hasErrors()) {
+            FieldError firstError = bindingResult.getFieldErrors().get(0);
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message(firstError.getDefaultMessage()).build());
+        }
+
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+
         accountService.updateMenteeProfile(mentee, tokenPayload.getAccount_id());
     }
 
     @PostMapping("/mentor/profile")
-    public void updateMentorProfile(@RequestBody MentorDTODetailUpdateRequest mentor, HttpServletRequest request)
+    public void updateMentorProfile(@RequestBody @Valid MentorDTODetailUpdateRequest mentor, BindingResult bindingResult, HttpServletRequest request)
             throws CustomBadRequestException {
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+         if (bindingResult.hasErrors()) {
+            FieldError firstError = bindingResult.getFieldErrors().get(0);
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message(firstError.getDefaultMessage()).build());
+        }
         accountService.updateMentorProfile(mentor, tokenPayload.getAccount_id());
     }
 

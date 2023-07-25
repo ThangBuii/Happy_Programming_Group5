@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Favorite_Mentor;
@@ -82,10 +85,34 @@ public class AccountServiceImpl implements AccountService {
         }
         Account account = AccountMapper.toUser(accountDTOCreate);
 
-        account = accountRepository.save(account);
-        emailService.sendEmail(account.getEmail(), "Register Account Successfully",
-                "Welcome to happy programming. Contact us by this email!");
+        accountRepository.save(account);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            sendWelcomeEmail(account);
+        });
+        executorService.shutdown();
         return buildDTOResponse(account);
+    }
+
+    private void sendWelcomeEmail(Account account) {
+        String subject = "Registration Successful - Welcome to Happy Programming!";
+        String body = "Dear [Recipient's Name],\n\n"
+                + "I hope this email finds you well. We are delighted to inform you that your account registration with Happy Programming has been successfully completed.\n\n"
+                + "Allow me to extend a warm and heartfelt welcome to our platform. We take immense pride in having you as a valued member of our growing community of passionate programmers.\n\n"
+                + "At Happy Programming, we are committed to providing an enriching and engaging experience for all our users. As a registered member, you now have access to a wide range of resources, tutorials, and interactive coding challenges that will aid you in your journey towards mastering various programming languages and technologies.\n\n"
+                + "Moreover, our platform is not just limited to learning. It also serves as a platform for collaboration and networking with like-minded individuals. You can connect with fellow developers, share your knowledge, and participate in discussions to foster a vibrant learning environment.\n\n"
+                + "Should you encounter any technical issues or have questions regarding the platform's functionalities, please do not hesitate to reach out to us. Our dedicated support team is always ready to assist you and ensure that your experience with Happy Programming remains smooth and enjoyable.\n\n"
+                + "Lastly, we encourage you to make the most of your membership by exploring all the features and resources available to you. Stay updated with our regular newsletters and announcements to stay informed about the latest additions and updates.\n\n"
+                + "Once again, welcome aboard! We are thrilled to have you join our community and look forward to witnessing your growth and achievements as you embark on your programming journey with us.\n\n"
+                + "If you have any questions or need further assistance, please feel free to contact us via this email address.\n\n"
+                + "Thank you for choosing Happy Programming!\n\n"
+                + "Best regards,\n"
+                + "[Your Name]\n"
+                + "Customer Support Team\n"
+                + "Happy Programming";
+
+        // Send the email
+        emailService.sendEmail(account.getEmail(), subject, body);
     }
 
     private Map<String, AccountDTOLoginResponse> buildDTOResponse(Account account) {

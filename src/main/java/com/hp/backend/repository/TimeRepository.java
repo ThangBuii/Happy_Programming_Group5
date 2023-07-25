@@ -25,4 +25,7 @@ public interface TimeRepository extends JpaRepository<Times, Integer> {
     @Query("SELECT DISTINCT  t.start_date FROM Times t WHERE t.session.session_id = :sessionId")
     List<Date> getListTimesBySession(@Param("sessionId") int session_id);
 
+    @Query("SELECT t FROM Times t LEFT JOIN Booking b ON b.time.time_id = t.time_id WHERE t.session.session_id = :sessionId AND t.start_date = :startDate AND b.time.time_id IS NULL")
+    List<Times> findStartTimeAndEndTimeCheckout(@Param("sessionId") int sessionId, @Param("startDate") Date startDate);
+
 }

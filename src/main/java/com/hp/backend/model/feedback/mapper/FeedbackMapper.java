@@ -14,6 +14,7 @@ import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMenteeResponseDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListMentorResponseDTO;
+import com.hp.backend.model.feedback.dto.FeedbackMenteeFeedbackMentorListDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.utils.CommonUtils;
 
@@ -96,5 +97,9 @@ public class FeedbackMapper {
                 return Feedback.builder().content(feedback.getContent()).mentor_id(feedback.getMentor_id())
                                 .rating(feedback.getRating()).time(currentDate)
                                 .mentee_id(mentee_id).build();
+        }
+
+        public FeedbackMenteeFeedbackMentorListDTO toFeedbackMenteeFeedbackMentorListDTO(Account account) {
+            return FeedbackMenteeFeedbackMentorListDTO.builder().mentor_id(account.getAccount_id()).mentor_name(account.getUsername()).build();
         }
 }

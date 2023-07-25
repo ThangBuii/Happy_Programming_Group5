@@ -16,4 +16,5 @@ import lombok.Setter;
 
 public class AddBookingRequestDTO {
     private int time_id;
+    private String payment_method;
 }

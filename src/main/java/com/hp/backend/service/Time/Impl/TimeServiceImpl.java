@@ -115,25 +115,39 @@ public class TimeServiceImpl implements TimeService {
         List<GetListTimeResponseFindMentorDTO> timeList = new ArrayList<>();
 
         for (Date date : dates) {
-            List<GetListTimeResponseDTO> getListTimeResponseDTOs = getAllTime(
+            List<GetListTimeResponseDTO> getListTimeResponseDTOs = getAllTimeCheckOut(
                     GetListTimeRequestDTO.builder().session_id(session_id).start_date(date).build());
-            timeList.add(timeMapper.toGetListTimeResponseFindMentorDTO(date, getListTimeResponseDTOs));
+            if (getListTimeResponseDTOs.size() != 0) {
+                timeList.add(timeMapper.toGetListTimeResponseFindMentorDTO(date, getListTimeResponseDTOs));
+            }
+
         }
 
         return timeList;
     }
 
     @Override
+    public List<GetListTimeResponseDTO> getAllTimeCheckOut(GetListTimeRequestDTO requestDTO) {
+        List<GetListTimeResponseDTO> listTimeResponseDTOs = new ArrayList<>();
+        List<Times> times = timeRepository.findStartTimeAndEndTimeCheckout(requestDTO.getSession_id(),
+                requestDTO.getStart_date());
+        for (Times time : times) {
+            listTimeResponseDTOs.add(timeMapper.toGetListTimeResponseDTO(time));
+        }
+        return listTimeResponseDTOs;
+    }
+
+    @Override
     public void deleteTimeByID(int timeID) throws CustomBadRequestException {
         Optional<Times> time = timeRepository.findById(timeID);
 
-        
         if (!time.isPresent()) {
             throw new CustomBadRequestException(
                     CustomError.builder().message("Bad request").code("400").build());
-        }else if(bookingRepository.checkBookedTime(time.get().getTime_id())){
+        } else if (bookingRepository.checkBookedTime(time.get().getTime_id())) {
             throw new CustomBadRequestException(
-                    CustomError.builder().message("This time slot has already been booked by a mentee").code("400").build());
+                    CustomError.builder().message("This time slot has already been booked by a mentee").code("400")
+                            .build());
         }
 
         timeRepository.deleteById(timeID);

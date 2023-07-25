@@ -77,7 +77,7 @@ public class AccountMapper {
 
     public MentorDTOResponse toMentorDTOResponse(Account account) {
         int numberOfBookings = bookingRepository.getSessionCountByMentorId(account.getAccount_id());
-        double earned = bookingRepository.sumPriceByTimeSessionMentorId(account.getAccount_id());
+        double earned = bookingRepository.sumPriceByTimeSessionMentorId(account.getAccount_id()) * 90/100;
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedValue = decimalFormat.format(earned);

@@ -18,4 +18,5 @@ public interface TimeService {
 
     void deleteTimeByID(int timeID) throws CustomBadRequestException;
 
+    List<GetListTimeResponseDTO> getAllTimeCheckOut(GetListTimeRequestDTO requestDTO);
 }
