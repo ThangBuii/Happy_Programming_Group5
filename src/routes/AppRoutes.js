@@ -84,16 +84,29 @@ const AppRoutes = () => {
 
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
-
-          {/* <Route element={<PrivateRoute />}> */}
           <Route
             path="/mentor/:id/checkout/:sessionId"
             element={<Checkout />}
           />
+          <Route element={<PrivateRoute />}>
+            <Route path="/feedback" element={<Feedback />} />
 
-          <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
-          <Route path="/bookings" element={<Booking />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
+            <Route path="/invoice" element={<Invoice />} />
+
+            <Route path="/report/add" element={<ReportAdd />} />
+            <Route path="/report/:report_id" element={<ReportDetail />} />
+            <Route path="/report" element={<Report />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/bookings/:booking_id" element={<BookingsDetail />} />
+            <Route path="/bookings" element={<Booking />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+
+
 
           <Route element={<PrivateMenteeRoute />}>
             <Route path="/favorite-mentor" element={<FavouriteMentor />} />
@@ -101,23 +114,15 @@ const AppRoutes = () => {
 
           <Route element={<PrivateMentorRoute />}>
             <Route path="/schedule-timings" element={<ScheduleTimings />} />
+            <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
+            <Route path="/sessions" element={<Session />} />
           </Route>
 
-          <Route path="/feedback" element={<Feedback />} />
 
-          <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
-          <Route path="/invoice" element={<Invoice />} />
 
-          <Route path="/report/add" element={<ReportAdd />} />
-          <Route path="/report/:report_id" element={<ReportDetail />} />
-          <Route path="/report" element={<Report />} />
 
-          <Route path="/sessions/:sessions_id" element={<SessionsDetail />} />
-          <Route path="/sessions" element={<Session />} />
 
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
+
           {/* </Route> */}
 
           <Route element={<PrivateAdminRoute />}>

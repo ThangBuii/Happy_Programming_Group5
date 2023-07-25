@@ -144,7 +144,7 @@ const Favourite = () => {
                           <Button variant="contained">Book Now</Button>
                         </div>
                         <div className={styles.bookMark}>
-                          <BookmarkIcon onClick={() => handleBookmarkClick(mentor.favorite_id)}/>
+                          <BookmarkIcon onClick={() => handleBookmarkClick(mentor.mentor_id)}/>
                         </div>
                       </div>
                     </div>

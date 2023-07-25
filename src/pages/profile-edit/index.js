@@ -1,4 +1,4 @@
-import { Button, Checkbox, CircularProgress, IconButton } from "@mui/material";
+import { Alert, Button, Checkbox, CircularProgress, IconButton, Slide, Snackbar } from "@mui/material";
 import MainLayout from "../../component/main-layout";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import { useContext, useEffect, useState } from "react";
@@ -36,6 +36,8 @@ const EditProfile = () => {
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
   const imageSource = profile.avatar
     ? `data:image/jpeg;base64, ${profile.avatar}`
@@ -143,8 +145,17 @@ const EditProfile = () => {
         // Handle success or show a success message to the user
       })
       .catch((error) => {
-        console.log("API error:", error);
-        // Handle error or show an error message to the user
+        setSnackbarOpen(true);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          setErrorMessage(error.response.data.errors.message);
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
+        console.error(error);
       });
   };
 
@@ -422,6 +433,22 @@ const EditProfile = () => {
               </div>
             </>
           )}
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={snackbarOpen}
+            autoHideDuration={2000}
+            onClose={() => setSnackbarOpen(false)}
+            style={{ marginTop: "40px" }}
+            TransitionComponent={({ children }) => (
+              <Slide direction="left" in={snackbarOpen}>
+                {children}
+              </Slide>
+            )}
+          >
+            <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+              {errorMessage}
+            </Alert>
+          </Snackbar>
         </div>
       }
     />

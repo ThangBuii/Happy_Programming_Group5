@@ -1,4 +1,4 @@
-import { Button, Container, TextField } from "@mui/material";
+import { Alert, Button, Container, Slide, Snackbar, TextField } from "@mui/material";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
@@ -7,7 +7,8 @@ import { request } from "../../axios_helper";
 const ReportAdd = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({ title: "", content: "" });
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -18,9 +19,16 @@ const ReportAdd = () => {
         
       })
       .catch((error) => {
-        // Handle the error here (e.g., show an error message)
-       
-      
+        setSnackbarOpen(true);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          setErrorMessage(error.response.data.errors.message);
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
         console.error(error);
       });
 
@@ -80,6 +88,22 @@ const ReportAdd = () => {
           </div>
         </Container>
       </div>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

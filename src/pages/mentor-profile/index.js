@@ -42,6 +42,11 @@ const MentorProfile = () => {
   };
 
   const handleClickBook = () => {
+    if (!sessionIdChoosed) {
+      setErrorMessage("You must select a session");
+      setSnackbarOpen(true);
+      return;
+    }
     navigate(`/mentor/${mentorInfo.mentor_id}/checkout/${sessionIdChoosed}`, {
       state: {
         listPrevPath: [
