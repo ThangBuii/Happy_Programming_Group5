@@ -17,7 +17,7 @@ const SessionsDetail = () => {
 
   useEffect(() => {
     seIsLoading(true);
-    request("GET", `/api/session/${sessions_id}`)
+    request("GET", `/api/public/sessions/${sessions_id}`)
       .then((response) => {
         setSessions(response.data);
       })
