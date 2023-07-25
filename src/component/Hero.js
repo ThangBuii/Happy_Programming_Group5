@@ -1,123 +1,64 @@
+import { useEffect, useState } from "react";
+import Card from "./Card";
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 const Hero = () => {
+  const [comment, setComment] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:9999/Comment")
+      .then(resp => resp.json())
+      .then(data => {
+        setComment(data);
+      })
+
+  }, []);
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
-    <div className="container py-5">
-      <h4 className="text-center">
-        Not yet convinced? Don't just take our word for it{" "}
-      </h4>
-      <p>
-        We've already delivered 1-on-1 mentorship to thousands of students,
-        professionals, managers and executives.Even better, they've left an
-        average rating of 4.9 out of 5 for our mentors
-      </p>
-      <div className="row row-cols-1 row-cols-md-3 g-4 py-5">
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
+    <Slider {...settings}>
+      {comment.map((m) => (
+        <Card title={m.title} imgURL={m.thumbnail} id={m.id} name={m.name} />
+      ))}
 
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
+    </Slider>
 
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col">
-          <div className="card">
-            <img
-              src="https://number1.com.vn/wp-content/uploads/2017/06/Albert-Einstein.jpg"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="text-center">Ngoc Anh</h5>
-              <p>
-                "Naz is an amazing person and a wonderful mentor. She is
-                supportive and knowledgeable with extensiv practical
-                experience.Having been a manager at Netflix, she also knows a
-                ton about working with teams at scale. Highly recommended.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 };
 

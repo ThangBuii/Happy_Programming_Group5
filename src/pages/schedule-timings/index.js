@@ -182,7 +182,7 @@ const ScheduleTimings = () => {
                           <option key={item.session_id} value={item.session_id}>
                             {item.session_name}
                           </option>
-                        ))}
+                        ))} 
                       </select>
                     </div>
                   </div>

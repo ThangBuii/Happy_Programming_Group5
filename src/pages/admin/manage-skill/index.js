@@ -234,7 +234,7 @@ const ManageSkill = () => {
       }
       isConfirmDialogOpen={isConfirmDialogOpen}
       onCloseConfirmDialog={handleCloseConfirmDialog}
-      confirmDialogTitle="Confirm delete mentee?"
+      confirmDialogTitle="Confirm delete skill?"
       confirmDialogContent={`Are you sure you want to delete skill ${getChooseName(
         skillRow,
         chooseId

@@ -58,6 +58,7 @@ const SignUp = () => {
 
   return (
     <div className="login-bg">
+    <div></div>
       <section class="background-radial-gradient overflow-hidden">
         <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
           <div class="row gx-lg-5 align-items-center mb-5">
@@ -84,7 +85,7 @@ const SignUp = () => {
                 class="position-absolute shadow-5-strong"
               ></div>
 
-              <div class="card bg-glass">
+              <div class="">
                 <div class="card-body px-4 py-5 px-md-5">
                   <form>
                     <div class="form-outline mb-4">
@@ -178,6 +179,22 @@ const SignUp = () => {
           </div>
         </div>
       </section>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={snackbarOpen}

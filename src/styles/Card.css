@@ -1,0 +1,48 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Điều này sẽ giúp căn giữa thẻ Card theo chiều dọc */
+  }
+  
+  .card {
+    width: 350px;
+    height: 350px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center; /* Căn giữa nội dung trong thẻ Card */
+    margin-top: 10px;
+  
+    /* Thêm margin giữa các thẻ Card */
+    margin: 100px; /* Điều chỉnh giá trị theo ý muốn */
+  }
+  
+  .card img {
+    width: 2600px;
+    height: 300px;
+    object-fit: cover;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .card-title-name {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .card-title-title {
+    font-size: 0.9rem;
+    font-weight: normal;
+  }
+  .card-text {
+    font-size: 0.9rem;
+  }
+  

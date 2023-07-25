@@ -1,10 +1,11 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState} from "react";
 
 import "../styles/SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
 import { request, setDataToLocal } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
 import { Alert, Snackbar ,Slide} from "@mui/material"; // Assuming you are using Material-UI
+
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -14,7 +15,9 @@ const SignIn = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { makeSignIn } = useContext(ApplicationContext);
-
+ 
+  // Check if the location state has the "passwordChanged" flag set to true
+  
   const handleSignIn = () => {
     const payload = {
       account: {
@@ -88,18 +91,20 @@ const SignIn = () => {
 
 
           <div className="auth-links">
-            <Link to="/forgotpassword" className="forgot-pwd">
+            <Link>
               Forgot your password
             </Link>
             <p>
               Don't have an account?
-              <Link to="/register" className="signup-link">
+              <Link to="/resgiter" className="signup-link">
                 Sign Up
               </Link>
             </p>
           </div>
         </div>
+        
       </div>
+
       <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={snackbarOpen}

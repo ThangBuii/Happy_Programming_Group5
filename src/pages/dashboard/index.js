@@ -100,9 +100,10 @@ const Dashboard = () => {
                     <TableCell className={styles.tableCellHead} align="center">
                       Status
                     </TableCell>
-                    <TableCell className={styles.tableCellHead} align="center">
+                    <TableCell className={styles.tableCellHead} align="center" colSpan={2} >
                       Action
                     </TableCell>
+                    
                   </TableRow>
                 </TableHead>
 
@@ -162,7 +163,8 @@ const Dashboard = () => {
                             <span>View</span>
                           </Link>
                           {item.status === 0 && role === 2 && (
-                            <>
+                            <TableCell>
+                          
                               <Button
                                 variant="contained"
                                 color="warning"
@@ -170,7 +172,7 @@ const Dashboard = () => {
                               >
                                 Delete
                               </Button>
-                            </>
+                              </TableCell>
                           )}
 
                           {item.status === 0 && role === 1 && (

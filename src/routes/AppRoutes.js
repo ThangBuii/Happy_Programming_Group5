@@ -24,10 +24,10 @@ import Invoice from "../pages/invoice";
 import Profile from "../pages/profile";
 import EditProfile from "../pages/profile-edit";
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {useLayoutEffect, useState } from "react";
 import AdminDashboard from "../pages/admin/dashboard";
 import ManageMentee from "../pages/admin/manage-mentee";
-import Footer from "../component/footer";
+import Footer from "../component/Footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";
@@ -45,6 +45,8 @@ import PrivateAdminRoute from "./PrivateAdminRoute";
 import PrivateMenteeRoute from "./PrivateMenteeRoute";
 import PrivateMentorRoute from "./PrivateMentorRoute";
 import Session from "../pages/session";
+import ChangePassword from "../pages/ChangePassword";
+import FeedbackAdd from "../pages/feedback-add";
 
 export const ApplicationContext = React.createContext([]);
 
