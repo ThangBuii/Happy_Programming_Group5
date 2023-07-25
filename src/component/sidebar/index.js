@@ -40,6 +40,10 @@ export const linkObjList = [
     to: "/profile",
     represent: "Profile",
   },
+  {
+    to: "/changepassword",
+    represent: "Password",
+  }
 ];
 
 const Sidebar = () => {

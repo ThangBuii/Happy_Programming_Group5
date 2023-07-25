@@ -63,6 +63,7 @@ const Feedback = () => {
               borderRadius: "10px",
             }}
           >
+          <div><h2 style={{ textAlign: "right" }}>Add</h2></div>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>

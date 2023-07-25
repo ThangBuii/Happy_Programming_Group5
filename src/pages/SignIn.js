@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState} from "react";
 
 import "../styles/SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,7 +16,9 @@ const SignIn = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { makeSignIn } = useContext(ApplicationContext);
-
+ 
+  // Check if the location state has the "passwordChanged" flag set to true
+  
   const handleSignIn = () => {
     const payload = {
       account: {
@@ -90,7 +92,7 @@ const SignIn = () => {
 
 
           <div className="auth-links">
-            <Link to="/changepassword" className="forgot-pwd">
+            <Link>
               Forgot your password
             </Link>
             <p>
