@@ -27,7 +27,7 @@ import EditProfile from "../pages/profile-edit";
 import React, {useLayoutEffect, useState } from "react";
 import AdminDashboard from "../pages/admin/dashboard";
 import ManageMentee from "../pages/admin/manage-mentee";
-import Footer from "../component/Footer";
+import Footer from "../component/footer";
 import ManageMentor from "../pages/admin/manage-mentor";
 import ManageSession from "../pages/admin/manage-session";
 import ManageFeedback from "../pages/admin/manage-feedback";
@@ -86,6 +86,7 @@ const AppRoutes = () => {
 
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
+          <Route path="/changepassword" element={<ChangePassword/>}/>
           <Route
             path="/mentor/:id/checkout/:sessionId"
             element={<Checkout />}
@@ -112,6 +113,7 @@ const AppRoutes = () => {
 
           <Route element={<PrivateMenteeRoute />}>
             <Route path="/favorite-mentor" element={<FavouriteMentor />} />
+            <Route path="/feedback/add" element={<FeedbackAdd/>}/>
           </Route>
 
           <Route element={<PrivateMentorRoute />}>
