@@ -6,6 +6,7 @@ import { request, setDataToLocal } from "../axios_helper";
 import { ApplicationContext } from "../routes/AppRoutes";
 import { Alert, Snackbar ,Slide} from "@mui/material"; // Assuming you are using Material-UI
 
+
 const SignIn = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
@@ -89,7 +90,7 @@ const SignIn = () => {
 
 
           <div className="auth-links">
-            <Link to="/forgotpassword" className="forgot-pwd">
+            <Link to="/changepassword" className="forgot-pwd">
               Forgot your password
             </Link>
             <p>
@@ -100,6 +101,7 @@ const SignIn = () => {
             </p>
           </div>
         </div>
+        
       </div>
 
       <Snackbar

@@ -45,6 +45,7 @@ import PrivateAdminRoute from "./PrivateAdminRoute";
 import PrivateMenteeRoute from "./PrivateMenteeRoute";
 import PrivateMentorRoute from "./PrivateMentorRoute";
 import Session from "../pages/session";
+import ChangePassword from "../pages/ChangePassword";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -84,6 +85,7 @@ const AppRoutes = () => {
 
           <Route path="/login" element={<SigIn />} />
           <Route path="/resgiter" element={<SigUp />} />
+          <Route path="/changepassword" element={<ChangePassword/>}/>
 
           {/* <Route element={<PrivateRoute />}> */}
           <Route
