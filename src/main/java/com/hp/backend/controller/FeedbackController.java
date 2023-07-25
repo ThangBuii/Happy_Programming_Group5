@@ -3,7 +3,10 @@ package com.hp.backend.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.exception.custom.CustomInternalServerException;
+import com.hp.backend.model.CustomError;
 import com.hp.backend.model.TokenPayload;
 import com.hp.backend.model.feedback.dto.FeedbackAddRequestDTO;
 import com.hp.backend.model.feedback.dto.FeedbackListAdminResponseDTO;
@@ -64,9 +68,14 @@ public class FeedbackController {
     }
 
     @PostMapping("mentee/feedback")
-    public void addFeedbackForMentor(@RequestBody FeedbackAddRequestDTO feedback,HttpServletRequest request) throws CustomBadRequestException{
+    public void addFeedbackForMentor(@RequestBody @Valid FeedbackAddRequestDTO feedback,BindingResult bindingResult, HttpServletRequest request) throws CustomBadRequestException{
         String token = jwtTokenUtil.getRequestToken(request);
         TokenPayload tokenPayload = jwtTokenUtil.getTokenPayload(token);
+        if (bindingResult.hasErrors()) {
+            FieldError firstError = bindingResult.getFieldErrors().get(0);
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message(firstError.getDefaultMessage()).build());
+        }
         feedbackService.addFeedback(feedback,tokenPayload.getAccount_id());
     }
 
