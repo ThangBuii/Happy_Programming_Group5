@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.hp.backend.entity.Account;
 import com.hp.backend.entity.Favorite_Mentor;
+import com.hp.backend.entity.Mentor_Skills;
 import com.hp.backend.entity.Skills;
 import com.hp.backend.exception.custom.CustomBadRequestException;
 import com.hp.backend.model.CustomError;
@@ -27,7 +28,7 @@ import com.hp.backend.model.favorite.dto.FavoriteListMenteeResponseDTO;
 import com.hp.backend.repository.AccountRepository;
 import com.hp.backend.repository.BookingRepository;
 import com.hp.backend.repository.FavoriteRepository;
-
+import com.hp.backend.repository.Mentor_SkillsRepository;
 import com.hp.backend.repository.SkillsRepository;
 import com.hp.backend.utils.CommonUtils;
 
@@ -41,6 +42,7 @@ public class AccountMapper {
     private final AccountRepository accountRepository;
     private final CommonUtils commonUtils;
     private final FavoriteRepository favoriteRepository;
+    private final Mentor_SkillsRepository mentor_SkillsRepository;
 
     public static AccountDTOLoginResponse toAccountDTOResponse(Account account) {
         return AccountDTOLoginResponse.builder().role(account.getRole()).build();
@@ -143,6 +145,11 @@ public class AccountMapper {
         }
 
         Account account1 = account.get();
+        for(Skills skill : mentor.getSkills()){
+            if(!mentor_SkillsRepository.checkExisted(skill.getSkill_id(),account_id)){
+                mentor_SkillsRepository.save(Mentor_Skills.builder().account_id(account_id).skill_id(skill.getSkill_id()).build());
+            }
+        }
         
         return Account.builder().account_id(account_id).avatar(commonUtils.imageToDatabase(mentor.getAvatar())).email(account1.getEmail())
                 .username(mentor.getUsername()).gender(mentor.getGender()).dob(mentor.getDob())
