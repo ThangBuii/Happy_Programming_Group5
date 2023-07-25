@@ -16,6 +16,7 @@ const SignUp = () => {
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   const { makeSignIn } = useContext(ApplicationContext);
 
   const handleSubmit = (e) => {
@@ -40,7 +41,7 @@ const SignUp = () => {
       })
       .catch((error) => {
         // Handle the error here (e.g., show an error message)
-        setSnackbarOpen(true)
+        setSnackbarOpen(true);
         if (
           error.response &&
           error.response.data &&
@@ -168,38 +169,9 @@ const SignUp = () => {
                     >
                       Sign up
                     </button>
-                
+              
 
-                    <div class="text-center">
-                      <p>or sign up with:</p>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-facebook-f"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-google"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-twitter"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        class="btn btn-link btn-floating mx-1"
-                      >
-                        <i class="fab fa-github"></i>
-                      </button>
-                    </div>
+                    
                   </form>
                 </div>
               </div>
@@ -207,6 +179,22 @@ const SignUp = () => {
           </div>
         </div>
       </section>
+      <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        style={{ marginTop: "40px" }} 
+        TransitionComponent={({ children }) => (
+          <Slide direction="left" in={snackbarOpen}>
+            {children}
+          </Slide>
+        )}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={snackbarOpen}

@@ -30,6 +30,8 @@ const Checkout = () => {
   const { user } = useContext(ApplicationContext);
   const role = user.role;
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [successPayment, setSuccessPayment] = useState(false);
   console.log(params, location);
 
   useEffect(() => {
@@ -130,7 +132,7 @@ const Checkout = () => {
                     ))
                   ) : (
                     <div className={styles.notFound}>
-                      Don't have any slot on this day!
+                      Don't have any slot
                     </div>
                   )}
                 </div>
@@ -173,6 +175,9 @@ const Checkout = () => {
                           type="radio"
                           name="radio"
                           className={styles.customRadio}
+                          value="Credit Card"
+                          checked={selectedOption === "Credit Card"}
+                          onChange={(e) => setSelectedOption(e.target.value)}
                         />
                         <span className="checkmark"></span>Credit card
                       </label>
@@ -181,6 +186,9 @@ const Checkout = () => {
                           type="radio"
                           name="radio"
                           className={styles.customRadio}
+                          value="Paypal"
+                          checked={selectedOption === "Paypal"}
+                          onChange={(e) => setSelectedOption(e.target.value)}
                         />
                         <span className="checkmark"></span>Paypal
                       </label>
@@ -193,34 +201,44 @@ const Checkout = () => {
                       fullWidth
                       onClick={() => {
                         const data1 = {
-                          time_id: chosenTime
+                          time_id: chosenTime,
+                          payment_method: selectedOption,
                         }
-                        if(role === -1){
+                      
+                        if (role === -1) {
                           setSnackbarOpen(true);
                           setErrorMessage("Please login in order to book this session!")
+                          setSuccessPayment(false);
                           return
-                        }else if(role === 0 || role === 1){
+                        } else if (role === 0 || role === 1) {
                           setSnackbarOpen(true);
                           setErrorMessage("Please login as mentee in order to book this session!")
+                          setSuccessPayment(false);
                           return
+                        }else if(!chosenTime){
+                          setSnackbarOpen(true);
+                          setErrorMessage("Please choose your date")
+                          setSuccessPayment(false);
+                          return;
+                        }else if(!selectedOption){
+                          setSnackbarOpen(true);
+                          setErrorMessage("Please choose your payment method")
+                          setSuccessPayment(false);
+                          return;
                         }
-                        Promise.all([
-                          request("POST", "/api/mentee/booking", data1),
-                          request("POST", "/api/second-endpoint"),
-                        ])
-                          .then(([response1, response2]) => {
-                            // Handle the responses from the API requests
+                        request("POST", "/api/mentee/booking", data1)
+                          .then((response) => {
+                            // Handle the response from the API request
 
                             // Set any necessary state or perform additional actions
+                            setSnackbarOpen(true);
+                            setSuccessPayment(true);
+                            setErrorMessage("Payment Success!");
                           })
                           .catch((error) => {
-                            // Handle errors from either API request
+                            // Handle errors from the API request
                             console.error("Error:", error);
-                          })
-                          .finally(() => {
-                            setSnackbarOpen(true);
-                            setErrorMessage("Payment Success!");
-                          });
+                          })      
                       }}
                     >
                       Confirm and Pay
@@ -230,20 +248,22 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-        </Container> 
-      )}
+        </Container>
+      )
+      }
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={snackbarOpen}
         autoHideDuration={2000}
         onClose={() => {
           setSnackbarOpen(false);
-          if(role === -1 || role === 0 || role === 1) {
-            navigate("/login");
+          if(successPayment){
+              navigate("/");
           }else{
-            navigate("/");
+            if (role === -1 || role === 0 || role === 1) {
+              navigate("/login");
+            }
           }
-          
         }}
         style={{ marginTop: "40px" }}
         TransitionComponent={({ children }) => (
@@ -252,11 +272,11 @@ const Checkout = () => {
           </Slide>
         )}
       >
-        <Alert  severity={role === 2 ? "success" : "error"} variant="filled" sx={{ width: "100%" }}>
+        <Alert severity={successPayment? "success" : "error"} variant="filled" sx={{ width: "100%" }}>
           {errorMessage}
         </Alert>
       </Snackbar>
-    </div>
+    </div >
   );
 };
 

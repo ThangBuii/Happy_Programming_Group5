@@ -1,4 +1,4 @@
-import { Button, Container, TextField, Rating } from "@mui/material";
+import { Button, Container, TextField, Rating, Snackbar, Slide, Alert } from "@mui/material";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
@@ -12,6 +12,8 @@ const FeedbackAdd = () => {
     const [inputValue, setInputValue] = useState({ rating: "", content: "" });
     const [mentor, setMentor] = useState([])
     const [mentorIdChoosed, setMentorIdChoosed] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     useEffect(() => {
 
@@ -27,8 +29,8 @@ const FeedbackAdd = () => {
         e.preventDefault();
 
         const data = {
-            mentor_id : mentorIdChoosed,
-            rating : inputValue.rating,
+            mentor_id: mentorIdChoosed,
+            rating: inputValue.rating,
             content: inputValue.content
         }
         request("POST", "/api/mentee/feedback", data)
@@ -37,9 +39,16 @@ const FeedbackAdd = () => {
 
             })//phải co một cái call api vào ddeerr lấy list mentor xong truyền vào cái select ý
             .catch((error) => {
-                // Handle the error here (e.g., show an error message)
-
-
+                setSnackbarOpen(true);
+                if (
+                    error.response &&
+                    error.response.data &&
+                    error.response.data.errors
+                ) {
+                    setErrorMessage(error.response.data.errors.message);
+                } else {
+                    setErrorMessage("An error occurred. Please try again.");
+                }
                 console.error(error);
             });
 
@@ -111,6 +120,22 @@ const FeedbackAdd = () => {
                     </div>
                 </Container>
             </div>
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={snackbarOpen}
+                autoHideDuration={2000}
+                onClose={() => setSnackbarOpen(false)}
+                style={{ marginTop: "40px" }}
+                TransitionComponent={({ children }) => (
+                    <Slide direction="left" in={snackbarOpen}>
+                        {children}
+                    </Slide>
+                )}
+            >
+                <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </div>
 
 

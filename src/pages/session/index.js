@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import MainLayout from "../../component/main-layout";
 import {
+  Alert,
   Button,
   Checkbox,
   CircularProgress,
@@ -11,6 +12,8 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Slide,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -44,6 +47,8 @@ const Session = () => {
   const [originFilterListSkill, setOriginFilterListSkill] = useState([]);
   const [filterListSkill, setFilterListSkill] = useState([]);
   const [filterSearch, setFilterSearch] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [addSession, setAddSession] = useState({
     skills: {},
     session_name: "",
@@ -136,23 +141,33 @@ const Session = () => {
 
   const handleSubmitAddSessions = () => {
     console.log("Submit add sessions >>: ", addSession);
-    const data ={
-      skill_id : addSession.skills.skill_id,
+    const data = {
+      skill_id: addSession.skills.skill_id,
       session_name: addSession.session_name,
       duration: addSession.duration,
       price: addSession.price,
       description: addSession.description
     }
     request("POST", "/api/mentor/session", data)
-    .then((response) => {
-      if (response.status === 200) {
-        fetchData(); // Call the fetchData function
-        handleCloseDialog();
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((response) => {
+        if (response.status === 200) {
+          fetchData(); // Call the fetchData function
+          handleCloseDialog();
+        }
+      })
+      .catch((error) => {
+        setSnackbarOpen(true);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          setErrorMessage(error.response.data.errors.message);
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
+        console.error(error);
+      });
 
   };
 
@@ -256,19 +271,19 @@ const Session = () => {
                                 item.status === 0
                                   ? styles.pendindStatus
                                   : item.status === 1
-                                  ? styles.acceptStatus
-                                  : item.status === 2
-                                  ? styles.rejectStatus
-                                  : ""
+                                    ? styles.acceptStatus
+                                    : item.status === 2
+                                      ? styles.rejectStatus
+                                      : ""
                               }
                             >
                               {item.status === 0
                                 ? "Pending"
                                 : item.status === 1
-                                ? "Accepted"
-                                : item.status === 2
-                                ? "Rejected"
-                                : ""}
+                                  ? "Accepted"
+                                  : item.status === 2
+                                    ? "Rejected"
+                                    : ""}
                             </span>
                           </TableCell>
                           <TableCell align="center">
@@ -291,6 +306,22 @@ const Session = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  open={snackbarOpen}
+                  autoHideDuration={2000}
+                  onClose={() => setSnackbarOpen(false)}
+                  style={{ marginTop: "40px" }}
+                  TransitionComponent={({ children }) => (
+                    <Slide direction="left" in={snackbarOpen}>
+                      {children}
+                    </Slide>
+                  )}
+                >
+                  <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+                    {errorMessage}
+                  </Alert>
+                </Snackbar>
               </div>
             )}
           </>
@@ -435,6 +466,7 @@ const Session = () => {
         </DialogActions>
       </Dialog>
     </>
+
   );
 };
 
