@@ -46,6 +46,7 @@ import PrivateMenteeRoute from "./PrivateMenteeRoute";
 import PrivateMentorRoute from "./PrivateMentorRoute";
 import Session from "../pages/session";
 import ChangePassword from "../pages/ChangePassword";
+import FeedbackAdd from "../pages/feedback-add";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -106,6 +107,7 @@ const AppRoutes = () => {
           </Route>
 
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/feedback/add" element={<FeedbackAdd/>}/>
 
           <Route path="/invoice/:receipt_id" element={<InvoiceView />} />
           <Route path="/invoice" element={<Invoice />} />

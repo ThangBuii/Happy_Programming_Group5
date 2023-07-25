@@ -10,6 +10,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { Plus } from "react-bootstrap-icons";
 import AvatarDefault from "../../assets/avatar-thinking-3-svgrepo-com.svg";
 import styles from "./index.module.css";
 import { request } from "../../axios_helper";
@@ -20,6 +22,7 @@ import { ApplicationContext } from "../../routes/AppRoutes";
 const Feedback = () => {
   const [reportList, setReportList] = useState([]);
   const { user } = useContext(ApplicationContext);
+  const navigate = useNavigate(); 
   const role = user.role;  // authen => context => role
 
   const fetchData = () => {
@@ -52,7 +55,18 @@ const Feedback = () => {
   };
   return (
     <MainLayout
-      pageTitle={"List Of Report"}
+      pageTitle={"List Of Feedback"}
+      titleControl={
+        <div className={styles.actionAdd}>
+          <Button
+            variant="contained"
+            startIcon={<Plus />}
+            onClick={() => navigate("/feedback/add")}
+          >
+            Add Feedback
+          </Button>
+        </div>
+      }
       layoutContent={
         <div className={styles.layoutWrapper}>
           <TableContainer
@@ -63,7 +77,6 @@ const Feedback = () => {
               borderRadius: "10px",
             }}
           >
-          <div><h2 style={{ textAlign: "right" }}>Add</h2></div>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>

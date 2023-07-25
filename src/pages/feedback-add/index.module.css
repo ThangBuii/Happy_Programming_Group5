@@ -1,0 +1,79 @@
+.breadcumBarWrapper {
+    background-color: rgba(246, 246, 246, 0.525);
+    border-bottom: 1px solid #e3e8eb;
+    padding: 15px 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+
+  .bcLeft {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .breadcumBarWrapper {
+      flex-direction: row;
+    }
+  }
+  
+  .bcHome {
+    background-color: transparent;
+    font-size: 14px;
+    color: #1890ff;
+    cursor: pointer;
+  }
+  
+  .bcPersonProfile {
+    padding-left: 0.5rem;
+    color: #6c757d;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .bcPersonProfile::before {
+    display: inline-block;
+    padding-right: 0.5rem;
+    color: #6c757d;
+    content: "/";
+    font-size: 14px;
+  }
+  
+  .breadcumBarWrapper h2 {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 22px;
+    font-weight: 700;
+    margin: 5px 0 0;
+  }
+  
+  .containerWrapper {
+    min-height: 600px;
+  }
+  
+  .containerWrapper h4 {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .containerWrapper h4 span {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  .containerWrapper input:focus {
+    width: 100%;
+    margin: 0;
+    border-bottom: 0;
+  }
+  
+  .reportAction {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
