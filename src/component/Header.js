@@ -5,9 +5,10 @@ import "../styles/Header.css";
 import {
   FaSearch,
   
-  FaHistory,
+ 
   FaFingerprint,
   FaUser,
+  FaDashcube,
 } from "react-icons/fa";
 
 function Header({user, makeSignOut}) {
@@ -40,10 +41,10 @@ function Header({user, makeSignOut}) {
                 <FaHeart /> Favorite
               </Nav.Link> */}
               {(user.role===1 || user.role===2) && <Nav.Link as={Link} to="/dashboard">
-                <FaHistory /> Dashboard
+                <FaDashcube /> Dashboard
               </Nav.Link>}
               {user.role===0 && <Nav.Link as={Link} to="/admin">
-                <FaHistory /> Admin Dashboard
+                <FaDashcube /> Admin Dashboard
               </Nav.Link>}
             </Nav>
             <Nav className={`ms-auto ${user.isAuthenticated? 'd-none' : ''}`}>
