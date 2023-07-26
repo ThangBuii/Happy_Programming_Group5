@@ -227,7 +227,19 @@ const MentorProfile = () => {
                             control={<Radio />}
                             label={
                               <div className={styles.labelWrapper}>
-                                <h4>{item.session_name}</h4>
+                              <Link
+                              className={styles.customAction}
+                              to={`/sessions/${item.session_id}`}
+                              state={{
+                                prevPath: {
+                                  to: location.pathname,
+                                  represent: "Sessions",
+                                },
+                              }}
+                            >
+                              <h4>{item.session_name}</h4>
+                            </Link>
+                                
                                 <span>
                                   {item.duration} minutes, $
                                   {item.price.toFixed(2)} per session
