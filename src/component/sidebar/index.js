@@ -42,7 +42,7 @@ export const linkObjList = [
   },
   {
     to: "/changepassword",
-    represent: "Password",
+    represent: "Change Password",
   }
 ];
 

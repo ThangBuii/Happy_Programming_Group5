@@ -58,13 +58,15 @@ const Feedback = () => {
       pageTitle={"List Of Feedback"}
       titleControl={
         <div className={styles.actionAdd}>
+        {role === 2 && 
           <Button
-            variant="contained"
-            startIcon={<Plus />}
-            onClick={() => navigate("/feedback/add")}
-          >
-            Add Feedback
-          </Button>
+          variant="contained"
+          startIcon={<Plus />}
+          onClick={() => navigate("/feedback/add")}
+        >
+          Add Feedback
+        </Button>}
+          
         </div>
       }
       layoutContent={
